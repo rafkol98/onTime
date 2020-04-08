@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "895446317584",
+    "firebase_url": "https://ontime-cfbf2.firebaseio.com",
+    "project_id": "ontime-cfbf2",
+    "storage_bucket": "ontime-cfbf2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:895446317584:android:39100570056c8e6006a895",
+        "android_client_info": {
+          "package_name": "com.example.ontime"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "895446317584-9blukbl4a91m0i8tn2l15frond44goe7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ontime",
+            "certificate_hash": "a270f8400d6399e933b37fc5b91c3f087f5d0b01"
+          }
+        },
+        {
+          "client_id": "895446317584-tbp1kek2gudvrfl9h9tbg5nth35mn2q0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASpkAe5qbUnk4O-EkfpREjk4twFgjOp9Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "895446317584-tbp1kek2gudvrfl9h9tbg5nth35mn2q0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

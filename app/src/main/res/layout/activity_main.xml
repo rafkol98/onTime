@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/home"
+    tools:context=".MainActivity"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    >
+
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="52dp"
+        android:fontFamily="helvetica"
+        android:text="Welcome to onTime"
+        android:textColor="#000000"
+        android:textSize="34sp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline5"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.050890584"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintGuide_percent="0.94" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="230dp"
+        android:layout_height="30dp"
+
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="helvetica"
+        android:text="Never be late again!"
+        android:textColor="#000000"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="263dp"
+        android:layout_height="86dp"
+
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:fontFamily="helvetica"
+        android:text="Use our revolutionary app that will get you there on time, using your own pace!"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <EditText
+        android:id="@+id/sign_in_email"
+        android:layout_width="265dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="32dp"
+        android:ems="10"
+        android:hint="Email Address"
+        android:inputType="textEmailAddress"
+        app:layout_constraintEnd_toStartOf="@+id/guideline5"
+        app:layout_constraintHorizontal_bias="0.514"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <EditText
+        android:id="@+id/sign_in_password"
+        android:layout_width="265dp"
+        android:layout_height="46dp"
+        android:ems="10"
+        android:hint="Password"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toStartOf="@+id/guideline5"
+        app:layout_constraintHorizontal_bias="0.514"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/sign_in_email" />
+
+    <Button
+        android:id="@+id/sign_in_button"
+        android:layout_width="220dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="32dp"
+        android:background="@color/grey"
+        android:text="Sign In"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline5"
+        app:layout_constraintHorizontal_bias="0.506"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/sign_in_password" />
+
+    <TextView
+        android:id="@+id/sign_up_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Not a member? Sign Up!"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline5"
+        app:layout_constraintHorizontal_bias="0.506"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/sign_in_button" />
+
+<!--    <Button-->
+<!--        android:id="@+id/suggest"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Button"-->
+<!--        tools:layout_editor_absoluteX="161dp"-->
+<!--        tools:layout_editor_absoluteY="599dp" />-->
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
