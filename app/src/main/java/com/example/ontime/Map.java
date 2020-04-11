@@ -3,7 +3,9 @@ package com.example.ontime;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Criteria;
@@ -14,6 +16,7 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
@@ -25,6 +28,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -116,8 +120,17 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
-
         map = googleMap;
+
+        try{
+        boolean success = googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this,R.raw.style2));
+
+        if(!success){
+            Log.d("MapActivity", "Style parsing failes");
+        }
+        } catch (Resources.NotFoundException e){
+            Log.d("MapActivity", "Can't find style");
+        }
 
         //enable the zoom in and out buttons bottom right
         map.getUiSettings().setZoomControlsEnabled(true);
@@ -130,8 +143,6 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
         //enables the set view to current location top right
         map.setMyLocationEnabled(true);
         LatLng place = getLatLngFromAddress(destinationPassed);
-
-
 
         float zoom = 14.5f;
         if(place != null) {
@@ -188,6 +199,15 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
             e.printStackTrace();
             return null;
         }
+    }
+
+    public void onPlan(View v){
+        //go to select time class after user clicks on plan trip.
+        Intent myIntent = new Intent(Map.this, SelectTime.class);
+        myIntent.putExtra("keyMap", destinationPassed);
+        startActivity(myIntent);
+
+
     }
 
 }

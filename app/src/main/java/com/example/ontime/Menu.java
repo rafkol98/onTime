@@ -20,15 +20,12 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.List;
 
 public class Menu extends AppCompatActivity {
-    FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser() ;
+    FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-    private EditText text;
     private AutoCompleteTextView destination;
-     Button walks;
-     String addressToRet;
 
 
-     Upcoming_Walks upcoming_walks = new Upcoming_Walks();
+
 
 
 
@@ -36,72 +33,30 @@ public class Menu extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+
         AutoCompleteTextView autoCompleteTextView = findViewById(R.id.autoComplete);
-        autoCompleteTextView.setAdapter(new PlaceAutoSuggestAdapter(Menu.this,android.R.layout.simple_list_item_1));
-
-//        addressToRet = autoCompleteTextView.getText().toString();
-
-
-//        upcoming_walks. itemsAdapter = new ArrayAdapter<String>(this,
-//                android.R.layout.simple_list_item_1, items);
-//        addListenerOnButton();
-
-
+        autoCompleteTextView.setAdapter(new PlaceAutoSuggestAdapter(Menu.this, android.R.layout.simple_list_item_1));
 
     }
 
 
-
-
-    //    public void onBtn(View v) {
-//        text = (EditText)findViewById(R.id.writePlace);
-//        String string =text.getText().toString();
-//
-//        upcoming_walks.getItemsAdapter().add(string);
-//
-//        upcoming_walks.writeItems();
-//
-//
-//    }
-
-    public void onClickB(View v){
-        Intent myIntent = new Intent(Menu.this,Map.class);
+    public void onClickB(View v) {
+        Intent myIntent = new Intent(Menu.this, Map.class);
         destination = findViewById(R.id.autoComplete);
 
         String destinationStr = destination.getText().toString();
-        myIntent.putExtra("key",destinationStr);
+        myIntent.putExtra("key", destinationStr);
+        startActivity(myIntent);
+    }
+
+    public void onUpcoming(View v) {
+        Intent myIntent = new Intent(Menu.this, Upcoming_Walks.class);
+        myIntent.putExtras(getIntent().getExtras());
         startActivity(myIntent);
     }
 
 
-
-
-//    public void addListenerOnButton() {
-//        Intent myIntent = new Intent(Menu.this,Map.class);
-//                startActivity(myIntent);
-//
-
-
-//        walks = findViewById(R.id.buttonTrips);
-//        walks.setOnClickListener(new View.OnClickListener() {
-//
-//            public void onClick(View view) {
-//                text = (EditText)findViewById(R.id.writePlace);
-//                String string =text.getText().toString();
-//
-//
-//                Intent myIntent = new Intent(Menu.this,Upcoming_Walks.class);
-//                myIntent.putExtra("key",string);
-//                startActivity(myIntent);
-//
-
-
-
-//            }
-//        });
-
-
-    }
+}
 
 
 

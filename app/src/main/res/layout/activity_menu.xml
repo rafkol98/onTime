@@ -84,6 +84,7 @@
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="italic"
+        android:onClick="onUpcoming"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

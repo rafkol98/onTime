@@ -22,8 +22,12 @@
         android:layout_marginBottom="16dp"
         android:alpha="0.90"
         android:background="@drawable/custom_button2"
-        android:padding="20dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="25dp"
+        android:paddingBottom="25dp"
         android:text="Plan Trip"
+        android:onClick="onPlan"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
