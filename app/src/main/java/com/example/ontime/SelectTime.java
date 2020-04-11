@@ -112,9 +112,6 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
         childReff2.setValue(timePassed);
 
         Intent myIntent = new Intent(SelectTime.this, SuperScreen.class);
-        myIntent.putExtra("keyDate", dateText.getText().toString());
-        myIntent.putExtra("keyTime", timeText.getText().toString());
-        myIntent.putExtra("keyMap", destinationPassed);
         startActivity(myIntent);
 
 
