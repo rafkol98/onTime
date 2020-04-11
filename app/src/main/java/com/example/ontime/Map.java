@@ -123,7 +123,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
         map = googleMap;
 
         try{
-        boolean success = googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this,R.raw.style2));
+        boolean success = googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this,R.raw.b_w_style1));
 
         if(!success){
             Log.d("MapActivity", "Style parsing failes");

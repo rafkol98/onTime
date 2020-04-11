@@ -11,6 +11,11 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.Calendar;
 
 public class SelectTime extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerFragment.TimePickerListener {
@@ -20,12 +25,16 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
     private TextView dateText;
     private TextView timeText;
     boolean flag;
+    Trip trip;
 
-    Upcoming_Walks uw =new Upcoming_Walks();
+    String datePassed, timePassed;
 
 
+    FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-    private Upcoming_Intermediate upcoming_intermediate = new Upcoming_Intermediate();
+    private DatabaseReference dbRef= FirebaseDatabase.getInstance().getReference("/profiles");
+
+
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +43,8 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
 
         dateText = findViewById(R.id.selectDate_txt);
         timeText = findViewById(R.id.timer_txt);
+
+
 
         flag=false;
 
@@ -84,6 +95,21 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
 
     public void onDone(View v) {
         setFlag(true);
+        datePassed = dateText.getText().toString();
+        timePassed =timeText.getText().toString();
+
+        trip = new Trip(destinationPassed,datePassed,timePassed);
+
+        String uId = currentFirebaseUser.getUid();
+
+        DatabaseReference childReff = dbRef.child(uId).child("trips").child("destination");
+        DatabaseReference childReff1 = dbRef.child(uId).child("trips").child("date");
+        DatabaseReference childReff2 = dbRef.child(uId).child("trips").child("time");
+
+//                DatabaseReference childReff = reff.child("Users").child(uId);
+        childReff.setValue(destinationPassed);
+        childReff1.setValue(datePassed);
+        childReff2.setValue(timePassed);
 
         Intent myIntent = new Intent(SelectTime.this, SuperScreen.class);
         myIntent.putExtra("keyDate", dateText.getText().toString());
