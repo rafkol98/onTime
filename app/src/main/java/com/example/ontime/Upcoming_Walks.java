@@ -29,8 +29,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Upcoming_Walks extends AppCompatActivity {
-    String location, date, time;
-    TextView locView, dateView, timeView;
+    String destination, date, time;
+//    TextView locView, dateView, timeView;
 
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/profiles");
@@ -41,25 +41,27 @@ public class Upcoming_Walks extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upcoming_walks);
 
-        locView = findViewById(R.id.location_txt);
-        dateView = findViewById(R.id.date_text);
-        timeView = findViewById(R.id.time_txt);
+        final ListView mListView = (ListView) findViewById(R.id.listView);
+        
 
         final String uId = currentFirebaseUser.getUid();
 
-        locView.setVisibility(View.VISIBLE);
-        dateView.setVisibility(View.VISIBLE);
-        timeView.setVisibility(View.VISIBLE);
+
+        final ArrayList<Trip> tripList = new ArrayList<>();
+
         dbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                location = dataSnapshot.child(uId).child("trips").child("destination").getValue().toString();
+                destination = dataSnapshot.child(uId).child("trips").child("destination").getValue().toString();
                 date = dataSnapshot.child(uId).child("trips").child("date").getValue().toString();
                 time = dataSnapshot.child(uId).child("trips").child("time").getValue().toString();
 
-                locView.setText(location);
-                dateView.setText(date);
-                timeView.setText(time);
+                Trip newTrip = new Trip(destination,date,time);
+                tripList.add(newTrip);
+
+                TripListAdapter adapter = new TripListAdapter(Upcoming_Walks.this, R.layout.adapter_view,tripList);
+                mListView.setAdapter(adapter);
+
             }
 
             @Override

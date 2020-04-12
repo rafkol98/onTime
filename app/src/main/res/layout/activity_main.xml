@@ -46,7 +46,7 @@
         app:layout_constraintGuide_percent="0.94" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/textTime"
         android:layout_width="230dp"
         android:layout_height="30dp"
 
@@ -72,7 +72,7 @@
         android:textColor="#000000"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/textTime" />
 
     <EditText
         android:id="@+id/sign_in_email"

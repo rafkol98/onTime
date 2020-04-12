@@ -25,4 +25,15 @@ public class Trip {
     public String getTime() {
         return time;
     }
+
+    //Get unique hash key of the trip
+    public int getTripId(){
+        String date_time = (getDestination()+getDate()+getTime());
+
+        int hash = 17;
+        for (int i = 0; i < date_time.length(); i++) {
+            hash = hash*31 + date_time.charAt(i);
+        }
+        return hash;
+    }
 }
