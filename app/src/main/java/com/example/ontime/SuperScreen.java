@@ -22,6 +22,7 @@ public class SuperScreen extends AppCompatActivity {
             @Override
             public void run() {
                 Intent intent = new Intent(SuperScreen.this, Menu.class);
+                intent.putExtras(getIntent().getExtras());
                 startActivity(intent);
             }
         }, 6000);

@@ -48,7 +48,7 @@ public class TripListAdapter extends ArrayAdapter<Trip> {
         tvDate.setText(date);
         tvTime.setText(time);
 
-        Log.d("HERE HERE", "HERE HERE "+newTrip.getTripId());
+
 
         return convertView;
     }

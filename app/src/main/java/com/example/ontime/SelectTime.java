@@ -6,6 +6,7 @@ import androidx.fragment.app.DialogFragment;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
@@ -20,14 +21,11 @@ import java.util.Calendar;
 
 public class SelectTime extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerFragment.TimePickerListener {
 
-    String destinationPassed;
+    String destinationPassed,datePassed, timePassed;
 
     private TextView dateText;
     private TextView timeText;
-    boolean flag;
     Trip trip;
-
-    String datePassed, timePassed;
 
 
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -43,10 +41,6 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
 
         dateText = findViewById(R.id.selectDate_txt);
         timeText = findViewById(R.id.timer_txt);
-
-
-
-        flag=false;
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -82,6 +76,7 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
     }
 
 
+
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         String date = dayOfMonth + "/" + (month + 1) + "/" + year;
@@ -94,17 +89,18 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
     }
 
     public void onDone(View v) {
-        setFlag(true);
         datePassed = dateText.getText().toString();
         timePassed =timeText.getText().toString();
 
         trip = new Trip(destinationPassed,datePassed,timePassed);
 
         String uId = currentFirebaseUser.getUid();
+        String tripId = Integer.toString(trip.getTripId(destinationPassed,datePassed,timePassed));
 
-        DatabaseReference childReff = dbRef.child(uId).child("trips").child("destination");
-        DatabaseReference childReff1 = dbRef.child(uId).child("trips").child("date");
-        DatabaseReference childReff2 = dbRef.child(uId).child("trips").child("time");
+
+        DatabaseReference childReff = dbRef.child(uId).child("trips").child(tripId).child("destination");
+        DatabaseReference childReff1 = dbRef.child(uId).child("trips").child(tripId).child("date");
+        DatabaseReference childReff2 = dbRef.child(uId).child("trips").child(tripId).child("time");
 
 //                DatabaseReference childReff = reff.child("Users").child(uId);
         childReff.setValue(destinationPassed);
@@ -112,19 +108,11 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
         childReff2.setValue(timePassed);
 
         Intent myIntent = new Intent(SelectTime.this, SuperScreen.class);
+        myIntent.putExtra("keyTripId", tripId);
         startActivity(myIntent);
 
-
     }
 
-
-    public boolean isFlag() {
-        return flag;
-    }
-
-    public void setFlag(boolean flag) {
-        this.flag = flag;
-    }
 
 }
 

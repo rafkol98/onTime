@@ -30,11 +30,14 @@ import java.util.ArrayList;
 
 public class Upcoming_Walks extends AppCompatActivity {
     String destination, date, time;
-//    TextView locView, dateView, timeView;
+
+    SelectTime selectTime = new SelectTime();
+    Trip newTrip;
+
 
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/profiles");
-
+    final ArrayList<Trip> tripList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,24 +45,39 @@ public class Upcoming_Walks extends AppCompatActivity {
         setContentView(R.layout.activity_upcoming_walks);
 
         final ListView mListView = (ListView) findViewById(R.id.listView);
-        
+
 
         final String uId = currentFirebaseUser.getUid();
 
 
-        final ArrayList<Trip> tripList = new ArrayList<>();
+
 
         dbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                destination = dataSnapshot.child(uId).child("trips").child("destination").getValue().toString();
-                date = dataSnapshot.child(uId).child("trips").child("date").getValue().toString();
-                time = dataSnapshot.child(uId).child("trips").child("time").getValue().toString();
+                Bundle b = getIntent().getExtras();
+                String tripId = b.getString("keyTripId");
+//                String tripId = selectTime.getTripId();
 
-                Trip newTrip = new Trip(destination,date,time);
-                tripList.add(newTrip);
 
-                TripListAdapter adapter = new TripListAdapter(Upcoming_Walks.this, R.layout.adapter_view,tripList);
+//                for(int i=0;i<(dataSnapshot.child(uId).child("trips")).getChildrenCount();i++){
+                for (DataSnapshot child : dataSnapshot.child(uId).child("trips").getChildren()) {
+                    //Here you can access the child.getKey()
+                    destination = child.child("destination").getValue().toString();
+                    date = child.child("date").getValue().toString();
+                    time = child.child("time").getValue().toString();
+
+                    newTrip = new Trip(destination, date, time);
+                    tripList.add(newTrip);
+
+                }
+
+//                    destination = dataSnapshot.child(uId).child("trips").child(tripId).child("destination").getValue().toString();
+//                    date = dataSnapshot.child(uId).child("trips").child(tripId).child("date").getValue().toString();
+//                    time = dataSnapshot.child(uId).child("trips").child(tripId).child("time").getValue().toString();
+
+
+                TripListAdapter adapter = new TripListAdapter(Upcoming_Walks.this, R.layout.adapter_view, tripList);
                 mListView.setAdapter(adapter);
 
             }
@@ -70,6 +88,11 @@ public class Upcoming_Walks extends AppCompatActivity {
             }
         });
 //
+
+
+//        Log.d("HERE HERE","HERE HERE "+getDst());
+
+
 
 
     }

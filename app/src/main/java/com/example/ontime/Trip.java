@@ -14,6 +14,9 @@ public class Trip {
         this.time = time;
     }
 
+    public Trip() {
+    }
+
     public String getDestination() {
         return destination;
     }
@@ -27,8 +30,8 @@ public class Trip {
     }
 
     //Get unique hash key of the trip
-    public int getTripId(){
-        String date_time = (getDestination()+getDate()+getTime());
+    public int getTripId(String destination, String date, String time){
+        String date_time = (destination+date+time);
 
         int hash = 17;
         for (int i = 0; i < date_time.length(); i++) {
