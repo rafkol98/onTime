@@ -55,8 +55,8 @@ public class Upcoming_Walks extends AppCompatActivity {
         dbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Bundle b = getIntent().getExtras();
-                String tripId = b.getString("keyTripId");
+//                Bundle b = getIntent().getExtras();
+//                String tripId = b.getString("keyTripId");
 //                String tripId = selectTime.getTripId();
 
 

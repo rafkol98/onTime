@@ -46,8 +46,12 @@ public class Menu extends AppCompatActivity {
     }
 
     public void onUpcoming(View v) {
+
         Intent myIntent = new Intent(Menu.this, Upcoming_Walks.class);
-        myIntent.putExtras(getIntent().getExtras());
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            myIntent.putExtras(getIntent().getExtras());
+        }
         startActivity(myIntent);
     }
 
