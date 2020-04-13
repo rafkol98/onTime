@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,7 +22,7 @@ import java.util.Calendar;
 
 public class SelectTime extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerFragment.TimePickerListener {
 
-    String destinationPassed,datePassed, timePassed;
+    String destinationPassed, datePassed, timePassed;
 
     private TextView dateText;
     private TextView timeText;
@@ -30,9 +31,7 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
 
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-    private DatabaseReference dbRef= FirebaseDatabase.getInstance().getReference("/profiles");
-
-
+    private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/profiles");
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +75,6 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
     }
 
 
-
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         String date = dayOfMonth + "/" + (month + 1) + "/" + year;
@@ -89,27 +87,36 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
     }
 
     public void onDone(View v) {
-        datePassed = dateText.getText().toString();
-        timePassed =timeText.getText().toString();
+        if((dateText.getText().toString()).equalsIgnoreCase("date") && (timeText.getText().toString()).equalsIgnoreCase("time")){
+            Toast.makeText(SelectTime.this, "Please select both date and time!", Toast.LENGTH_LONG).show();
+        }
+        if ((dateText.getText().toString()).equalsIgnoreCase("date") || (timeText.getText().toString()).equalsIgnoreCase("time")) {
+            Toast.makeText(SelectTime.this, "Please select both date and time!", Toast.LENGTH_LONG).show();
+        } else {
+            datePassed = dateText.getText().toString();
 
-        trip = new Trip(destinationPassed,datePassed,timePassed);
+            timePassed = timeText.getText().toString();
 
-        String uId = currentFirebaseUser.getUid();
-        String tripId = Integer.toString(trip.getTripId(destinationPassed,datePassed,timePassed));
+            trip = new Trip(destinationPassed, datePassed, timePassed);
+
+            String uId = currentFirebaseUser.getUid();
+            String tripId = Integer.toString(trip.getTripId(destinationPassed, datePassed, timePassed));
 
 
-        DatabaseReference childReff = dbRef.child(uId).child("trips").child(tripId).child("destination");
-        DatabaseReference childReff1 = dbRef.child(uId).child("trips").child(tripId).child("date");
-        DatabaseReference childReff2 = dbRef.child(uId).child("trips").child(tripId).child("time");
+            DatabaseReference childReff = dbRef.child(uId).child("trips").child(tripId).child("destination");
+            DatabaseReference childReff1 = dbRef.child(uId).child("trips").child(tripId).child("date");
+            DatabaseReference childReff2 = dbRef.child(uId).child("trips").child(tripId).child("time");
 
 //                DatabaseReference childReff = reff.child("Users").child(uId);
-        childReff.setValue(destinationPassed);
-        childReff1.setValue(datePassed);
-        childReff2.setValue(timePassed);
+            childReff.setValue(destinationPassed);
+            childReff1.setValue(datePassed);
+            childReff2.setValue(timePassed);
 
-        Intent myIntent = new Intent(SelectTime.this, SuperScreen.class);
-        myIntent.putExtra("keyTripId", tripId);
-        startActivity(myIntent);
+            Intent myIntent = new Intent(SelectTime.this, SuperScreen.class);
+            myIntent.putExtra("keyTripId", tripId);
+            startActivity(myIntent);
+        }
+
 
     }
 
