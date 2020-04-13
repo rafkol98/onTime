@@ -22,9 +22,24 @@
         android:id="@+id/listView"
         android:layout_width="409dp"
         android:layout_height="580dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView6"
+        app:layout_constraintTop_toBottomOf="@+id/upcoming_txt"
         tools:layout_editor_absoluteX="1dp" />
+
+    <TextView
+        android:id="@+id/upcoming_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="24dp"
+        android:text="UPCOMING WALKS"
+        android:textColor="@color/blgrey"
+        android:textSize="20sp"
+        android:textStyle="italic"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView6" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

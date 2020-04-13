@@ -9,7 +9,8 @@
     <color name="red">#9F1A1A</color>
     <color name="grey">#EFEFEF</color>
     <color name="blgrey">#171717</color>
-
+    <color name="green">#ABFF76</color>
+    <color name="darkGreen">#2EFF1D</color>
 
 
     <color name="grey_lighter">#E0E0E0</color>
@@ -20,7 +21,6 @@
     <color name="blue_light">#03A9F4</color>
     <color name="blue">#1E88E5</color>
     <color name="blue_dark">#01579B</color>
-
 
 
 </resources>

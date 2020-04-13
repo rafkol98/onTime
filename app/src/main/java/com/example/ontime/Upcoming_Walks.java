@@ -3,6 +3,7 @@ package com.example.ontime;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -50,17 +51,10 @@ public class Upcoming_Walks extends AppCompatActivity {
         final String uId = currentFirebaseUser.getUid();
 
 
-
-
         dbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                Bundle b = getIntent().getExtras();
-//                String tripId = b.getString("keyTripId");
-//                String tripId = selectTime.getTripId();
 
-
-//                for(int i=0;i<(dataSnapshot.child(uId).child("trips")).getChildrenCount();i++){
                 for (DataSnapshot child : dataSnapshot.child(uId).child("trips").getChildren()) {
                     //Here you can access the child.getKey()
                     destination = child.child("destination").getValue().toString();
@@ -71,10 +65,6 @@ public class Upcoming_Walks extends AppCompatActivity {
                     tripList.add(newTrip);
 
                 }
-
-//                    destination = dataSnapshot.child(uId).child("trips").child(tripId).child("destination").getValue().toString();
-//                    date = dataSnapshot.child(uId).child("trips").child(tripId).child("date").getValue().toString();
-//                    time = dataSnapshot.child(uId).child("trips").child(tripId).child("time").getValue().toString();
 
 
                 TripListAdapter adapter = new TripListAdapter(Upcoming_Walks.this, R.layout.adapter_view, tripList);
@@ -87,12 +77,19 @@ public class Upcoming_Walks extends AppCompatActivity {
 
             }
         });
-//
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Get the selected item text from ListView
+//                String selectedItemAddress = (String) parent.getItemAtPosition(position);
+
+                Intent myIntent = new Intent(Upcoming_Walks.this, SuperScreen.class);
+                startActivity(myIntent);
 
 
-//        Log.d("HERE HERE","HERE HERE "+getDst());
-
-
+            }
+        });
 
 
     }
