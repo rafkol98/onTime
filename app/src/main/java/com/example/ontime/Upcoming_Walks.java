@@ -84,7 +84,7 @@ public class Upcoming_Walks extends AppCompatActivity {
                 // Get the selected item text from ListView
 //                String selectedItemAddress = (String) parent.getItemAtPosition(position);
 
-                Intent myIntent = new Intent(Upcoming_Walks.this, SuperScreen.class);
+                Intent myIntent = new Intent(Upcoming_Walks.this, Navigate.class);
                 startActivity(myIntent);
 
 
