@@ -1,18 +1,37 @@
 package com.example.ontime;
 
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Criteria;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+
 import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,13 +42,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
-public class Navigate extends FragmentActivity implements OnMapReadyCallback {
+public class Navigate extends FragmentActivity implements OnMapReadyCallback, LocationListener {
 
     private GoogleMap mMap;
+    private FusedLocationProviderClient client;
+//    private FusedLocationProviderClient
 
     MarkerOptions origin, destination;
+    private LocationManager locationManager;
+    private double currentLat, currentLong;
+    String destinationPassed;
+    private String bestProvider;
+    private Criteria criteria;
+    private Location lcn;
+
 
 
     @Override
@@ -37,14 +66,50 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigate);
 
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L,
+                500.0f, locationListener);
+        Location location = locationManager
+                .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if (location != null) {
+            double latitude = location.getLatitude();
+            double longitude = location.getLongitude();
+        }
+
+
+
+//        criteria = new Criteria();
+//        bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
+//        getCurrentLocation();
+
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            destinationPassed = extras.getString("keyDest");
+        }
+
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+
+//        Log.d("HERE HERE LAT LONG", lcn.getLatitude() + "  " + lcn.getLongitude());
         //Setting marker to draw route between these two points
-        origin = new MarkerOptions().position(new LatLng(12.9121, 77.6446)).title("HSR Layout").snippet("origin");
-        destination = new MarkerOptions().position(new LatLng(12.9304, 77.6784)).title("Bellandur").snippet("destination");
+        origin = new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())).title("HSR Layout").snippet("origin");
+        destination = new MarkerOptions().position(getLatLngFromAddress(destinationPassed)).title("Bellandur").snippet("destination");
 
         // Getting URL to the Google Directions API
         String url = getDirectionsUrl(origin.getPosition(), destination.getPosition());
@@ -62,10 +127,44 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        mMap.addMarker(origin);
-        mMap.addMarker(destination);
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(origin.getPosition(), 10));
+        try{
+            boolean success = googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this,R.raw.b_w_style1));
 
+            if(!success){
+                Log.d("MapActivity", "Style parsing failes");
+            }
+        } catch (Resources.NotFoundException e){
+            Log.d("MapActivity", "Can't find style");
+        }
+
+        //enable the zoom in and out buttons bottom right
+        float zoom = 14.5f;
+        mMap.setMyLocationEnabled(true);
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.addMarker(destination);
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(origin.getPosition(), zoom));
+
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        currentLat = location.getLatitude();
+        currentLong = location.getLongitude();
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
 
     }
 
@@ -214,5 +313,63 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback {
         }
         return data;
     }
+
+    public LatLng getLatLngFromAddress(String address) {
+        Geocoder geocoder = new Geocoder(Navigate.this);
+        List<Address> addressList;
+
+        try {
+            addressList = geocoder.getFromLocationName(address, 1);
+            if (addressList != null) {
+                Address singleAddress = addressList.get(0);
+                LatLng latLng = new LatLng(singleAddress.getLatitude(), singleAddress.getLongitude());
+                return latLng;
+            } else {
+                return null;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+
+
+
+
+    private LatLng updateWithNewLocation(Location location) {
+        LatLng latLng;
+        String latLongString = "";
+        if (location != null) {
+            double lat = location.getLatitude();
+            double lng = location.getLongitude();
+            latLng=new LatLng(lat,lng);
+
+        } else {
+            latLng = new LatLng(1,1);
+        }
+        return latLng;
+    }
+
+    private final LocationListener locationListener = new LocationListener() {
+
+        public void onLocationChanged(Location location) {
+            updateWithNewLocation(location);
+        }
+
+        public void onProviderDisabled(String provider) {
+            updateWithNewLocation(null);
+        }
+
+        public void onProviderEnabled(String provider) {}
+
+        public void onStatusChanged(String provider,int status,Bundle extras){}
+    };
+
+//    private void requestPermission(){
+//        ActivityCompat.requestPermissions(this,new String[]{ACCESS_FINE_LO});
+//    }
 
 }

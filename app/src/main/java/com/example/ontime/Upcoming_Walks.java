@@ -85,6 +85,7 @@ public class Upcoming_Walks extends AppCompatActivity {
 //                String selectedItemAddress = (String) parent.getItemAtPosition(position);
 
                 Intent myIntent = new Intent(Upcoming_Walks.this, Navigate.class);
+                myIntent.putExtra("keyDest", destination);
                 startActivity(myIntent);
 
 
