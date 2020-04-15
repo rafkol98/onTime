@@ -208,6 +208,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
         startActivity(myIntent);
 
 
+
     }
 
 }

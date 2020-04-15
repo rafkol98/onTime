@@ -27,6 +27,7 @@ public class SuperScreen extends AppCompatActivity {
                     intent.putExtras(getIntent().getExtras());
                 }
                 startActivity(intent);
+
             }
         }, 6000);
     }

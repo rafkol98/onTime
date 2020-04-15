@@ -122,6 +122,10 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
 
     }
 
+    public void onBackPressed(){
+
+    }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
