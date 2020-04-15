@@ -3,7 +3,10 @@ package com.example.ontime;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -15,7 +18,10 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -53,6 +59,7 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
     private FusedLocationProviderClient client;
 //    private FusedLocationProviderClient
 
+    double latitude, longitude;
     MarkerOptions origin, destination;
     private LocationManager locationManager;
     private double currentLat, currentLong;
@@ -61,7 +68,6 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
     private Criteria criteria;
     private Location lcn;
     LatLng desLatLgn;
-
 
 
     @Override
@@ -81,27 +87,23 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L,
-                500.0f, locationListener);
-        Location location = locationManager
-                .getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if (location != null) {
-            double latitude = location.getLatitude();
-            double longitude = location.getLongitude();
-        }
-
-
-
-//        criteria = new Criteria();
-//        bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
-//        getCurrentLocation();
-
+//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L,
+//                500.0f, locationListener);
+//        Location location = locationManager
+//                .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//        if (location != null) {
+//            double latitude = location.getLatitude();
+//            double longitude = location.getLongitude();
+//        } else{
+//            //if last known location is not known, request location updates.
+//            locationManager.requestLocationUpdates(bestProvider,1000,0,this);
+//        }
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             destinationPassed = extras.getString("keyDest");
         }
-        Log.d("HERE HERE DEST"," "+destinationPassed);
+        Log.d("HERE HERE DEST", " " + destinationPassed);
 
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -109,15 +111,16 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        getLocation();
+
         desLatLgn = getLatLngFromAddress(destinationPassed);
-        Log.d("HERE HERE LOG"," "+desLatLgn);
-//        Log.d("HERE HERE LAT LONG", lcn.getLatitude() + "  " + lcn.getLongitude());
+        Log.d("HERE HERE LOG", " " + desLatLgn);
         //Setting marker to draw route between these two points
-        origin = new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())).title("Current Position").snippet("origin");
-        if(desLatLgn!=null) {
+        origin = new MarkerOptions().position(new LatLng(latitude, longitude)).title("Current Position").snippet("origin");
+        if (desLatLgn != null) {
             destination = new MarkerOptions().position(desLatLgn).title("Bellandur").snippet("destination");
-        } else{
-            destination = new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())).title("Current Position").snippet("destination");
+        } else {
+            destination = new MarkerOptions().position(new LatLng(latitude, longitude)).title("Current Position").snippet("destination");
         }
 
         // Getting URL to the Google Directions API
@@ -129,28 +132,30 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
         downloadTask.execute(url);
 
 
-
     }
 
 
-
-    public void onHomeIcon(View v){
+    public void onHomeIcon(View v) {
         Intent intent = new Intent(Navigate.this, Menu.class);
         startActivity(intent);
         finish();
+    }
+
+    public void onBackPressed() {
+
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        try{
-            boolean success = googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this,R.raw.b_w_style1));
+        try {
+            boolean success = googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.b_w_style1));
 
-            if(!success){
+            if (!success) {
                 Log.d("MapActivity", "Style parsing failes");
             }
-        } catch (Resources.NotFoundException e){
+        } catch (Resources.NotFoundException e) {
             Log.d("MapActivity", "Can't find style");
         }
 
@@ -351,10 +356,74 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
         }
     }
 
+    protected void getLocation() {
+        if (isLocationEnabled(Navigate.this)) {
+            locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+            criteria = new Criteria();
+            bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
 
+            //You can still do this if you like, you might get lucky:
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            Location location = locationManager.getLastKnownLocation(bestProvider);
+            if (location != null) {
+                Log.e("TAG", "GPS is on");
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+            }
+            else{
+                //This is what you need:
+                locationManager.requestLocationUpdates(bestProvider, 1000, 0, this);
+            }
+        }
+        else
+        {
+//            //prompt user to enable location....
+//            // Build the alert dialog
+//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//            builder.setTitle("Location Services Not Active");
+//            builder.setMessage("Please enable Location Services and GPS");
+//            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                public void onClick(DialogInterface dialogInterface, int i) {
+//                    // Show location settings when the user acknowledges the alert dialog
+//                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+//                    startActivity(intent);
+//                }
+//            });
+//            Dialog alertDialog = builder.create();
+//            alertDialog.setCanceledOnTouchOutside(false);
+//            alertDialog.show();
+        }
+    }
 
-
-
+    public static boolean isLocationEnabled(Context context)
+    {
+        int locationMode = 0;
+        String locationProviders;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+        {
+            try
+            {
+                locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
+            } catch (Settings.SettingNotFoundException e) {
+                e.printStackTrace();
+            }
+            return locationMode != Settings.Secure.LOCATION_MODE_OFF;
+        }
+        else
+        {
+            locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+            return !TextUtils.isEmpty(locationProviders);
+        }
+    }
 
     private LatLng updateWithNewLocation(Location location) {
         LatLng latLng;
@@ -362,10 +431,10 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
         if (location != null) {
             double lat = location.getLatitude();
             double lng = location.getLongitude();
-            latLng=new LatLng(lat,lng);
+            latLng = new LatLng(lat, lng);
 
         } else {
-            latLng = new LatLng(1,1);
+            latLng = new LatLng(1, 1);
         }
         return latLng;
     }
@@ -380,13 +449,12 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
             updateWithNewLocation(null);
         }
 
-        public void onProviderEnabled(String provider) {}
+        public void onProviderEnabled(String provider) {
+        }
 
-        public void onStatusChanged(String provider,int status,Bundle extras){}
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
     };
 
-//    private void requestPermission(){
-//        ActivityCompat.requestPermissions(this,new String[]{ACCESS_FINE_LO});
-//    }
 
 }
