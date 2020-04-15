@@ -60,6 +60,7 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
     private String bestProvider;
     private Criteria criteria;
     private Location lcn;
+    LatLng desLatLgn;
 
 
 
@@ -107,11 +108,15 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-
+        desLatLgn = getLatLngFromAddress(destinationPassed);
 //        Log.d("HERE HERE LAT LONG", lcn.getLatitude() + "  " + lcn.getLongitude());
         //Setting marker to draw route between these two points
-        origin = new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())).title("HSR Layout").snippet("origin");
-        destination = new MarkerOptions().position(getLatLngFromAddress(destinationPassed)).title("Bellandur").snippet("destination");
+        origin = new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())).title("Current Position").snippet("origin");
+        if(desLatLgn!=null) {
+            destination = new MarkerOptions().position(desLatLgn).title("Bellandur").snippet("destination");
+        } else{
+            destination = new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())).title("Current Position").snippet("destination");
+        }
 
         // Getting URL to the Google Directions API
         String url = getDirectionsUrl(origin.getPosition(), destination.getPosition());

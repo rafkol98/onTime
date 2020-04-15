@@ -33,7 +33,9 @@ public class Upcoming_Walks extends AppCompatActivity {
     String destination, date, time;
 
     SelectTime selectTime = new SelectTime();
-    Trip newTrip;
+    Object newTrip;
+    Trip trip;
+
 
 
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -57,12 +59,14 @@ public class Upcoming_Walks extends AppCompatActivity {
 
                 for (DataSnapshot child : dataSnapshot.child(uId).child("trips").getChildren()) {
                     //Here you can access the child.getKey()
-                    destination = child.child("destination").getValue().toString();
                     date = child.child("date").getValue().toString();
+                    destination = child.child("destination").getValue().toString();
                     time = child.child("time").getValue().toString();
 
-                    newTrip = new Trip(destination, date, time);
-                    tripList.add(newTrip);
+//                    newTrip = child.getValue();
+                    trip = new Trip(destination,date,time);
+//                    newTrip = new Trip(destination, date, time);
+                    tripList.add(trip);
 
                 }
 

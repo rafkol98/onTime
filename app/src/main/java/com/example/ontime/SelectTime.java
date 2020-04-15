@@ -103,17 +103,19 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
             String tripId = Integer.toString(trip.getTripId(destinationPassed, datePassed, timePassed));
 
 
-            DatabaseReference childReff = dbRef.child(uId).child("trips").child(tripId).child("destination");
-            DatabaseReference childReff1 = dbRef.child(uId).child("trips").child(tripId).child("date");
-            DatabaseReference childReff2 = dbRef.child(uId).child("trips").child(tripId).child("time");
+            DatabaseReference childReff = dbRef.child(uId).child("trips").child(tripId);
+
+//                    .child("destination");
+//            DatabaseReference childReff1 = dbRef.child(uId).child("trips").child(tripId).child("date");
+//            DatabaseReference childReff2 = dbRef.child(uId).child("trips").child(tripId).child("time");
 
 //                DatabaseReference childReff = reff.child("Users").child(uId);
-            childReff.setValue(destinationPassed);
-            childReff1.setValue(datePassed);
-            childReff2.setValue(timePassed);
+            childReff.setValue(trip);
+//            childReff1.setValue(datePassed);
+//            childReff2.setValue(timePassed);
 
             Intent myIntent = new Intent(SelectTime.this, SuperScreen.class);
-            myIntent.putExtra("keyTripId", tripId);
+            myIntent.putExtra("keyDest", trip.getDestination());
             startActivity(myIntent);
 
         }
