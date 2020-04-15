@@ -67,6 +67,10 @@ public class Menu extends AppCompatActivity {
 
     }
 
+    public void onBackPressed(){
+
+    }
+
 
     public void onClickB(View v) {
         Intent myIntent = new Intent(Menu.this, Map.class);

@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 public class Welcome extends AppCompatActivity {
 
-Button start;
+    Button start;
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -23,16 +23,18 @@ Button start;
 
         start = findViewById(R.id.start_button);
 
-              start.setOnClickListener(new View.OnClickListener() {
-                  @Override
-                  public void onClick(View v) {
-                      Intent intent = new Intent(Welcome.this, Countdown.class);
-                      startActivity(intent);
-                      finish();
+        start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Welcome.this, Countdown.class);
+                startActivity(intent);
+                finish();
 
-                  }
-              } );
+            }
+        });
+    }
 
+    public void onBackPressed() {
 
     }
 }

@@ -21,8 +21,9 @@ public class Cool extends AppCompatActivity {
                 startActivity(intent);
             }
         }, 4000);
+    }
 
-
+    public void onBackPressed() {
 
     }
 }

@@ -4,6 +4,7 @@ package com.example.ontime;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -16,6 +17,7 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -126,6 +128,11 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
 
     }
 
+    public void onHomeIcon(View v){
+        Intent intent = new Intent(Navigate.this, Menu.class);
+        startActivity(intent);
+        finish();
+    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {

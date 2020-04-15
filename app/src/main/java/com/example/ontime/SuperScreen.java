@@ -32,5 +32,8 @@ public class SuperScreen extends AppCompatActivity {
         }, 6000);
     }
 
+    public void onBackPressed(){
+
+    }
 
 }

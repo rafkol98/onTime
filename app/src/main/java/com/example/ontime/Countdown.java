@@ -47,7 +47,7 @@ public class Countdown extends AppCompatActivity implements LocationListener {
 
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-    private DatabaseReference dbRef= FirebaseDatabase.getInstance().getReference("/profiles");
+    private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/profiles");
 
 
 //    DatabaseReference reff = FirebaseDatabase.getInstance().getReference();
@@ -62,10 +62,6 @@ public class Countdown extends AppCompatActivity implements LocationListener {
         sw_metric = findViewById(R.id.sw_speed);
         txt = findViewById(R.id.speedometer_txt);
         avgTxt = findViewById(R.id.avgSpeedTxt);
-
-
-
-
 
 
         //Used to check for gps permission
@@ -256,6 +252,10 @@ public class Countdown extends AppCompatActivity implements LocationListener {
         User user = new User(userId, avgSpeed);
 
 //        reff.child("Users").setValue(user);
+
+    }
+
+    public void onBackPressed() {
 
     }
 
