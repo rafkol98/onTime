@@ -101,6 +101,7 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
         if (extras != null) {
             destinationPassed = extras.getString("keyDest");
         }
+        Log.d("HERE HERE DEST"," "+destinationPassed);
 
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -109,6 +110,7 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
         mapFragment.getMapAsync(this);
 
         desLatLgn = getLatLngFromAddress(destinationPassed);
+        Log.d("HERE HERE LOG"," "+desLatLgn);
 //        Log.d("HERE HERE LAT LONG", lcn.getLatitude() + "  " + lcn.getLongitude());
         //Setting marker to draw route between these two points
         origin = new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())).title("Current Position").snippet("origin");
@@ -127,11 +129,10 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
         downloadTask.execute(url);
 
 
-    }
-
-    public void onBackPressed(){
 
     }
+
+
 
     public void onHomeIcon(View v){
         Intent intent = new Intent(Navigate.this, Menu.class);

@@ -6,6 +6,7 @@ public class Trip {
     String destination;
     String date;
     String time;
+    Object object;
 
 
     public Trip(String destination, String date, String time) {
@@ -14,7 +15,8 @@ public class Trip {
         this.time = time;
     }
 
-    public Trip() {
+    public Trip(Object object) {
+        this.object = object;
     }
 
     public String getDestination() {

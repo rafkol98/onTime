@@ -63,9 +63,8 @@ public class Upcoming_Walks extends AppCompatActivity {
                     destination = child.child("destination").getValue().toString();
                     time = child.child("time").getValue().toString();
 
-//                    newTrip = child.getValue();
+
                     trip = new Trip(destination,date,time);
-//                    newTrip = new Trip(destination, date, time);
                     tripList.add(trip);
 
                 }
@@ -86,10 +85,12 @@ public class Upcoming_Walks extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Get the selected item text from ListView
-//                String selectedItemAddress = (String) parent.getItemAtPosition(position);
+                Trip selectedItem = (Trip) parent.getItemAtPosition(position);
+
+
 
                 Intent myIntent = new Intent(Upcoming_Walks.this, Navigate.class);
-                myIntent.putExtra("keyDest", destination);
+                myIntent.putExtra("keyDest", selectedItem.getDestination());
                 startActivity(myIntent);
 
 
