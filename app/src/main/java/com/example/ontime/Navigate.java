@@ -64,10 +64,11 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
     private LocationManager locationManager;
     private double currentLat, currentLong;
     String destinationPassed;
-    private String bestProvider;
+    private String bestProvider,url;
     private Criteria criteria;
     private Location lcn;
     LatLng desLatLgn;
+
 
 
     @Override
@@ -87,21 +88,12 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L,
-//                500.0f, locationListener);
-//        Location location = locationManager
-//                .getLastKnownLocation(LocationManager.GPS_PROVIDER);
-//        if (location != null) {
-//            double latitude = location.getLatitude();
-//            double longitude = location.getLongitude();
-//        } else{
-//            //if last known location is not known, request location updates.
-//            locationManager.requestLocationUpdates(bestProvider,1000,0,this);
-//        }
+
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             destinationPassed = extras.getString("keyDest");
+            desLatLgn = getLatLngFromAddress(destinationPassed);
         }
         Log.d("HERE HERE DEST", " " + destinationPassed);
 
@@ -113,18 +105,21 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
 
         getLocation();
 
-        desLatLgn = getLatLngFromAddress(destinationPassed);
+
         Log.d("HERE HERE LOG", " " + desLatLgn);
         //Setting marker to draw route between these two points
         origin = new MarkerOptions().position(new LatLng(latitude, longitude)).title("Current Position").snippet("origin");
         if (desLatLgn != null) {
             destination = new MarkerOptions().position(desLatLgn).title("Bellandur").snippet("destination");
+            url = getDirectionsUrl(origin.getPosition(), destination.getPosition());
         } else {
             destination = new MarkerOptions().position(new LatLng(latitude, longitude)).title("Current Position").snippet("destination");
+            // Getting URL to the Google Directions API
+            url = getDirectionsUrl(origin.getPosition(), origin.getPosition());
         }
 
         // Getting URL to the Google Directions API
-        String url = getDirectionsUrl(origin.getPosition(), destination.getPosition());
+
 
         DownloadTask downloadTask = new DownloadTask();
 
@@ -165,7 +160,6 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.addMarker(destination);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(origin.getPosition(), zoom));
-
 
     }
 
@@ -386,21 +380,7 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
         }
         else
         {
-//            //prompt user to enable location....
-//            // Build the alert dialog
-//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//            builder.setTitle("Location Services Not Active");
-//            builder.setMessage("Please enable Location Services and GPS");
-//            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                public void onClick(DialogInterface dialogInterface, int i) {
-//                    // Show location settings when the user acknowledges the alert dialog
-//                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-//                    startActivity(intent);
-//                }
-//            });
-//            Dialog alertDialog = builder.create();
-//            alertDialog.setCanceledOnTouchOutside(false);
-//            alertDialog.show();
+
         }
     }
 
