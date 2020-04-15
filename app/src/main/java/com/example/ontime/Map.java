@@ -2,7 +2,9 @@ package com.example.ontime;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -56,7 +58,6 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
     public String bestProvider;
     public Criteria criteria;
     public LocationManager locationManager;
-    Checks checks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -209,8 +210,22 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
 
         //Check if current location is more than 3 km away from destination. Dialog to user.
         if (inRadius(destinationLatLng) == false) {
-            Toast.makeText(this, "Location more than 3 km away from current location", Toast.LENGTH_SHORT).show();
-
+            //Alert the user about the distance.
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("You seem to be more than 3km away from destination, do you still wanna proceed?")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(final DialogInterface dialog, final int id) {
+                            startActivity(new Intent(Map.this,SelectTime.class));
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(final DialogInterface dialog, final int id) {
+                            startActivity(new Intent(Map.this,Menu.class));
+                        }
+                    });
+            final AlertDialog alert = builder.create();
+            alert.show();
         } else {
             //go to select time class after user clicks on plan trip. if the trip passes all the criteria.
             Intent myIntent = new Intent(Map.this, SelectTime.class);
@@ -228,6 +243,5 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
         return isWithin3km;
     }
 
-    
 
 }
