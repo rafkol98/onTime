@@ -83,36 +83,6 @@ public class Countdown extends AppCompatActivity implements LocationListener {
         });
 
 
-//        new CountDownTimer(120000, 1000) {
-//            @Override
-//            public void onTick(long millisUntilFinished) {
-//                timer = (TextView) findViewById(R.id.timer);
-//                timer.setText(String.format("0%d:%d",
-//                        TimeUnit.MICROSECONDS.toMinutes( millisUntilFinished),
-//                        TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) -
-//                                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
-//            } public void onFinish() {
-//                avgTSpeed = totalSpeed / 119;
-//                // Write user to the database
-//                String uId= currentFirebaseUser.getUid();
-////                writeNewUser(uId,avgTSpeed);
-//
-//                //Make double into string
-//                String avg = String.valueOf(avgTSpeed);
-//
-//                DatabaseReference childReff= reff.child("Users").child(uId);
-//                childReff.setValue(avgTSpeed);
-//
-////                reff.child("Users").child("uId").setValue(uId);
-////                reff.child("Users").child("avgSpeed").setValue(avgTSpeed);
-//
-//                Intent i = new Intent(Countdown.this, Cool.class);
-//                startActivity(i);
-//                finish();
-//            }
-//        }.start();
-
-
         //Declare the timer
         Timer t = new Timer();
         //Set the schedule function and rate
@@ -161,7 +131,7 @@ public class Countdown extends AppCompatActivity implements LocationListener {
                 String avg = String.valueOf(avgTSpeed);
 
                 DatabaseReference childReff = dbRef.child(uId).child("Average Speed");
-//                DatabaseReference childReff = reff.child("Users").child(uId);
+
                 childReff.setValue(avgTSpeed);
 
                 Intent i = new Intent(Countdown.this, Cool.class);
