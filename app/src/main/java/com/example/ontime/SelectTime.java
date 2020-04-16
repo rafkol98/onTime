@@ -26,7 +26,10 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
 
     private TextView dateText;
     private TextView timeText;
+    private TextView minTodest;
     Trip trip;
+    Map map;
+    String time;
 
 
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -38,13 +41,23 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_time);
 
+
+
+
         dateText = findViewById(R.id.selectDate_txt);
         timeText = findViewById(R.id.timer_txt);
+        minTodest = findViewById(R.id.minutesFromLocation);
+
+
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             destinationPassed = extras.getString("keyMap");
+            time = extras.getString("keyTimeToDest");
         }
+
+        //Set text appropriate to how many minutes the user needs to get there.
+        minTodest.setText("You need "+time+"minutes to go there from your current location");
 
         findViewById(R.id.selectDate_txt).setOnClickListener(new View.OnClickListener() {
             @Override

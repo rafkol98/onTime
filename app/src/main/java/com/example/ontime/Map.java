@@ -54,6 +54,9 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
     Geocoder geocoder;
     private String tempAverageSpeed;
     private String averageSpeed;
+    private double timeToDest;
+
+
 
     public String getAverageSpeed() {
         return averageSpeed;
@@ -258,10 +261,9 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
 
     public void onPlan(View v) {
 
-
         LatLng destinationLatLng = getLatLngFromAddress(destinationPassed);
         currentOrigin = getAddressFromLatLng(currentLat,currentLong);
-        Log.d("HERE HEREEE aa", destinationPassed + "->"+ currentOrigin);
+
 
 
         String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + currentOrigin + "&destinations=" + destinationPassed + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
@@ -290,6 +292,8 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
             //go to select time class after user clicks on plan trip. if the trip passes all the criteria.
             Intent myIntent = new Intent(Map.this, SelectTime.class);
             myIntent.putExtra("keyMap", destinationPassed);
+            Log.d("here before intent"," "+timeToDest);
+            myIntent.putExtra("keyTimeToDest",timeToDest);
             startActivity(myIntent);
         }
     }
@@ -315,6 +319,8 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
         Double d = Double.valueOf(dist);
         Double s = Double.valueOf(getAverageSpeed());
         Log.d("value of s",""+s);
-        Log.d("Time based on Speed", " "+d/s);
+        Log.d("Time based on Speed", " "+((d/s)*60)+" minutes");
+        //It should take 72.156 minutes to go to the crossings from current loc.
+
     }
 }
