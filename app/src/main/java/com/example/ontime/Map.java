@@ -8,19 +8,18 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
@@ -28,25 +27,17 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -61,6 +52,19 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
     public LocationManager locationManager;
     String durationG, distanceG;
     Geocoder geocoder;
+    private String tempAverageSpeed;
+    private String averageSpeed;
+
+    public String getAverageSpeed() {
+        return averageSpeed;
+    }
+
+    public void setAverageSpeed(String averageSpeed) {
+        this.averageSpeed = averageSpeed;
+    }
+
+    FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+    private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/profiles");
 
 
     @Override
@@ -74,6 +78,26 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_class);
+
+        final String uId = currentFirebaseUser.getUid();
+
+
+        //Get average speed of user from firebase database.
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                tempAverageSpeed = dataSnapshot.child(uId).child("Average Speed").getValue().toString();
+                setAverageSpeed(tempAverageSpeed);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -288,5 +312,9 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
         durationG = "Duration= " + (int) (min / 60) + " hr " + (int) (min % 60) + " mins";
         distanceG = "Distance= " + dist + "kilometers";
         Log.d("HERE HERE DUR/DIST",durationG+"  ,  "+distanceG);
+        Double d = Double.valueOf(dist);
+        Double s = Double.valueOf(getAverageSpeed());
+        Log.d("value of s",""+s);
+        Log.d("Time based on Speed", " "+d/s);
     }
 }
