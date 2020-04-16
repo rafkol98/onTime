@@ -48,16 +48,20 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
-public class Map extends FragmentActivity implements OnMapReadyCallback, LocationListener {
+public class Map extends FragmentActivity implements OnMapReadyCallback, LocationListener, GeoTask.Geo {
 
     GoogleMap map;
     double currentLat;
     double currentLong;
-    String destinationPassed;
+    String destinationPassed, currentOrigin;
     public String bestProvider;
     public Criteria criteria;
     public LocationManager locationManager;
+    String durationG, distanceG;
+    Geocoder geocoder;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,7 +123,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
         //Output format
         String output = "json";
         //Create url to request
-        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + param + "&key=" + "AIzaSyAUHI3Ny9kHYrmYQ_c6uXQSwLFWSiyJ4Ko";
+        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + param + "&key=" + "AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
         return url;
     }
 
@@ -202,26 +206,58 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
         }
     }
 
+    public String getAddressFromLatLng(double latitude, double longitude){
+
+            String strAdd = "";
+            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+            try {
+                List<Address> addresses = geocoder.getFromLocation(latitude,longitude, 1);
+                if (addresses != null) {
+                    Address returnedAddress = addresses.get(0);
+                    StringBuilder strReturnedAddress = new StringBuilder("");
+
+                    for (int i = 0; i <= returnedAddress.getMaxAddressLineIndex(); i++) {
+                        strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
+                    }
+                    strAdd = strReturnedAddress.toString();
+                    Log.d("HERE HEREEE address", strReturnedAddress.toString());
+                } else {
+                    Log.d("HERE HEREEE address", "No Address returned!");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.d("HERE HEREEE address", "Cannot get Address!");
+            }
+            return strAdd;
+        }
+
+
     public void onPlan(View v) {
 
 
         LatLng destinationLatLng = getLatLngFromAddress(destinationPassed);
+        currentOrigin = getAddressFromLatLng(currentLat,currentLong);
+        Log.d("HERE HEREEE aa", destinationPassed + "->"+ currentOrigin);
 
+
+        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + currentOrigin + "&destinations=" + destinationPassed + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
+        Log.d("url string",url);
+        new GeoTask(Map.this).execute(url);
 
         //Check if current location is more than 3 km away from destination. Dialog to user.
         if (inRadius(destinationLatLng) == false) {
             //Alert the user about the distance.
             final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("You seem to be more than 3km away from destination, do you still wanna proceed?")
+            builder.setMessage("You seem to be more than 5km away from destination, do you still wanna proceed?")
                     .setCancelable(false)
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         public void onClick(final DialogInterface dialog, final int id) {
-                            startActivity(new Intent(Map.this,SelectTime.class));
+                            startActivity(new Intent(Map.this, SelectTime.class));
                         }
                     })
                     .setNegativeButton("No", new DialogInterface.OnClickListener() {
                         public void onClick(final DialogInterface dialog, final int id) {
-                            startActivity(new Intent(Map.this,Menu.class));
+                            startActivity(new Intent(Map.this, Menu.class));
                         }
                     });
             final AlertDialog alert = builder.create();
@@ -239,9 +275,18 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
         float[] results = new float[1];
         Location.distanceBetween(currentLat, currentLong, destinationLL.latitude, destinationLL.longitude, results);
         float distanceInMeters = results[0];
-        boolean isWithin3km = distanceInMeters < 3000;
+        boolean isWithin3km = distanceInMeters < 5000;
         return isWithin3km;
     }
 
 
+    @Override
+    public void setDouble(String result) {
+        String res[] = result.split(",");
+        Double min = Double.parseDouble(res[0]) / 60;
+        Double dist = Double.parseDouble(res[1])/1000;
+        durationG = "Duration= " + (int) (min / 60) + " hr " + (int) (min % 60) + " mins";
+        distanceG = "Distance= " + dist + "kilometers";
+        Log.d("HERE HERE DUR/DIST",durationG+"  ,  "+distanceG);
+    }
 }
