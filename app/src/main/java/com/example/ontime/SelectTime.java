@@ -34,9 +34,8 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
     private TextView minTodest;
     Trip trip;
     Map map;
-    double time,tt;
+    double time, tt;
     DateTimeCheck dateTimeCheck;
-    Integer timeToWalk;
 //    Map.GeoTask geoTask;
 //    GeoTask gt;
 
@@ -71,7 +70,7 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
             tt = extras.getDouble("keyTimeToDest");
             stringIn = extras.getString("keyTime");
             Log.d("HERE HERE MALAKA", stringIn);
-//Get the time to walk there based on the user's speed.
+
         }
 
 
@@ -120,41 +119,43 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
         Date date = Calendar.getInstance().getTime();
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         String strDate = dateFormat.format(date);
-
-
+        //Get the time to walk there based on the user's speed.
+        double timeToWalk = Double.parseDouble(stringIn);
+        int temp = (int) timeToWalk;
 
 
         Log.d("HERE HERE datetest", "Test: " + dateTimeCheck.getDateDiff(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"), strDate, dateSelected));
 
 
-        System.out.println("gggg"+stringIn);
+        System.out.println("gggg" + map.getMinutes() + "ffff" + map.getDistance());
 
 
-//        int minutesDate=dateTimeCheck.getDateDiff(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"),strDate,dateSelected);
-//
-//        if(minutesDate<timeToWalk){
-//            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//            builder.setMessage("You cant make it there on time walking, you would have to speed up, you need "+timeToWalk+ "minutes to go there and you have to be there in "+minutesDate+". Do you want to proceed?")
-//                    .setCancelable(false)
-//                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                        public void onClick(final DialogInterface dialog, final int id) {
-//                            startActivity(new Intent(SelectTime.this, SuperScreen.class));
-//                        }
-//                    })
-//                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
-//                        public void onClick(final DialogInterface dialog, final int id) {
-//                            startActivity(new Intent(SelectTime.this, Menu.class));
-//                        }
-//                    });
-//            final AlertDialog alert = builder.create();
-//            alert.show();
-//        }
+        int minutesDate = dateTimeCheck.getDateDiff(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"), strDate, dateSelected);
+
 
         if ((dateText.getText().toString()).equalsIgnoreCase("date") && (timeText.getText().toString()).equalsIgnoreCase("time")) {
             Toast.makeText(SelectTime.this, "Please select both date and time!", Toast.LENGTH_LONG).show();
         }
         if ((dateText.getText().toString()).equalsIgnoreCase("date") || (timeText.getText().toString()).equalsIgnoreCase("time")) {
             Toast.makeText(SelectTime.this, "Please select both date and time!", Toast.LENGTH_LONG).show();
+        }
+        //Check if time walking is more than the difference in minutes between current time and desired arrival time.
+        else if (minutesDate < temp) {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("You cant make it there on time walking, you would have to speed up, you need " + timeToWalk + "minutes to go there and you have to be there in " + minutesDate + ". Do you want to proceed?")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(final DialogInterface dialog, final int id) {
+                            startActivity(new Intent(SelectTime.this, SuperScreen.class));
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(final DialogInterface dialog, final int id) {
+                            startActivity(new Intent(SelectTime.this, Menu.class));
+                        }
+                    });
+            final AlertDialog alert = builder.create();
+            alert.show();
         } else {
             datePassed = dateText.getText().toString();
 

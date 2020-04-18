@@ -57,7 +57,7 @@ public class GeoTask extends AsyncTask<String, Void, String> {
             geo1.setDouble(aDouble);
         }
         else
-            Toast.makeText(mContext, "Error4!Please Try Again with proper values", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "Error! You can't go there walking from current location", Toast.LENGTH_LONG).show();
     }
 
     @Override
