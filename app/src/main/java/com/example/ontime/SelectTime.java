@@ -3,7 +3,9 @@ package com.example.ontime;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,7 +27,7 @@ import java.util.Date;
 
 public class SelectTime extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerFragment.TimePickerListener {
 
-    String destinationPassed, datePassed, timePassed, boobs;
+    String destinationPassed, datePassed, timePassed, stringIn;
 
     private TextView dateText;
     private TextView timeText;
@@ -34,6 +36,7 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
     Map map;
     double time,tt;
     DateTimeCheck dateTimeCheck;
+    Integer timeToWalk;
 //    Map.GeoTask geoTask;
 //    GeoTask gt;
 
@@ -66,10 +69,11 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
         if (extras != null) {
             destinationPassed = extras.getString("keyMap");
             tt = extras.getDouble("keyTimeToDest");
-            boobs = extras.getString("keyBoobs");
-            Log.d("HERE HERE MALAKA",boobs);
-
+            stringIn = extras.getString("keyTime");
+            Log.d("HERE HERE MALAKA", stringIn);
+//Get the time to walk there based on the user's speed.
         }
+
 
         findViewById(R.id.selectDate_txt).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,20 +120,34 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
         Date date = Calendar.getInstance().getTime();
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         String strDate = dateFormat.format(date);
-        System.out.println("CHECK ITS HERE"+map.getMinutes());
+
 
 
 
         Log.d("HERE HERE datetest", "Test: " + dateTimeCheck.getDateDiff(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"), strDate, dateSelected));
 
 
-        System.out.println("gggg"+map.getMinutes()+"ffff"+map.getDistance());
+        System.out.println("gggg"+stringIn);
 
 
-
-
-//        if(dateTimeCheck.getDateDiff(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"),x,dateSelected)>time){
+//        int minutesDate=dateTimeCheck.getDateDiff(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"),strDate,dateSelected);
 //
+//        if(minutesDate<timeToWalk){
+//            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//            builder.setMessage("You cant make it there on time walking, you would have to speed up, you need "+timeToWalk+ "minutes to go there and you have to be there in "+minutesDate+". Do you want to proceed?")
+//                    .setCancelable(false)
+//                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                        public void onClick(final DialogInterface dialog, final int id) {
+//                            startActivity(new Intent(SelectTime.this, SuperScreen.class));
+//                        }
+//                    })
+//                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+//                        public void onClick(final DialogInterface dialog, final int id) {
+//                            startActivity(new Intent(SelectTime.this, Menu.class));
+//                        }
+//                    });
+//            final AlertDialog alert = builder.create();
+//            alert.show();
 //        }
 
         if ((dateText.getText().toString()).equalsIgnoreCase("date") && (timeText.getText().toString()).equalsIgnoreCase("time")) {

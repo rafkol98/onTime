@@ -73,9 +73,6 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
     TextView textChange;
 
 
-
-
-
     GeoTask geoTask;
 
     private double minutes;
@@ -102,7 +99,6 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
     private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/profiles");
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -111,16 +107,14 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
         criteria = new Criteria();
         bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
 
-        geoTask=new GeoTask(Map.this);
-
-
+        geoTask = new GeoTask(Map.this);
 
 
         getCurrentLocation();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_class);
-        textChange= (TextView) findViewById(R.id.textChange);
+        textChange = (TextView) findViewById(R.id.textChange);
 
         final String uId = currentFirebaseUser.getUid();
 
@@ -151,11 +145,6 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
                 .findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(this);
-
-
-
-
-
 
 
     }
@@ -235,16 +224,14 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
             Toast.makeText(Map.this, "Location Could Not be Found", Toast.LENGTH_LONG);
         }
 
-        currentOrigin = getAddressFromLatLng(currentLat,currentLong);
-        Log.d("here here",currentLat+" "+currentLong);
-        Log.d("here here 2",currentOrigin+" "+destinationPassed);
+        currentOrigin = getAddressFromLatLng(currentLat, currentLong);
+        Log.d("here here", currentLat + " " + currentLong);
+        Log.d("here here 2", currentOrigin + " " + destinationPassed);
 
 
         String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + currentOrigin + "&destinations=" + destinationPassed + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
-        Log.d("url string",url);
+        Log.d("url string", url);
         geoTask.execute(url);
-
-//        textChange.setText("1");
 
     }
 
@@ -290,46 +277,36 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
         }
     }
 
-    public String getAddressFromLatLng(double latitude, double longitude){
+    public String getAddressFromLatLng(double latitude, double longitude) {
 
-            String strAdd = "";
-            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-            try {
-                List<Address> addresses = geocoder.getFromLocation(latitude,longitude, 1);
-                if (addresses != null) {
-                    Address returnedAddress = addresses.get(0);
-                    StringBuilder strReturnedAddress = new StringBuilder("");
+        String strAdd = "";
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            if (addresses != null) {
+                Address returnedAddress = addresses.get(0);
+                StringBuilder strReturnedAddress = new StringBuilder("");
 
-                    for (int i = 0; i <= returnedAddress.getMaxAddressLineIndex(); i++) {
-                        strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
-                    }
-                    strAdd = strReturnedAddress.toString();
-                    Log.d("HERE HEREEE address", strReturnedAddress.toString());
-                } else {
-                    Log.d("HERE HEREEE address", "No Address returned!");
+                for (int i = 0; i <= returnedAddress.getMaxAddressLineIndex(); i++) {
+                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-                Log.d("HERE HEREEE address", "Cannot get Address!");
+                strAdd = strReturnedAddress.toString();
+                Log.d("HERE HEREEE address", strReturnedAddress.toString());
+            } else {
+                Log.d("HERE HEREEE address", "No Address returned!");
             }
-            return strAdd;
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("HERE HEREEE address", "Cannot get Address!");
         }
+        return strAdd;
+    }
 
 
     @SuppressLint("StaticFieldLeak")
     public void onPlan(View v) throws ExecutionException, InterruptedException {
 
         LatLng destinationLatLng = getLatLngFromAddress(destinationPassed);
-
-//        currentOrigin = getAddressFromLatLng(currentLat,currentLong);
-//
-//
-//        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + currentOrigin + "&destinations=" + destinationPassed + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
-//        Log.d("url string",url);
-//        geoTask.execute(url);
-
-
-
 
 
         //Check if current location is more than 3 km away from destination. Dialog to user.
@@ -350,14 +327,13 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
                     });
             final AlertDialog alert = builder.create();
             alert.show();
-        }
-        else {
+        } else {
             //go to select time class after user clicks on plan trip. if the trip passes all the criteria.
             Intent myIntent = new Intent(Map.this, SelectTime.class);
             myIntent.putExtra("keyMap", destinationPassed);
             myIntent.putExtra("keyTimeToDest", timeToDest);
-            myIntent.putExtra("keyBoobs",textChange.getText().toString());
-            Log.d("here before intent"," "+timeToDest);
+            myIntent.putExtra("keyTime", textChange.getText().toString());
+            Log.d("here before intent", " " + timeToDest);
 
             startActivity(myIntent);
         }
@@ -377,24 +353,23 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
     public void setDouble(String result) {
         String res[] = result.split(",");
         Double min = Double.parseDouble(res[0]) / 60;
-        Double dist = Double.parseDouble(res[1])/1000;
+        Double dist = Double.parseDouble(res[1]) / 1000;
         durationG = "Duration= " + (int) (min / 60) + " hr " + (int) (min % 60) + " mins";
         distanceG = "Distance= " + dist + "kilometers";
-        Log.d("HERE HERE DUR/DIST",durationG+"  ,  "+distanceG);
+        Log.d("HERE HERE DUR/DIST", durationG + "  ,  " + distanceG);
         Double d = Double.valueOf(dist);
         Double s = Double.valueOf(getAverageSpeed());
-        Log.d("value of s",""+s);
-        Log.d("Time based on Speed", " "+((d/s)*60)+" minutes");
+        Log.d("value of s", "" + s);
+        Log.d("Time based on Speed", " " + ((d / s) * 60) + " minutes");
 //        setTimeToDest((d/s)*60);
-        timeToDest=((d/s)*60);
+        timeToDest = ((d / s) * 60);
         //It should take 72.156 minutes to go to the crossings from current loc.
-        minutes =timeToDest;
-        textChange.setText(timeToDest+"");
-        distance= dist;
-        System.out.println("I am done re "+ minutes);
+        minutes = timeToDest;
+        textChange.setText(timeToDest + "");
+        distance = dist;
+        System.out.println("I am done re " + minutes);
 
     }
-
 
 
 }
