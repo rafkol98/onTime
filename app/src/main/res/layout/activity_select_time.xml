@@ -58,7 +58,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.569"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/minutesFromLocation" />
+        app:layout_constraintTop_toBottomOf="@+id/textDate" />
 
     <TextView
     android:id="@+id/selectDate_txt"
@@ -102,21 +102,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:onClick="onDone"/>
-
-    <TextView
-        android:id="@+id/minutesFromLocation"
-        android:layout_width="324dp"
-        android:layout_height="66dp"
-        android:layout_marginTop="16dp"
-        android:text="You need __ minutes to go there from your current location"
-        android:textColor="@color/blgrey"
-        android:gravity="center"
-        android:textSize="22sp"
-        android:textStyle="italic"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textDate" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

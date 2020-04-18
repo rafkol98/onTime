@@ -18,19 +18,33 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class SelectTime extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerFragment.TimePickerListener {
 
-    String destinationPassed, datePassed, timePassed;
+    String destinationPassed, datePassed, timePassed, boobs;
 
     private TextView dateText;
     private TextView timeText;
     private TextView minTodest;
     Trip trip;
     Map map;
-    String time;
+    double time,tt;
+    DateTimeCheck dateTimeCheck;
+//    Map.GeoTask geoTask;
+//    GeoTask gt;
 
+
+    public double getTime() {
+        return time;
+    }
+
+    public void setTime(double time) {
+        this.time = time;
+    }
 
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -40,24 +54,22 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_time);
-
-
-
+        map = new Map();
+        dateTimeCheck = new DateTimeCheck();
+//        geoTask= new Map.GeoTask();
 
         dateText = findViewById(R.id.selectDate_txt);
         timeText = findViewById(R.id.timer_txt);
-        minTodest = findViewById(R.id.minutesFromLocation);
-
 
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             destinationPassed = extras.getString("keyMap");
-            time = extras.getString("keyTimeToDest");
-        }
+            tt = extras.getDouble("keyTimeToDest");
+            boobs = extras.getString("keyBoobs");
+            Log.d("HERE HERE MALAKA",boobs);
 
-        //Set text appropriate to how many minutes the user needs to get there.
-        minTodest.setText("You need "+time+"minutes to go there from your current location");
+        }
 
         findViewById(R.id.selectDate_txt).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,7 +112,27 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
     }
 
     public void onDone(View v) {
-        if((dateText.getText().toString()).equalsIgnoreCase("date") && (timeText.getText().toString()).equalsIgnoreCase("time")){
+        String dateSelected = dateText.getText().toString() + " " + timeText.getText().toString() + ":00";
+        Date date = Calendar.getInstance().getTime();
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        String strDate = dateFormat.format(date);
+        System.out.println("CHECK ITS HERE"+map.getMinutes());
+
+
+
+        Log.d("HERE HERE datetest", "Test: " + dateTimeCheck.getDateDiff(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"), strDate, dateSelected));
+
+
+        System.out.println("gggg"+map.getMinutes()+"ffff"+map.getDistance());
+
+
+
+
+//        if(dateTimeCheck.getDateDiff(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"),x,dateSelected)>time){
+//
+//        }
+
+        if ((dateText.getText().toString()).equalsIgnoreCase("date") && (timeText.getText().toString()).equalsIgnoreCase("time")) {
             Toast.makeText(SelectTime.this, "Please select both date and time!", Toast.LENGTH_LONG).show();
         }
         if ((dateText.getText().toString()).equalsIgnoreCase("date") || (timeText.getText().toString()).equalsIgnoreCase("time")) {
@@ -118,14 +150,8 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
 
             DatabaseReference childReff = dbRef.child(uId).child("trips").child(tripId);
 
-//                    .child("destination");
-//            DatabaseReference childReff1 = dbRef.child(uId).child("trips").child(tripId).child("date");
-//            DatabaseReference childReff2 = dbRef.child(uId).child("trips").child(tripId).child("time");
-
-//                DatabaseReference childReff = reff.child("Users").child(uId);
             childReff.setValue(trip);
-//            childReff1.setValue(datePassed);
-//            childReff2.setValue(timePassed);
+
 
             Intent myIntent = new Intent(SelectTime.this, SuperScreen.class);
             myIntent.putExtra("keyDest", trip.getDestination());

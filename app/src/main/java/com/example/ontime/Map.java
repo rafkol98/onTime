@@ -3,6 +3,7 @@ package com.example.ontime;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,9 +15,11 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -38,8 +41,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 public class Map extends FragmentActivity implements OnMapReadyCallback, LocationListener, GeoTask.Geo {
 
@@ -56,7 +70,25 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
     private String averageSpeed;
     private double timeToDest;
 
+    TextView textChange;
 
+
+
+
+
+    GeoTask geoTask;
+
+    private double minutes;
+
+    public double getMinutes() {
+        return minutes;
+    }
+
+    private double distance;
+
+    public double getDistance() {
+        return distance;
+    }
 
     public String getAverageSpeed() {
         return averageSpeed;
@@ -70,17 +102,25 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
     private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/profiles");
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
 
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         criteria = new Criteria();
         bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
 
+        geoTask=new GeoTask(Map.this);
+
+
+
+
         getCurrentLocation();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_class);
+        textChange= (TextView) findViewById(R.id.textChange);
 
         final String uId = currentFirebaseUser.getUid();
 
@@ -111,6 +151,12 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
                 .findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(this);
+
+
+
+
+
+
 
     }
 
@@ -189,6 +235,17 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
             Toast.makeText(Map.this, "Location Could Not be Found", Toast.LENGTH_LONG);
         }
 
+        currentOrigin = getAddressFromLatLng(currentLat,currentLong);
+        Log.d("here here",currentLat+" "+currentLong);
+        Log.d("here here 2",currentOrigin+" "+destinationPassed);
+
+
+        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + currentOrigin + "&destinations=" + destinationPassed + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
+        Log.d("url string",url);
+        geoTask.execute(url);
+
+//        textChange.setText("1");
+
     }
 
     @Override
@@ -259,16 +316,21 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
         }
 
 
-    public void onPlan(View v) {
+    @SuppressLint("StaticFieldLeak")
+    public void onPlan(View v) throws ExecutionException, InterruptedException {
 
         LatLng destinationLatLng = getLatLngFromAddress(destinationPassed);
-        currentOrigin = getAddressFromLatLng(currentLat,currentLong);
+
+//        currentOrigin = getAddressFromLatLng(currentLat,currentLong);
+//
+//
+//        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + currentOrigin + "&destinations=" + destinationPassed + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
+//        Log.d("url string",url);
+//        geoTask.execute(url);
 
 
 
-        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + currentOrigin + "&destinations=" + destinationPassed + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
-        Log.d("url string",url);
-        new GeoTask(Map.this).execute(url);
+
 
         //Check if current location is more than 3 km away from destination. Dialog to user.
         if (inRadius(destinationLatLng) == false) {
@@ -288,12 +350,15 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
                     });
             final AlertDialog alert = builder.create();
             alert.show();
-        } else {
+        }
+        else {
             //go to select time class after user clicks on plan trip. if the trip passes all the criteria.
             Intent myIntent = new Intent(Map.this, SelectTime.class);
             myIntent.putExtra("keyMap", destinationPassed);
+            myIntent.putExtra("keyTimeToDest", timeToDest);
+            myIntent.putExtra("keyBoobs",textChange.getText().toString());
             Log.d("here before intent"," "+timeToDest);
-            myIntent.putExtra("keyTimeToDest",timeToDest);
+
             startActivity(myIntent);
         }
     }
@@ -320,7 +385,18 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
         Double s = Double.valueOf(getAverageSpeed());
         Log.d("value of s",""+s);
         Log.d("Time based on Speed", " "+((d/s)*60)+" minutes");
+//        setTimeToDest((d/s)*60);
+        timeToDest=((d/s)*60);
         //It should take 72.156 minutes to go to the crossings from current loc.
+        minutes =timeToDest;
+        textChange.setText(timeToDest+"");
+        distance= dist;
+        System.out.println("I am done re "+ minutes);
 
     }
+
+
+
 }
+
+

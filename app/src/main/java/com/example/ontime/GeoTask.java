@@ -25,22 +25,29 @@ import java.net.URL;
 public class GeoTask extends AsyncTask<String, Void, String> {
     ProgressDialog pd;
     Context mContext;
-    Double duration;
+
+    SelectTime selectTime;
     Geo geo1;
+
+
     //constructor is used to get the context.
     public GeoTask(Context mContext) {
         this.mContext = mContext;
         geo1= (Geo) mContext;
     }
-    //This function is executed before before "doInBackground(String...params)" is executed to dispaly the progress dialog
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-        pd=new ProgressDialog(mContext);
-        pd.setMessage("Loading");
-        pd.setCancelable(false);
-        pd.show();
-    }
+
+
+
+    //        //This function is executed before before "doInBackground(String...params)" is executed to dispaly the progress dialog
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//            selectTime=new SelectTime();
+//            pd=new ProgressDialog(mContext);
+//            pd.setMessage("Loading");
+//            pd.setCancelable(false);
+//            pd.show();
+//        }
     //This function is executed after the execution of "doInBackground(String...params)" to dismiss the dispalyed progress dialog and call "setDouble(Double)" defined in "MainActivity.java"
     @Override
     protected void onPostExecute(String aDouble) {
@@ -48,7 +55,6 @@ public class GeoTask extends AsyncTask<String, Void, String> {
         if(aDouble!=null)
         {
             geo1.setDouble(aDouble);
-            pd.dismiss();
         }
         else
             Toast.makeText(mContext, "Error4!Please Try Again with proper values", Toast.LENGTH_SHORT).show();
@@ -101,9 +107,9 @@ public class GeoTask extends AsyncTask<String, Void, String> {
 
         return null;
     }
+
     interface Geo{
         public void setDouble(String min);
     }
 
 }
-
