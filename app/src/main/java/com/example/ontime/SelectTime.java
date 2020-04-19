@@ -124,10 +124,7 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
         int temp = (int) timeToWalk;
 
 
-        Log.d("HERE HERE datetest", "Test: " + dateTimeCheck.getDateDiff(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"), strDate, dateSelected));
 
-
-        System.out.println("gggg" + map.getMinutes() + "ffff" + map.getDistance());
 
 
         int minutesDate = dateTimeCheck.getDateDiff(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"), strDate, dateSelected);
@@ -146,7 +143,7 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
                     .setCancelable(false)
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         public void onClick(final DialogInterface dialog, final int id) {
-                            startActivity(new Intent(SelectTime.this, SuperScreen.class));
+                            doTrip();
                         }
                     })
                     .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -157,27 +154,31 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
             final AlertDialog alert = builder.create();
             alert.show();
         } else {
-            datePassed = dateText.getText().toString();
-
-            timePassed = timeText.getText().toString();
-
-            trip = new Trip(destinationPassed, datePassed, timePassed);
-
-            String uId = currentFirebaseUser.getUid();
-            String tripId = Integer.toString(trip.getTripId(destinationPassed, datePassed, timePassed));
-
-
-            DatabaseReference childReff = dbRef.child(uId).child("trips").child(tripId);
-
-            childReff.setValue(trip);
-
-
-            Intent myIntent = new Intent(SelectTime.this, SuperScreen.class);
-            myIntent.putExtra("keyDest", trip.getDestination());
-            startActivity(myIntent);
-
+           doTrip();
         }
 
+
+    }
+
+    public void doTrip(){
+        datePassed = dateText.getText().toString();
+
+        timePassed = timeText.getText().toString();
+
+        trip = new Trip(destinationPassed, datePassed, timePassed);
+
+        String uId = currentFirebaseUser.getUid();
+        String tripId = Integer.toString(trip.getTripId(destinationPassed, datePassed, timePassed));
+
+
+        DatabaseReference childReff = dbRef.child(uId).child("trips").child(tripId);
+
+        childReff.setValue(trip);
+
+
+        Intent myIntent = new Intent(SelectTime.this, SuperScreen.class);
+        myIntent.putExtra("keyDest", trip.getDestination());
+        startActivity(myIntent);
 
     }
 

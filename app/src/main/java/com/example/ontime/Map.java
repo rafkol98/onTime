@@ -65,7 +65,6 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
     public Criteria criteria;
     public LocationManager locationManager;
     String durationG, distanceG;
-    Geocoder geocoder;
     private String tempAverageSpeed;
     private String averageSpeed;
     private double timeToDest;
@@ -75,11 +74,6 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
 
     GeoTask geoTask;
 
-    private double minutes;
-
-    public double getMinutes() {
-        return minutes;
-    }
 
     private double distance;
 
@@ -169,25 +163,25 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
         }
     }
 
-    //This method is used to build the url string that is sent to the maps api to request directions
-    private String getRequestUrl() {
-        //Value of origin
-        String str_origin2 = "origin=" + currentLat + "," + currentLong;
-        String str_origin_as_str = "origin=" + "Newcastle";
-        //Value of destination
-        String str_destination2 = "destination=" + (currentLat + 0.01) + "," + (currentLong + 0.01);
-        //Set value enable the sensor
-        String sensor = "sensor=false";
-        //Mode of travel
-        String mode = "mode=walking";
-        //Build the full string with the variables
-        String param = str_origin2 + "&" + str_destination2 + "&" + sensor + "&" + mode;
-        //Output format
-        String output = "json";
-        //Create url to request
-        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + param + "&key=" + "AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
-        return url;
-    }
+//    //This method is used to build the url string that is sent to the maps api to request directions
+//    private String getRequestUrl() {
+//        //Value of origin
+//        String str_origin2 = "origin=" + currentLat + "," + currentLong;
+//        String str_origin_as_str = "origin=" + "Newcastle";
+//        //Value of destination
+//        String str_destination2 = "destination=" + (currentLat + 0.01) + "," + (currentLong + 0.01);
+//        //Set value enable the sensor
+//        String sensor = "sensor=false";
+//        //Mode of travel
+//        String mode = "mode=walking";
+//        //Build the full string with the variables
+//        String param = str_origin2 + "&" + str_destination2 + "&" + sensor + "&" + mode;
+//        //Output format
+//        String output = "json";
+//        //Create url to request
+//        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + param + "&key=" + "AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
+//        return url;
+//    }
 
     //once the map fragment has loaded do this
     @Override
@@ -225,10 +219,9 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
         }
 
         currentOrigin = getAddressFromLatLng(currentLat, currentLong);
-        Log.d("here here", currentLat + " " + currentLong);
-        Log.d("here here 2", currentOrigin + " " + destinationPassed);
 
 
+        //Use Geocoder class to calculate minutes walking from current location.
         String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + currentOrigin + "&destinations=" + destinationPassed + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
         Log.d("url string", url);
         geoTask.execute(url);
@@ -339,7 +332,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
         }
     }
 
-    //Method checks if current location is more than 3 km away from destination.
+    //Method checks if current location is more than 5 km away from destination.
     private boolean inRadius(LatLng destinationLL) {
         float[] results = new float[1];
         Location.distanceBetween(currentLat, currentLong, destinationLL.latitude, destinationLL.longitude, results);
@@ -354,21 +347,14 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
         String res[] = result.split(",");
         Double min = Double.parseDouble(res[0]) / 60;
         Double dist = Double.parseDouble(res[1]) / 1000;
-        durationG = "Duration= " + (int) (min / 60) + " hr " + (int) (min % 60) + " mins";
-        distanceG = "Distance= " + dist + "kilometers";
-        Log.d("HERE HERE DUR/DIST", durationG + "  ,  " + distanceG);
+
         Double d = Double.valueOf(dist);
         Double s = Double.valueOf(getAverageSpeed());
-        Log.d("value of s", "" + s);
-        Log.d("Time based on Speed", " " + ((d / s) * 60) + " minutes");
-//        setTimeToDest((d/s)*60);
+
         timeToDest = ((d / s) * 60);
-        //It should take 72.156 minutes to go to the crossings from current loc.
-        minutes = timeToDest;
+
         textChange.setText(timeToDest + "");
         distance = dist;
-        System.out.println("I am done re " + minutes);
-
     }
 
 

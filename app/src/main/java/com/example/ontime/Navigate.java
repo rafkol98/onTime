@@ -37,6 +37,13 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONObject;
 
@@ -46,37 +53,80 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
-public class Navigate extends FragmentActivity implements OnMapReadyCallback, LocationListener {
+public class Navigate extends FragmentActivity implements OnMapReadyCallback, LocationListener, GeoTask.Geo {
+
+    static final long ONE_MINUTE_IN_MILLIS = 60000;//millisecs
 
     private GoogleMap mMap;
     private FusedLocationProviderClient client;
-//    private FusedLocationProviderClient
-
+    //    private FusedLocationProviderClient
+    String currentOrigin;
     double latitude, longitude;
     MarkerOptions origin, destination;
     private LocationManager locationManager;
     private double currentLat, currentLong;
     String destinationPassed;
-    private String bestProvider,url;
+    private String bestProvider, url;
     private Criteria criteria;
     private Location lcn;
     LatLng desLatLgn;
+    TextView arrivalTxt;
 
+    GeoTask geoTask;
 
+    //Used to get the User's speed from firebase.
+    FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+    private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/profiles");
+    private String tempAverageSpeed;
+    private String averageSpeed;
+
+    public String getAverageSpeed() {
+        return averageSpeed;
+    }
+
+    public void setAverageSpeed(String averageSpeed) {
+        this.averageSpeed = averageSpeed;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigate);
 
+        final String uId = currentFirebaseUser.getUid();
+
+
+        //Get average speed of user from firebase database.
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                tempAverageSpeed = dataSnapshot.child(uId).child("Average Speed").getValue().toString();
+                setAverageSpeed(tempAverageSpeed);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        arrivalTxt = findViewById(R.id.textArrival);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -89,6 +139,7 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
             return;
         }
 
+        geoTask = new GeoTask(Navigate.this);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -120,11 +171,15 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
 
         // Getting URL to the Google Directions API
 
+        Log.d("here here latlong",latitude+","+longitude);
+        currentOrigin = getAddressFromLatLng(latitude, longitude);
+
 
         DownloadTask downloadTask = new DownloadTask();
 
         // Start downloading json data from Google Directions API
         downloadTask.execute(url);
+
 
 
     }
@@ -161,6 +216,10 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
         mMap.addMarker(destination);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(origin.getPosition(), zoom));
 
+        //Use Geocoder class to calculate minutes walking from current location.
+        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + currentOrigin + "&destinations=" + destinationPassed + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
+        Log.d("url string", url);
+        geoTask.execute(url);
     }
 
     @Override
@@ -181,6 +240,37 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
 
     @Override
     public void onProviderDisabled(String provider) {
+
+    }
+
+    @Override
+    public void setDouble(String result) {
+
+
+        Calendar date = Calendar.getInstance();
+        long t = date.getTimeInMillis();
+
+        String pattern = "HH:mm";
+
+// Create an instance of SimpleDateFormat used for formatting
+// the string representation of date according to the chosen pattern
+        DateFormat df = new SimpleDateFormat(pattern);
+
+
+        String res[] = result.split(",");
+        Double min = Double.parseDouble(res[0]) / 60;
+        Double dist = Double.parseDouble(res[1]) / 1000;
+
+        Double d = Double.valueOf(dist);
+        Double s = Double.valueOf(getAverageSpeed());
+
+        int timeToDest = (int) ((d / s) * 60);
+
+        //Add timeToDest to current time
+        Date afterAddingTimeToDest = new Date(t + (timeToDest * ONE_MINUTE_IN_MILLIS));
+        String todayAsString = df.format(afterAddingTimeToDest.getTime());
+
+        arrivalTxt.setText("Arrival Time: "+todayAsString);
 
     }
 
@@ -372,14 +462,11 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
                 Log.e("TAG", "GPS is on");
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
-            }
-            else{
+            } else {
                 //This is what you need:
                 locationManager.requestLocationUpdates(bestProvider, 1000, 0, this);
             }
-        }
-        else
-        {
+        } else {
 //            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 //            builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
 //                    .setCancelable(false)
@@ -398,22 +485,44 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
         }
     }
 
-    public static boolean isLocationEnabled(Context context)
-    {
+
+    public String getAddressFromLatLng(double latitude, double longitude) {
+
+        String strAdd = "";
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            if (addresses != null) {
+                Address returnedAddress = addresses.get(0);
+                StringBuilder strReturnedAddress = new StringBuilder("");
+
+                for (int i = 0; i <= returnedAddress.getMaxAddressLineIndex(); i++) {
+                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
+                }
+                strAdd = strReturnedAddress.toString();
+                Log.d("HERE HEREEE address", strReturnedAddress.toString());
+            } else {
+                Log.d("HERE HEREEE address", "No Address returned!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("HERE HEREEE address", "Cannot get Address!");
+        }
+        return strAdd;
+    }
+
+
+    public static boolean isLocationEnabled(Context context) {
         int locationMode = 0;
         String locationProviders;
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-        {
-            try
-            {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            try {
                 locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
             } catch (Settings.SettingNotFoundException e) {
                 e.printStackTrace();
             }
             return locationMode != Settings.Secure.LOCATION_MODE_OFF;
-        }
-        else
-        {
+        } else {
             locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
             return !TextUtils.isEmpty(locationProviders);
         }
