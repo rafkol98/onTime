@@ -20,10 +20,21 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.io.IOException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class SelectTime extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerFragment.TimePickerListener {
 
@@ -31,13 +42,11 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
 
     private TextView dateText;
     private TextView timeText;
-    private TextView minTodest;
+
     Trip trip;
     Map map;
     double time, tt;
     DateTimeCheck dateTimeCheck;
-//    Map.GeoTask geoTask;
-//    GeoTask gt;
 
 
     public double getTime() {
@@ -114,7 +123,7 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
         timeText.setText(hour + ":" + minute);
     }
 
-    public void onDone(View v) {
+    public void onDone(View v) throws ParseException {
         String dateSelected = dateText.getText().toString() + " " + timeText.getText().toString() + ":00";
         Date date = Calendar.getInstance().getTime();
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -122,9 +131,6 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
         //Get the time to walk there based on the user's speed.
         double timeToWalk = Double.parseDouble(stringIn);
         int temp = (int) timeToWalk;
-
-
-
 
 
         int minutesDate = dateTimeCheck.getDateDiff(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"), strDate, dateSelected);
@@ -143,7 +149,11 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
                     .setCancelable(false)
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         public void onClick(final DialogInterface dialog, final int id) {
-                            doTrip();
+                            try {
+                                doTrip();
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
                         }
                     })
                     .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -154,25 +164,37 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
             final AlertDialog alert = builder.create();
             alert.show();
         } else {
-           doTrip();
+            //Call doTrip method to upload trip to firebase.
+            try {
+                doTrip();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
         }
 
 
     }
 
-    public void doTrip(){
-        datePassed = dateText.getText().toString();
+    //uploads trip to firebase for the user.
+    public void doTrip() throws ParseException {
 
+        //Store date,time and destination on a new Trip.
+        datePassed = dateText.getText().toString();
         timePassed = timeText.getText().toString();
 
-        trip = new Trip(destinationPassed, datePassed, timePassed);
+        String dateSelected = dateText.getText().toString() + " " + timeText.getText().toString();
+        Long timestamp = toMilli(dateSelected);
 
+//        trip = new Trip(destinationPassed, datePassed, timePassed);
+        trip = new Trip(destinationPassed,timestamp);
+        //Get uId of the Firebase User.
         String uId = currentFirebaseUser.getUid();
+        //Create a unique Hash Key for the Trip.
         String tripId = Integer.toString(trip.getTripId(destinationPassed, datePassed, timePassed));
 
-
+        //Store the trip on Firebase RealTime Database.
         DatabaseReference childReff = dbRef.child(uId).child("trips").child(tripId);
-
         childReff.setValue(trip);
 
 
@@ -180,6 +202,15 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
         myIntent.putExtra("keyDest", trip.getDestination());
         startActivity(myIntent);
 
+    }
+
+    public Long toMilli(String dateIn) throws ParseException {
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        Date date = (Date) formatter.parse(dateIn);
+        long output = date.getTime() / 1000L;
+        String str = Long.toString(output);
+        long timestamp = Long.parseLong(str) * 1000;
+        return timestamp;
     }
 
 

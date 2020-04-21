@@ -21,6 +21,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import org.apache.commons.io.FileUtils;
@@ -31,6 +32,7 @@ import java.util.ArrayList;
 
 public class Upcoming_Walks extends AppCompatActivity {
     String destination, date, time;
+    Long timestamp;
 
     SelectTime selectTime = new SelectTime();
     Object newTrip;
@@ -49,22 +51,21 @@ public class Upcoming_Walks extends AppCompatActivity {
 
         final ListView mListView = (ListView) findViewById(R.id.listView);
 
-
+        //Get uId of the user
         final String uId = currentFirebaseUser.getUid();
 
 
+//        Query query = dbRef.child(uId).child("trips").child("timestamp").orderByValue();
         dbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 for (DataSnapshot child : dataSnapshot.child(uId).child("trips").getChildren()) {
-                    //Here you can access the child.getKey()
-                    date = child.child("date").getValue().toString();
                     destination = child.child("destination").getValue().toString();
-                    time = child.child("time").getValue().toString();
+                    timestamp = child.child("timestamp").getValue(Long.class);
 
 
-                    trip = new Trip(destination,date,time);
+                    trip = new Trip(destination,timestamp);
                     tripList.add(trip);
 
                 }

@@ -13,7 +13,11 @@ import androidx.annotation.Nullable;
 
 import com.google.firebase.database.ValueEventListener;
 
+import java.security.Timestamp;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class TripListAdapter extends ArrayAdapter<Trip> {
@@ -31,11 +35,10 @@ public class TripListAdapter extends ArrayAdapter<Trip> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        //Get destination and time.
         String destination = getItem(position).getDestination();
-        String date = getItem(position).getDate();
-        String time = getItem(position).getTime();
+        Long timeLong = getItem(position).getTimestamp();
 
-        Trip newTrip = new Trip(destination,date,time);
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
         convertView = inflater.inflate(mResource,parent,false);
@@ -44,12 +47,20 @@ public class TripListAdapter extends ArrayAdapter<Trip> {
         TextView tvDate = (TextView) convertView.findViewById(R.id.textDate);
         TextView tvTime = (TextView) convertView.findViewById(R.id.textTime);
 
+       String time=convertTime(timeLong);
+
         tvDestination.setText(destination);
-        tvDate.setText(date);
-        tvTime.setText(time);
+        tvDate.setText(time);
+        tvTime.setText("");
 
 
 
         return convertView;
+    }
+
+    public String convertTime(long time){
+        Date date = new Date(time);
+        Format format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        return format.format(date);
     }
 }

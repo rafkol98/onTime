@@ -215,7 +215,17 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
         } else {
             LatLng current = new LatLng(currentLat, currentLong);
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(current, zoom));
-            Toast.makeText(Map.this, "Location Could Not be Found", Toast.LENGTH_LONG);
+            textChange.setText("");
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("We could't find the location. Make sure you are connected to the internet and double check the address you entered.")
+                    .setCancelable(false)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(final DialogInterface dialog, final int id) {
+                            startActivity(new Intent(Map.this, Menu.class));
+                        }
+                    });
+            final AlertDialog alert = builder.create();
+            alert.show();
         }
 
         currentOrigin = getAddressFromLatLng(currentLat, currentLong);

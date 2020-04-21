@@ -226,6 +226,12 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
     public void onLocationChanged(Location location) {
         currentLat = location.getLatitude();
         currentLong = location.getLongitude();
+
+        String originUpdate = getAddressFromLatLng(currentLat, currentLong);
+        //Use Geocoder class to calculate minutes walking from current location.
+        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + originUpdate + "&destinations=" + destinationPassed + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
+        Log.d("url string", url);
+        geoTask.execute(url);
     }
 
     @Override

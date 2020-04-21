@@ -6,6 +6,7 @@ public class Trip {
     String destination;
     String date;
     String time;
+    Long timestamp;
     Object object;
 
 
@@ -13,6 +14,11 @@ public class Trip {
         this.destination = destination;
         this.date = date;
         this.time = time;
+    }
+
+    public Trip(String destination, Long timestamp) {
+        this.destination = destination;
+        this.timestamp = timestamp;
     }
 
     public Trip(Object object) {
@@ -29,6 +35,10 @@ public class Trip {
 
     public String getTime() {
         return time;
+    }
+
+    public Long getTimestamp() {
+        return timestamp;
     }
 
     //Get unique hash key of the trip
