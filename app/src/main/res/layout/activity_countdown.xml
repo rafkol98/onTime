@@ -13,7 +13,7 @@
         android:id="@+id/timer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="01:00"
+        android:text="02:00"
         android:textColor="@color/blgrey"
         android:textSize="60sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,6 +62,7 @@
         android:layout_marginTop="32dp"
         android:text="0.0 m/s"
         android:textSize="28sp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
@@ -69,14 +70,15 @@
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/sw_speed"
         android:layout_width="200dp"
-        android:gravity="center"
-        android:checked="true"
         android:layout_height="wrap_content"
+        android:checked="true"
+        android:gravity="center"
         android:text="Metric Units"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/speedometer_txt" />
+        app:layout_constraintTop_toBottomOf="@+id/speedometer_txt"
+        tools:visibility="invisible" />
 
     <TextView
         android:id="@+id/avgSpeedTxt"
@@ -86,5 +88,6 @@
         android:text="0.0 m/s"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/speedometer_txt" />
+        app:layout_constraintTop_toBottomOf="@+id/speedometer_txt"
+        tools:visibility="invisible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

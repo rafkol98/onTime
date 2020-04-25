@@ -163,26 +163,6 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
         }
     }
 
-//    //This method is used to build the url string that is sent to the maps api to request directions
-//    private String getRequestUrl() {
-//        //Value of origin
-//        String str_origin2 = "origin=" + currentLat + "," + currentLong;
-//        String str_origin_as_str = "origin=" + "Newcastle";
-//        //Value of destination
-//        String str_destination2 = "destination=" + (currentLat + 0.01) + "," + (currentLong + 0.01);
-//        //Set value enable the sensor
-//        String sensor = "sensor=false";
-//        //Mode of travel
-//        String mode = "mode=walking";
-//        //Build the full string with the variables
-//        String param = str_origin2 + "&" + str_destination2 + "&" + sensor + "&" + mode;
-//        //Output format
-//        String output = "json";
-//        //Create url to request
-//        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + param + "&key=" + "AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
-//        return url;
-//    }
-
     //once the map fragment has loaded do this
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -215,17 +195,17 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
         } else {
             LatLng current = new LatLng(currentLat, currentLong);
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(current, zoom));
-            textChange.setText("");
-            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("We could't find the location. Make sure you are connected to the internet and double check the address you entered.")
-                    .setCancelable(false)
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(final DialogInterface dialog, final int id) {
-                            startActivity(new Intent(Map.this, Menu.class));
-                        }
-                    });
-            final AlertDialog alert = builder.create();
-            alert.show();
+//            textChange.setText("");
+//            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//            builder.setMessage("We could't find the location. Make sure you are connected to the internet and double check the address you entered.")
+//                    .setCancelable(false)
+//                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                        public void onClick(final DialogInterface dialog, final int id) {
+//                            startActivity(new Intent(Map.this, Menu.class));
+//                        }
+//                    });
+//            final AlertDialog alert = builder.create();
+//            alert.show();
         }
 
         currentOrigin = getAddressFromLatLng(currentLat, currentLong);
@@ -320,7 +300,11 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
                     .setCancelable(false)
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         public void onClick(final DialogInterface dialog, final int id) {
-                            startActivity(new Intent(Map.this, SelectTime.class));
+                            Intent myIntent = new Intent(Map.this, SelectTime.class);
+                            myIntent.putExtra("keyMap", destinationPassed);
+                            myIntent.putExtra("keyTimeToDest", timeToDest);
+                            myIntent.putExtra("keyTime", textChange.getText().toString());
+                            startActivity(myIntent);
                         }
                     })
                     .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -365,6 +349,12 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
 
         textChange.setText(timeToDest + "");
         distance = dist;
+    }
+
+    @Override
+    public void tripFromLocation() {
+        Intent myIntent = new Intent(Map.this, PlanTripFromLocation.class);
+        startActivity(myIntent);
     }
 
 

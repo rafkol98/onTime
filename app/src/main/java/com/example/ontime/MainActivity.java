@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,12 +21,13 @@ import com.google.firebase.auth.*;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.File;
+
 public class MainActivity extends AppCompatActivity {
 
     TextView name_txt;
     EditText name_in;
     String name_input;
-
 
 
     EditText sign_in_email, sign_in_password;
@@ -46,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        fixGoogleMapBug();
 
         create_account_txt = findViewById(R.id.sign_up_text);
         sign_in_email = findViewById(R.id.sign_in_email);
@@ -71,36 +76,24 @@ public class MainActivity extends AppCompatActivity {
 
 
         sign_in.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    signInAccount();
-                }
+            @Override
+            public void onClick(View v) {
+                signInAccount();
+            }
 
         });
-
-//        Button suggest = findViewById(R.id.suggest);
-//        suggest.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(MainActivity.this, Suggestion.class);
-//                startActivity(intent);
-//            }
-//
-//        });
-
-
 
 
     }
 
-    public void signInAccount(){
+    public void signInAccount() {
 
         loadingAnimation();
 
         boolean emailVerified = validateInput.ValidateEmail();
         boolean passwordVerified = validateInput.ValidatePassword();
 
-        if(emailVerified && passwordVerified) {
+        if (emailVerified && passwordVerified) {
             email = sign_in_email.getText().toString().trim();
             password = sign_in_password.getText().toString().trim();
 
@@ -118,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
                             } else {
                                 // If sign in fails, display a message to the user.
                                 dialog.dismiss();
-                                Toast.makeText(MainActivity.this,"Password and Email mismatch.",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, "Password and Email mismatch.", Toast.LENGTH_SHORT).show();
 
                             }
 
@@ -126,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
         }
-}
+    }
 
     public void addListenerOnButton() {
         Intent myIntent = new Intent(MainActivity.this, Suggestion.class);
@@ -134,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void loadingAnimation(){
+    public void loadingAnimation() {
         LayoutInflater inflater = getLayoutInflater();
         builder.setView(inflater.inflate(R.layout.loading, null));
         builder.setCancelable(false);
@@ -143,4 +136,12 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    private void fixGoogleMapBug() {
+        SharedPreferences googleBug = getSharedPreferences("google_bug", Context.MODE_PRIVATE);
+        if (!googleBug.contains("fixed")) {
+            File corruptedZoomTables = new File(getFilesDir(), "ZoomTables.data");
+            corruptedZoomTables.delete();
+            googleBug.edit().putBoolean("fixed", true).apply();
+        }
+    }
 }

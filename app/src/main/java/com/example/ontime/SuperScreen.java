@@ -8,6 +8,7 @@ import android.os.Handler;
 
 public class SuperScreen extends AppCompatActivity {
 
+
     private Handler mHandler = new Handler();
 
 
@@ -17,7 +18,8 @@ public class SuperScreen extends AppCompatActivity {
         setContentView(R.layout.activity_super_screen);
 
 
-
+        //postDelayed method, Causes the Runnable r (in this case Class Superscreen) to be added to the message queue, to be run
+        // after the specified amount of time elapses.
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -32,8 +34,11 @@ public class SuperScreen extends AppCompatActivity {
         }, 6000);
     }
 
-    public void onBackPressed(){
+    public void onBackPressed() {
 
     }
 
 }
+
+
+

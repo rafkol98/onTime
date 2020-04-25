@@ -565,5 +565,10 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
         }
     };
 
+    @Override
+    public void tripFromLocation() {
+
+    }
+
 
 }

@@ -2,6 +2,7 @@ package com.example.ontime;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
@@ -56,8 +57,9 @@ public class GeoTask extends AsyncTask<String, Void, String> {
         {
             geo1.setDouble(aDouble);
         }
-        else
-            Toast.makeText(mContext, "Error! You can't go there walking from current location", Toast.LENGTH_LONG).show();
+        else {
+            geo1.tripFromLocation();
+        }
     }
 
     @Override
@@ -110,6 +112,7 @@ public class GeoTask extends AsyncTask<String, Void, String> {
 
     interface Geo{
         public void setDouble(String min);
+        public void tripFromLocation();
     }
 
 }

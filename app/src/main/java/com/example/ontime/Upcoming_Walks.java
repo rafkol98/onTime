@@ -55,12 +55,12 @@ public class Upcoming_Walks extends AppCompatActivity {
         final String uId = currentFirebaseUser.getUid();
 
 
-//        Query query = dbRef.child(uId).child("trips").child("timestamp").orderByValue();
-        dbRef.addValueEventListener(new ValueEventListener() {
+        //try it again tomorrow.
+        dbRef.child(uId).child("trips").orderByChild("timestamp").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                for (DataSnapshot child : dataSnapshot.child(uId).child("trips").getChildren()) {
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
                     destination = child.child("destination").getValue().toString();
                     timestamp = child.child("timestamp").getValue(Long.class);
 
