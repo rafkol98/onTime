@@ -4,13 +4,22 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.AutoCompleteTextView;
 
 public class PlanTripFromLocation extends AppCompatActivity {
+
+    private AutoCompleteTextView destination;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plan_trip_from_location);
+
+        AutoCompleteTextView fromAutoCompleteTextView = findViewById(R.id.fromAutoComplete);
+        fromAutoCompleteTextView.setAdapter(new PlaceAutoSuggestAdapter(PlanTripFromLocation.this, android.R.layout.simple_list_item_1));
+
+        AutoCompleteTextView toAutoCompleteTextView = findViewById(R.id.toAutoComplete);
+        toAutoCompleteTextView.setAdapter(new PlaceAutoSuggestAdapter(PlanTripFromLocation.this, android.R.layout.simple_list_item_1));
     }
 
     public void onBackPressed(){

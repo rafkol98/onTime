@@ -349,12 +349,18 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
 
         textChange.setText(timeToDest + "");
         distance = dist;
+        Log.d("Distance here here",distance+"");
+
+        if (dist > 50) {
+            Intent myIntent = new Intent(Map.this, PlanTripFromLocation.class);
+            startActivity(myIntent);
+        }
+
     }
 
     @Override
     public void tripFromLocation() {
-        Intent myIntent = new Intent(Map.this, PlanTripFromLocation.class);
-        startActivity(myIntent);
+
     }
 
 
