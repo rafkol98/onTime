@@ -109,6 +109,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_class);
         textChange = (TextView) findViewById(R.id.textChange);
+        textChange.setVisibility(View.INVISIBLE);
 
         final String uId = currentFirebaseUser.getUid();
 
@@ -191,21 +192,21 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(destinationLatLng, zoom));
             googleMap.addMarker(new MarkerOptions().position(destinationLatLng)
                     .title(destinationPassed));
-            Toast.makeText(Map.this, "Click on the Marker to select the trip", Toast.LENGTH_LONG);
+
         } else {
             LatLng current = new LatLng(currentLat, currentLong);
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(current, zoom));
-//            textChange.setText("");
-//            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//            builder.setMessage("We could't find the location. Make sure you are connected to the internet and double check the address you entered.")
-//                    .setCancelable(false)
-//                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                        public void onClick(final DialogInterface dialog, final int id) {
-//                            startActivity(new Intent(Map.this, Menu.class));
-//                        }
-//                    });
-//            final AlertDialog alert = builder.create();
-//            alert.show();
+            textChange.setText(" ");
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("We could't find the location. Make sure you are connected to the internet and double check the address you entered.")
+                    .setCancelable(false)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(final DialogInterface dialog, final int id) {
+                            startActivity(new Intent(Map.this, Menu.class));
+                        }
+                    });
+            final AlertDialog alert = builder.create();
+            alert.show();
         }
 
         currentOrigin = getAddressFromLatLng(currentLat, currentLong);
@@ -349,6 +350,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
 
         textChange.setText(timeToDest + "");
         distance = dist;
+        Toast.makeText(Map.this, "You need "+ (int)timeToDest+ " minutes to go there from your current location", Toast.LENGTH_LONG).show();
         Log.d("Distance here here",distance+"");
 
         if (dist > 50) {

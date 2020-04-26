@@ -1,6 +1,6 @@
 package com.example.ontime;
 
-public class Trip {
+public class Trip implements Comparable<Trip>{
 
 
     String destination;
@@ -50,5 +50,24 @@ public class Trip {
             hash = hash*31 + date_time.charAt(i);
         }
         return hash;
+    }
+
+
+    @Override
+    public int compareTo(Trip o) {
+        if ((Long) this.getTimestamp() < (Long) o.getTimestamp())
+            return -1;
+        if (this.getTimestamp().equals(o.getTimestamp()))
+            return 0;
+
+        return 1;
+    }
+
+    public static int safeLongToInt(long l) {
+        if (l < Integer.MIN_VALUE || l > Integer.MAX_VALUE) {
+            throw new IllegalArgumentException
+                    (l + " cannot be cast to int without changing its value.");
+        }
+        return (int) l;
     }
 }

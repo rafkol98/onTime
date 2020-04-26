@@ -29,6 +29,9 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+
+import static android.widget.AdapterView.*;
 
 public class Upcoming_Walks extends AppCompatActivity {
     String destination, date, time;
@@ -70,7 +73,7 @@ public class Upcoming_Walks extends AppCompatActivity {
 
                 }
 
-
+                Collections.sort(tripList);
                 TripListAdapter adapter = new TripListAdapter(Upcoming_Walks.this, R.layout.adapter_view, tripList);
                 mListView.setAdapter(adapter);
 
@@ -82,7 +85,11 @@ public class Upcoming_Walks extends AppCompatActivity {
             }
         });
 
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+
+
+        //When a user clicks on a trip open map with directions there.
+        mListView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Get the selected item text from ListView
@@ -99,6 +106,16 @@ public class Upcoming_Walks extends AppCompatActivity {
             }
         });
 
+        mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            public boolean onItemLongClick(AdapterView<?> parent, View view,
+                                           int position, long id) {
+
+                //need to remove it from the database.
+
+                return false;
+            }
+        });
 
     }
 

@@ -78,8 +78,6 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
             destinationPassed = extras.getString("keyMap");
             tt = extras.getDouble("keyTimeToDest");
             stringIn = extras.getString("keyTime");
-            Log.d("HERE HERE MALAKA", stringIn);
-
         }
 
 
@@ -146,7 +144,7 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
         //Check if time walking is more than the difference in minutes between current time and desired arrival time.
         else if (minutesDate < temp) {
             final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("You cant make it there on time walking, you would have to speed up, you need " + timeToWalk + "minutes to go there and you have to be there in " + minutesDate + ". Do you want to proceed?")
+            builder.setMessage("You cant make it there on time walking, you would have to speed up, you need " + timeToWalk + "minutes to go there and you have to be there in " + minutesDate + " minutes. Do you want to proceed?")
                     .setCancelable(false)
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         public void onClick(final DialogInterface dialog, final int id) {
