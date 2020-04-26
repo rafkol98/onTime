@@ -353,6 +353,9 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
 
         if (dist > 50) {
             Intent myIntent = new Intent(Map.this, PlanTripFromLocation.class);
+//            String temp = destinationPassed;
+//            Log.d("here here temp dest",temp+"");
+            myIntent.putExtra("keyMap", destinationPassed);
             startActivity(myIntent);
         }
 
