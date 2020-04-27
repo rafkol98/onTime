@@ -29,7 +29,7 @@
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/autoComplete"
+        app:layout_constraintTop_toBottomOf="@+id/autoComplete1"
         app:srcCompat="@drawable/transport" />
 
     <!--    <EditText-->
@@ -45,7 +45,7 @@
     <!--        ></EditText>-->
 
     <AutoCompleteTextView
-        android:id="@+id/autoComplete"
+        android:id="@+id/autoComplete1"
         android:layout_width="283dp"
         android:layout_height="39dp"
 
@@ -84,7 +84,7 @@
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="italic"
-        android:onClick="onUpcoming"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -114,8 +114,8 @@
 
         android:layout_marginTop="16dp"
         android:background="@drawable/go_btn"
-        android:onClick="onClickB"
-        app:layout_constraintStart_toEndOf="@+id/autoComplete"
+
+        app:layout_constraintStart_toEndOf="@+id/autoComplete1"
         app:layout_constraintTop_toTopOf="@+id/guideline7" />
 
     <androidx.constraintlayout.widget.Guideline

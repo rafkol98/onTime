@@ -1,7 +1,5 @@
 package com.example.ontime;
 
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,16 +8,12 @@ import android.widget.AutoCompleteTextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.maps.model.LatLng;
-
-import java.util.List;
-
 public class Suggestion extends AppCompatActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_suggestion);
-        final AutoCompleteTextView autoCompleteTextView = findViewById(R.id.autoComplete);
+        final AutoCompleteTextView autoCompleteTextView = findViewById(R.id.autoComplete1);
         autoCompleteTextView.setAdapter(new PlaceAutoSuggestAdapter(Suggestion.this,android.R.layout.simple_list_item_1));
 
         autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

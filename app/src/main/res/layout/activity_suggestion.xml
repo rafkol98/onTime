@@ -10,7 +10,7 @@
         android:hint="Search Location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/autoComplete"
+        android:id="@+id/autoComplete1"
         tools:ignore="MissingConstraints" />
 
 </RelativeLayout>
