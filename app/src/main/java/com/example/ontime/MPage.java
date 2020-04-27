@@ -30,6 +30,8 @@ public class MPage extends AppCompatActivity {
 
         pagerAdapter = new PageAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(pagerAdapter);
+        viewPager.setCurrentItem(1);
+        pagerAdapter.notifyDataSetChanged();
 
 
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

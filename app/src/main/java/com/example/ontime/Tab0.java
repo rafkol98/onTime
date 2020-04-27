@@ -12,9 +12,9 @@ import android.view.ViewGroup;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Tab2 extends Fragment {
+public class Tab0 extends Fragment {
 
-    public Tab2() {
+    public Tab0() {
         // Required empty public constructor
     }
 
@@ -23,6 +23,6 @@ public class Tab2 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tab2, container, false);
+        return inflater.inflate(R.layout.fragment_tab0, container, false);
     }
 }

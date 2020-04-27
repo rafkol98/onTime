@@ -116,26 +116,5 @@ public class Tab1 extends Fragment {
     public void onBackPressed(){
 
     }
-//
-//
-//    public void onClickBnn(View v) {
-//        Intent myIntent = new Intent(getContext(), Map.class);
-//        destination = v.findViewById(R.id.autoComplete1);
-//
-//        String destinationStr = destination.getText().toString();
-//        myIntent.putExtra("key", destinationStr);
-//        startActivity(myIntent);
-//    }
-//
-//
-//
-//    public void onUpcoming(View v) {
-//
-//        Intent myIntent = new Intent(getContext(), Upcoming_Walks.class);
-////        Bundle extras = getIntent().getExtras();
-////        if (extras != null) {
-////            myIntent.putExtras(getIntent().getExtras());
-////        }
-//        startActivity(myIntent);
-//    }
+
 }
