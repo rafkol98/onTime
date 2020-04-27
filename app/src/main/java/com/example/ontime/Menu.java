@@ -81,6 +81,11 @@ public class Menu extends AppCompatActivity {
         startActivity(myIntent);
     }
 
+    public void onClickTemp(View v) {
+        Intent myIntent = new Intent(Menu.this, MPage.class);
+        startActivity(myIntent);
+    }
+
     public void onUpcoming(View v) {
 
         Intent myIntent = new Intent(Menu.this, Upcoming_Walks.class);

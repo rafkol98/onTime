@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PlanTripFromLocation"></activity>
+        <activity android:name=".MPage"></activity>
+        <activity android:name=".PlanTripFromLocation" />
         <activity android:name=".Navigate" />
         <activity android:name=".SuperScreen" />
 
