@@ -157,7 +157,7 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
                     })
                     .setNegativeButton("No", new DialogInterface.OnClickListener() {
                         public void onClick(final DialogInterface dialog, final int id) {
-                            startActivity(new Intent(SelectTime.this, Menu.class));
+                            startActivity(new Intent(SelectTime.this, MPage.class));
                         }
                     });
             final AlertDialog alert = builder.create();

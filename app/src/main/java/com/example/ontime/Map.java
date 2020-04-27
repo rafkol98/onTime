@@ -202,7 +202,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
                     .setCancelable(false)
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(final DialogInterface dialog, final int id) {
-                            startActivity(new Intent(Map.this, Menu.class));
+                            startActivity(new Intent(Map.this, MPage.class));
                         }
                     });
             final AlertDialog alert = builder.create();
@@ -310,7 +310,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
                     })
                     .setNegativeButton("No", new DialogInterface.OnClickListener() {
                         public void onClick(final DialogInterface dialog, final int id) {
-                            startActivity(new Intent(Map.this, Menu.class));
+                            startActivity(new Intent(Map.this, MPage.class));
                         }
                     });
             final AlertDialog alert = builder.create();

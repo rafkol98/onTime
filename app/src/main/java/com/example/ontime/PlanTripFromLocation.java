@@ -31,7 +31,7 @@ public class PlanTripFromLocation extends AppCompatActivity {
     }
 
     public void onBackPressed(){
-        Intent myIntent = new Intent(PlanTripFromLocation.this, Menu.class);
+        Intent myIntent = new Intent(PlanTripFromLocation.this, MPage.class);
         startActivity(myIntent);
     }
 }

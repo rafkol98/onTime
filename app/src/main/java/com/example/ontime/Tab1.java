@@ -113,8 +113,6 @@ public class Tab1 extends Fragment {
     }
 
 
-    public void onBackPressed(){
 
-    }
 
 }

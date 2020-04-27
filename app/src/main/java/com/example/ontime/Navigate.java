@@ -186,7 +186,7 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
 
 
     public void onHomeIcon(View v) {
-        Intent intent = new Intent(Navigate.this, Menu.class);
+        Intent intent = new Intent(Navigate.this, MPage.class);
         startActivity(intent);
         finish();
     }

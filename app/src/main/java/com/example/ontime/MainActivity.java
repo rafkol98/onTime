@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
-                                Intent intent = new Intent(MainActivity.this, Menu.class);
+                                Intent intent = new Intent(MainActivity.this, MPage.class);
                                 startActivity(intent);
                                 dialog.dismiss();
                                 finish();

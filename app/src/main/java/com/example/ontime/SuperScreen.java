@@ -23,7 +23,7 @@ public class SuperScreen extends AppCompatActivity {
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(SuperScreen.this, Menu.class);
+                Intent intent = new Intent(SuperScreen.this, MPage.class);
                 Bundle extras = getIntent().getExtras();
                 if (extras != null) {
                     intent.putExtras(getIntent().getExtras());
