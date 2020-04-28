@@ -31,13 +31,6 @@ import java.util.Collections;
  */
 public class Tab2 extends Fragment {
 
-    String destination;
-    Long timestamp;
-
-    Trip trip;
-
-    int count=0;
-
 
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/profiles");
@@ -66,37 +59,6 @@ public class Tab2 extends Fragment {
 
         //Get uId of the user
         final String uId = currentFirebaseUser.getUid();
-
-
-        //try it again tomorrow.
-//        dbRef.child(uId).child("trips").orderByChild("timestamp").addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//
-//
-//                for (DataSnapshot child : dataSnapshot.getChildren()) {
-//                    destination = child.child("destination").getValue().toString();
-//                    timestamp = child.child("timestamp").getValue(Long.class);
-//
-//
-//                    trip = new Trip(destination, timestamp);
-//                    tripList.add(trip);
-//
-//
-//                }
-//
-//                Collections.sort(tripList);
-//                TripListAdapter adapter = new TripListAdapter(getContext(), R.layout.adapter_view, tripList);
-//                mListView.setAdapter(adapter);
-//
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
 
         tripList=readTrips.getTrips();
         TripListAdapter adapter = new TripListAdapter(getContext(), R.layout.adapter_view, tripList);
