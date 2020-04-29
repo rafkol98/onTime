@@ -123,7 +123,7 @@ public class Tab0 extends Fragment implements OnMapReadyCallback, LocationListen
         map = googleMap;
 
         try {
-            boolean success = googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.b_w_style1));
+            boolean success = googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.b_w_places));
 
             if (!success) {
                 Log.d("MapActivity", "Style parsing failes");
