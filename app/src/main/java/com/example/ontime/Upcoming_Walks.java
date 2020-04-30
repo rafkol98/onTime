@@ -3,6 +3,8 @@ package com.example.ontime;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,14 +39,16 @@ public class Upcoming_Walks extends AppCompatActivity {
     String destination;
     Long timestamp;
 
-
+    TripListAdapter adapter;
     Trip trip;
 
+    Button deleteBtn;
 
 
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/profiles");
     final ArrayList<Trip> tripList = new ArrayList<>();
+    final ArrayList<String> keyList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +56,7 @@ public class Upcoming_Walks extends AppCompatActivity {
         setContentView(R.layout.activity_upcoming_walks);
 
         final ListView mListView = (ListView) findViewById(R.id.listView);
+        deleteBtn = findViewById(R.id.buttonDelete);
 
         //Get uId of the user
         final String uId = currentFirebaseUser.getUid();
@@ -67,13 +72,14 @@ public class Upcoming_Walks extends AppCompatActivity {
                     timestamp = child.child("timestamp").getValue(Long.class);
 
 
-                    trip = new Trip(destination,timestamp);
+                    trip = new Trip(destination, timestamp);
                     tripList.add(trip);
+                    keyList.add(child.getKey());
 
                 }
 
                 Collections.sort(tripList);
-                TripListAdapter adapter = new TripListAdapter(Upcoming_Walks.this, R.layout.adapter_view, tripList);
+                adapter = new TripListAdapter(Upcoming_Walks.this, R.layout.adapter_view, tripList);
                 mListView.setAdapter(adapter);
 
             }
@@ -85,8 +91,6 @@ public class Upcoming_Walks extends AppCompatActivity {
         });
 
 
-
-
         //When a user clicks on a trip open map with directions there.
         mListView.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -95,27 +99,64 @@ public class Upcoming_Walks extends AppCompatActivity {
                 Trip selectedItem = (Trip) parent.getItemAtPosition(position);
 
 
-
                 Intent myIntent = new Intent(Upcoming_Walks.this, Navigate.class);
                 myIntent.putExtra("keyDest", selectedItem.getDestination());
                 startActivity(myIntent);
 
 
-
             }
         });
+
 
         mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
             public boolean onItemLongClick(AdapterView<?> parent, View view,
-                                           int position, long id) {
+                                           final int position, long id) {
 
                 //need to remove it from the database.
 
-                return false;
+                //Alert the user about the distance.
+//                final AlertDialog.Builder builder = new AlertDialog.Builder(Upcoming_Walks.this);
+//                builder.setMessage("You seem to be more than 5km away from destination, do you still wanna proceed?")
+//                        .setCancelable(false)
+//                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                            public void onClick(final DialogInterface dialog, final int id) {
+                deleteBtn.setVisibility(VISIBLE);
+
+                deleteBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Trip item = adapter.getItem(position);
+                        adapter.remove(item);
+                        adapter.notifyDataSetChanged();
+
+                        dbRef.child(uId).child("trips").child(keyList.get(position)).removeValue();
+                        keyList.remove(position);
+                        deleteBtn.setVisibility(INVISIBLE);
+                    }
+                    });
+
+//                            }
+//                        })
+//                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+//                            public void onClick(final DialogInterface dialog, final int id) {
+////                                dialog.dismiss();
+//                            }
+//                        });
+//                final AlertDialog alert = builder.create();
+//                alert.show();
+
+
+                return true;
             }
         });
 
+    }
+
+    public void onBackPressed() {
+        Intent myIntent = new Intent(Upcoming_Walks.this, MPage.class);
+//add a slide back transition. Maybe slidr
+        startActivity(myIntent);
     }
 
 
