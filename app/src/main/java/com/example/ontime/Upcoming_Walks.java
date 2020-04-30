@@ -34,11 +34,10 @@ import java.util.Collections;
 import static android.widget.AdapterView.*;
 
 public class Upcoming_Walks extends AppCompatActivity {
-    String destination, date, time;
+    String destination;
     Long timestamp;
 
-    SelectTime selectTime = new SelectTime();
-    Object newTrip;
+
     Trip trip;
 
 

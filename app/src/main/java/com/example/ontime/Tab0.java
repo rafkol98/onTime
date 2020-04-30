@@ -133,7 +133,7 @@ public class Tab0 extends Fragment implements OnMapReadyCallback, LocationListen
         }
 
         //enable the zoom in and out buttons bottom right
-        float zoom = 14.5f;
+        float zoom = 18.0f;
         map.setMyLocationEnabled(true);
         LatLng current = new LatLng(currentLat, currentLong);
 
@@ -161,6 +161,7 @@ public class Tab0 extends Fragment implements OnMapReadyCallback, LocationListen
     public void onProviderDisabled(String provider) {
 
     }
+
 
 
 }

@@ -3,8 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/uw_bg"
+    android:background="@drawable/upcoming_bg1"
     tools:context=".MainActivity">
+
 
 
     <TextView
@@ -22,13 +23,13 @@
 
     <ListView
         android:id="@+id/listView"
-        android:layout_width="409dp"
-        android:layout_height="580dp"
-        android:layout_marginTop="32dp"
+        android:layout_width="407dp"
+        android:layout_height="592dp"
+        android:layout_marginTop="8dp"
+        android:longClickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/upcoming_txt"
-        android:longClickable="true"
-        tools:layout_editor_absoluteX="1dp" />
+        tools:layout_editor_absoluteX="3dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"
