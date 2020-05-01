@@ -1,6 +1,8 @@
 package com.example.ontime;
 
 import java.text.DateFormat;
+import java.text.Format;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -21,5 +23,24 @@ public class DateTimeCheck {
         }
     }
 
+    public static boolean startEarlier(SimpleDateFormat format, String currentDate, String tripDate) {
+        try {
+            return format.parse(currentDate).before(format.parse(tripDate));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    //use this method to know that the user is not gonna be on time
+    public static boolean willIBeOnTime(String destination){
+        return false;
+    }
+
+    public String convertTime(long time) {
+        Date date = new Date(time);
+        Format format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        return format.format(date);
+    }
 
 }

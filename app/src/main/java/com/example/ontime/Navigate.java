@@ -258,8 +258,8 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
 
         String pattern = "HH:mm";
 
-// Create an instance of SimpleDateFormat used for formatting
-// the string representation of date according to the chosen pattern
+        // Create an instance of SimpleDateFormat used for formatting
+        // the string representation of date according to the chosen pattern
         DateFormat df = new SimpleDateFormat(pattern);
 
 
@@ -279,6 +279,7 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
         arrivalTxt.setText("Arrival Time: "+todayAsString);
 
     }
+
 
     private class DownloadTask extends AsyncTask<String, Void, String> {
 

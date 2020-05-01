@@ -7,15 +7,10 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -23,15 +18,15 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import org.apache.commons.io.FileUtils;
-
-import java.io.File;
-import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 
 import static android.widget.AdapterView.*;
 
@@ -82,6 +77,7 @@ public class Upcoming_Walks extends AppCompatActivity {
                 adapter = new TripListAdapter(Upcoming_Walks.this, R.layout.adapter_view, tripList);
                 mListView.setAdapter(adapter);
 
+
             }
 
             @Override
@@ -95,61 +91,74 @@ public class Upcoming_Walks extends AppCompatActivity {
         mListView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                DateTimeCheck dateTimeCheck = new DateTimeCheck();
                 // Get the selected item text from ListView
-                Trip selectedItem = (Trip) parent.getItemAtPosition(position);
+                final Trip selectedItem = (Trip) parent.getItemAtPosition(position);
+
+                String dateTrip = dateTimeCheck.convertTime(selectedItem.getTimestamp());
+                Date currentDate = Calendar.getInstance().getTime();
+                DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                String currentStrDate = dateFormat.format(currentDate);
+
+                if(dateTimeCheck.startEarlier(new SimpleDateFormat("dd/MM/yyyy HH:mm"),currentStrDate,dateTrip)){
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(Upcoming_Walks.this);
+                    builder.setMessage("You are about to start the walk earlier than expected, are you sure you want to proceed?")
+                            .setCancelable(false)
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(final DialogInterface dialog, final int id) {
+                                    Intent myIntent = new Intent(Upcoming_Walks.this, Navigate.class);
+                                    myIntent.putExtra("keyDest", selectedItem.getDestination());
+                                    startActivity(myIntent);
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                public void onClick(final DialogInterface dialog, final int id) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    final AlertDialog alert = builder.create();
+                    alert.show();
+                }
 
 
-                Intent myIntent = new Intent(Upcoming_Walks.this, Navigate.class);
-                myIntent.putExtra("keyDest", selectedItem.getDestination());
-                startActivity(myIntent);
+
 
 
             }
         });
-
 
         mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
             public boolean onItemLongClick(AdapterView<?> parent, View view,
                                            final int position, long id) {
-
-                //need to remove it from the database.
-
-                //Alert the user about the distance.
-//                final AlertDialog.Builder builder = new AlertDialog.Builder(Upcoming_Walks.this);
-//                builder.setMessage("You seem to be more than 5km away from destination, do you still wanna proceed?")
-//                        .setCancelable(false)
-//                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                            public void onClick(final DialogInterface dialog, final int id) {
+                //Set long button visible
                 deleteBtn.setVisibility(VISIBLE);
 
+                //on click of delete button
                 deleteBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Trip item = adapter.getItem(position);
-                        adapter.remove(item);
-                        adapter.notifyDataSetChanged();
+
 
                         dbRef.child(uId).child("trips").child(keyList.get(position)).removeValue();
+
                         keyList.remove(position);
+                        adapter.remove(item);
+                        adapter.notifyDataSetChanged();
+                        mListView.setAdapter(adapter);
+
+
                         deleteBtn.setVisibility(INVISIBLE);
+
                     }
-                    });
-
-//                            }
-//                        })
-//                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-//                            public void onClick(final DialogInterface dialog, final int id) {
-////                                dialog.dismiss();
-//                            }
-//                        });
-//                final AlertDialog alert = builder.create();
-//                alert.show();
-
+                });
 
                 return true;
             }
         });
+
 
     }
 
