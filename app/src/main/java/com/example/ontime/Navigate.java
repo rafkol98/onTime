@@ -85,6 +85,11 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
     LatLng desLatLgn;
     TextView arrivalTxt;
 
+
+
+    public Navigate() {
+    }
+
     GeoTask geoTask;
 
     //Used to get the User's speed from firebase.
@@ -276,9 +281,11 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
         Date afterAddingTimeToDest = new Date(t + (timeToDest * ONE_MINUTE_IN_MILLIS));
         String todayAsString = df.format(afterAddingTimeToDest.getTime());
 
-        arrivalTxt.setText("Arrival Time: "+todayAsString);
+        arrivalTxt.setText(todayAsString);
 
     }
+
+
 
 
     private class DownloadTask extends AsyncTask<String, Void, String> {

@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -102,6 +103,9 @@ public class Upcoming_Walks extends AppCompatActivity {
                 String currentStrDate = dateFormat.format(currentDate);
 
                 if(dateTimeCheck.startEarlier(new SimpleDateFormat("dd/MM/yyyy HH:mm"),currentStrDate,dateTrip)){
+
+
+
                     final AlertDialog.Builder builder = new AlertDialog.Builder(Upcoming_Walks.this);
                     builder.setMessage("You are about to start the walk earlier than expected, are you sure you want to proceed?")
                             .setCancelable(false)
@@ -120,6 +124,15 @@ public class Upcoming_Walks extends AppCompatActivity {
                     final AlertDialog alert = builder.create();
                     alert.show();
                 }
+
+
+//                else if(){
+//                    Navigate navigate= new Navigate(selectedItem.getDestination());
+//                    String arrivalTime = navigate.getArrivalTime();
+//
+//                    //get difference to find walking distance.
+//                    arrivalTime-currentDate;
+//                }
 
 
 

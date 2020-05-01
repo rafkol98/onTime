@@ -67,7 +67,7 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
         setContentView(R.layout.activity_select_time);
         map = new Map();
         dateTimeCheck = new DateTimeCheck();
-//        geoTask= new Map.GeoTask();
+
 
         dateText = findViewById(R.id.selectDate_txt);
         timeText = findViewById(R.id.timer_txt);
@@ -129,6 +129,7 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
         //Get the time to walk there based on the user's speed.
         double timeToWalk = Double.parseDouble(stringIn);
 
+        //temp is time to walk to destination.
         int temp = (int) timeToWalk;
 
 
@@ -142,7 +143,7 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
             Toast.makeText(SelectTime.this, "Please select both date and time!", Toast.LENGTH_LONG).show();
         }
         //Check if time walking is more than the difference in minutes between current time and desired arrival time.
-        else if (minutesDate < temp) {
+        else if (minutesDate < temp && minutesDate >= 1) {
             final AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage("You cant make it there on time walking, you would have to speed up, you need " + timeToWalk + "minutes to go there and you have to be there in " + minutesDate + " minutes. Do you want to proceed?")
                     .setCancelable(false)
@@ -162,6 +163,20 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
                     });
             final AlertDialog alert = builder.create();
             alert.show();
+        } else if (minutesDate < temp && minutesDate < 1) {
+
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("You cant make it there on time please select another time")
+                    .setCancelable(false)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(final DialogInterface dialog, final int id) {
+                            dialog.dismiss();
+                        }
+                    });
+            final AlertDialog alert = builder.create();
+            alert.show();
+
+
         } else {
             //Call doTrip method to upload trip to firebase.
             try {
@@ -186,7 +201,7 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
         Long timestamp = toMilli(dateSelected);
 
 //        trip = new Trip(destinationPassed, datePassed, timePassed);
-        trip = new Trip(destinationPassed,timestamp);
+        trip = new Trip(destinationPassed, timestamp);
         //Get uId of the Firebase User.
         String uId = currentFirebaseUser.getUid();
         //Create a unique Hash Key for the Trip.
