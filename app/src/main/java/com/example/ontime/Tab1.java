@@ -59,7 +59,6 @@ public class Tab1 extends Fragment {
 
 
 
-
         //initialise buttons and variables used.
         btnCounter = v.findViewById(R.id.button_counter);
         buttonTrips = v.findViewById(R.id.buttonTrips);
