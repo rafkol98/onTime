@@ -199,7 +199,32 @@ public class Upcoming_Walks extends AppCompatActivity implements GeoTask.Geo, Lo
 
                         int difference = dateTimeCheck.getDateDiff(new SimpleDateFormat("dd/MM/yyyy HH:mm"), currentStrDate, dateTrip);
 
-                        if (difference < minutesWalk && difference >= (minutesWalk / 2)) {
+                        //NEED TO MAKE TEST, WONT MAKE IT ON TIME.
+
+                        //currentStrDate+timeToWalk
+                        if (dateTimeCheck.startEarlier(new SimpleDateFormat("dd/MM/yyyy HH:mm"), currentStrDate, dateTrip)) {
+
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(Upcoming_Walks.this);
+                            builder.setMessage("You are about to start the walk earlier than expected, are you sure you want to proceed?")
+                                    .setCancelable(false)
+                                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                        public void onClick(final DialogInterface dialog, final int id) {
+
+                                            Intent myIntent = new Intent(Upcoming_Walks.this, Navigate.class);
+                                            myIntent.putExtra("keyDest", selectedItem.getDestination());
+                                            startActivity(myIntent);
+                                        }
+                                    })
+                                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                        public void onClick(final DialogInterface dialog, final int id) {
+                                            Intent myIntent = new Intent(Upcoming_Walks.this, MPage.class);
+                                            dialog.dismiss();
+                                            startActivity(myIntent);
+                                        }
+                                    });
+                            final AlertDialog alert = builder.create();
+                            alert.show();
+                        }else if (difference < minutesWalk && difference >= (minutesWalk / 2)) {
                             final AlertDialog.Builder builder = new AlertDialog.Builder(Upcoming_Walks.this);
                             builder.setMessage("YOU CANT MAKE IT THERE ON TIME ON YOUR REGULAR SPEED, WE HAVE TO WALK FASTER. Do you want to proceed?")
                                     .setCancelable(false)
@@ -217,29 +242,25 @@ public class Upcoming_Walks extends AppCompatActivity implements GeoTask.Geo, Lo
                                     });
                             final AlertDialog alert = builder.create();
                             alert.show();
-                        }
-
-                        if (dateTimeCheck.startEarlier(new SimpleDateFormat("dd/MM/yyyy HH:mm"), currentStrDate, dateTrip)) {
-
+                        } else {
+                            //and delete trip
                             final AlertDialog.Builder builder = new AlertDialog.Builder(Upcoming_Walks.this);
-                            builder.setMessage("You are about to start the walk earlier than expected, are you sure you want to proceed?")
+                            builder.setMessage("SORRY, YOU CANT MAKE IT THERE ON TIME")
                                     .setCancelable(false)
-                                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                         public void onClick(final DialogInterface dialog, final int id) {
-
-                                            Intent myIntent = new Intent(Upcoming_Walks.this, Navigate.class);
-                                            myIntent.putExtra("keyDest", selectedItem.getDestination());
-                                            startActivity(myIntent);
-                                        }
-                                    })
-                                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                        public void onClick(final DialogInterface dialog, final int id) {
+                                            //DELETE TRIP.
+                                            Intent myIntent = new Intent(Upcoming_Walks.this, MPage.class);
                                             dialog.dismiss();
+                                            startActivity(myIntent);
                                         }
                                     });
                             final AlertDialog alert = builder.create();
                             alert.show();
                         }
+
+
+
 
 
 //                else if(){
