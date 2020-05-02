@@ -2,16 +2,30 @@ package com.example.ontime;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Criteria;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
+
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,17 +42,43 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import static android.widget.AdapterView.*;
 
-public class Upcoming_Walks extends AppCompatActivity {
+public class Upcoming_Walks extends AppCompatActivity implements GeoTask.Geo, LocationListener {
     String destination;
     Long timestamp;
+
+    double currentLat;
+    double currentLong;
+
+    public Criteria criteria;
+    public String bestProvider;
+
+    private double timeToDest;
+
+    String destinationPassed, currentOrigin;
+    public LocationManager locationManager;
 
     TripListAdapter adapter;
     Trip trip;
 
+    String tempAverageSpeed, averageSpeed;
+
+    TextView textChange;
+
+    public String getAverageSpeed() {
+        return averageSpeed;
+    }
+
+    public void setAverageSpeed(String averageSpeed) {
+        this.averageSpeed = averageSpeed;
+    }
+
     Button deleteBtn;
+    GeoTask geoTask;
 
 
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -51,11 +91,37 @@ public class Upcoming_Walks extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upcoming_walks);
 
+
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        criteria = new Criteria();
+        bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
+
+        geoTask = new GeoTask(Upcoming_Walks.this);
+
+        textChange = (TextView) findViewById(R.id.textChangeUW);
+
         final ListView mListView = (ListView) findViewById(R.id.listView);
         deleteBtn = findViewById(R.id.buttonDelete);
 
         //Get uId of the user
         final String uId = currentFirebaseUser.getUid();
+
+
+        //Get average speed of user from firebase database.
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                tempAverageSpeed = dataSnapshot.child(uId).child("Average Speed").getValue().toString();
+                setAverageSpeed(tempAverageSpeed);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
 
         //try it again tomorrow.
@@ -93,37 +159,87 @@ public class Upcoming_Walks extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                DateTimeCheck dateTimeCheck = new DateTimeCheck();
+
                 // Get the selected item text from ListView
                 final Trip selectedItem = (Trip) parent.getItemAtPosition(position);
 
-                String dateTrip = dateTimeCheck.convertTime(selectedItem.getTimestamp());
-                Date currentDate = Calendar.getInstance().getTime();
-                DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-                String currentStrDate = dateFormat.format(currentDate);
+                //get current location and destination of trip selected.
+                getCurrentLocation();
+                currentOrigin = getAddressFromLatLng(currentLat, currentLong);
+                destinationPassed = selectedItem.getDestination();
 
-                if(dateTimeCheck.startEarlier(new SimpleDateFormat("dd/MM/yyyy HH:mm"),currentStrDate,dateTrip)){
+                //Use Geocoder class to calculate minutes walking from current location.
+                String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + currentOrigin + "&destinations=" + destinationPassed + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
+                Log.d("url string", url);
+                geoTask.execute(url);
 
 
 
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(Upcoming_Walks.this);
-                    builder.setMessage("You are about to start the walk earlier than expected, are you sure you want to proceed?")
-                            .setCancelable(false)
-                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                public void onClick(final DialogInterface dialog, final int id) {
-                                    Intent myIntent = new Intent(Upcoming_Walks.this, Navigate.class);
-                                    myIntent.putExtra("keyDest", selectedItem.getDestination());
-                                    startActivity(myIntent);
-                                }
-                            })
-                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                public void onClick(final DialogInterface dialog, final int id) {
-                                    dialog.dismiss();
-                                }
-                            });
-                    final AlertDialog alert = builder.create();
-                    alert.show();
-                }
+
+//                Log.d("here here trip time ",minutesWalk+"");
+
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        //get the minutes to walk to destination from current location.
+                        String minutesWalkStr = textChange.getText().toString();
+                        int minutesWalk = (int)Double.parseDouble(minutesWalkStr);
+
+
+
+                        Log.d("tell me how much it", minutesWalkStr);
+
+                        DateTimeCheck dateTimeCheck = new DateTimeCheck();
+                        String dateTrip = dateTimeCheck.convertTime(selectedItem.getTimestamp());
+                        Date currentDate = Calendar.getInstance().getTime();
+                        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                        String currentStrDate = dateFormat.format(currentDate);
+
+                        int difference = dateTimeCheck.getDateDiff(new SimpleDateFormat("dd/MM/yyyy HH:mm"), currentStrDate, dateTrip);
+
+                        if (difference < minutesWalk && difference >= (minutesWalk / 2)) {
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(Upcoming_Walks.this);
+                            builder.setMessage("YOU CANT MAKE IT THERE ON TIME ON YOUR REGULAR SPEED, WE HAVE TO WALK FASTER. Do you want to proceed?")
+                                    .setCancelable(false)
+                                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                        public void onClick(final DialogInterface dialog, final int id) {
+                                            Intent myIntent = new Intent(Upcoming_Walks.this, CatchUp.class);
+                                            myIntent.putExtra("keyDest", selectedItem.getDestination());
+                                            startActivity(myIntent);
+                                        }
+                                    })
+                                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                        public void onClick(final DialogInterface dialog, final int id) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                            final AlertDialog alert = builder.create();
+                            alert.show();
+                        }
+
+                        if (dateTimeCheck.startEarlier(new SimpleDateFormat("dd/MM/yyyy HH:mm"), currentStrDate, dateTrip)) {
+
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(Upcoming_Walks.this);
+                            builder.setMessage("You are about to start the walk earlier than expected, are you sure you want to proceed?")
+                                    .setCancelable(false)
+                                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                        public void onClick(final DialogInterface dialog, final int id) {
+
+                                            Intent myIntent = new Intent(Upcoming_Walks.this, Navigate.class);
+                                            myIntent.putExtra("keyDest", selectedItem.getDestination());
+                                            startActivity(myIntent);
+                                        }
+                                    })
+                                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                        public void onClick(final DialogInterface dialog, final int id) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                            final AlertDialog alert = builder.create();
+                            alert.show();
+                        }
 
 
 //                else if(){
@@ -134,8 +250,8 @@ public class Upcoming_Walks extends AppCompatActivity {
 //                    arrivalTime-currentDate;
 //                }
 
-
-
+                    }
+                }, 700);
 
 
             }
@@ -145,6 +261,8 @@ public class Upcoming_Walks extends AppCompatActivity {
 
             public boolean onItemLongClick(AdapterView<?> parent, View view,
                                            final int position, long id) {
+
+
                 //Set long button visible
                 deleteBtn.setVisibility(VISIBLE);
 
@@ -175,13 +293,101 @@ public class Upcoming_Walks extends AppCompatActivity {
 
     }
 
+    public String getAddressFromLatLng(double latitude, double longitude) {
+
+        String strAdd = "";
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            if (addresses != null) {
+                Address returnedAddress = addresses.get(0);
+                StringBuilder strReturnedAddress = new StringBuilder("");
+
+                for (int i = 0; i <= returnedAddress.getMaxAddressLineIndex(); i++) {
+                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
+                }
+                strAdd = strReturnedAddress.toString();
+                Log.d("HERE HEREEE address", strReturnedAddress.toString());
+            } else {
+                Log.d("HERE HEREEE address", "No Address returned!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("HERE HEREEE address", "Cannot get Address!");
+        }
+        return strAdd;
+    }
+
     public void onBackPressed() {
         Intent myIntent = new Intent(Upcoming_Walks.this, MPage.class);
 //add a slide back transition. Maybe slidr
         startActivity(myIntent);
     }
 
+    public void getCurrentLocation() {
+        @SuppressLint("MissingPermission") Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
+        if (location != null) {
+            currentLong = location.getLongitude();
+            currentLat = location.getLatitude();
+        } else {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            locationManager.requestLocationUpdates(bestProvider, 1000, 0, this);
+        }
+    }
 
+
+    @Override
+    public void setDouble(String result) {
+        String res[] = result.split(",");
+        Double min = Double.parseDouble(res[0]) / 60;
+        Double dist = Double.parseDouble(res[1]) / 1000;
+
+        System.out.println("I am here");
+        Double d = Double.valueOf(dist);
+        Double s = Double.valueOf(getAverageSpeed());
+        System.out.println("I progressed here is d= " + d + "here is s= " + s);
+        timeToDest = ((d / s) * 60);
+
+        Log.d("here here test 1", timeToDest + "");
+
+        textChange.setText(timeToDest + "");
+
+    }
+
+    @Override
+    public void tripFromLocation() {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        currentLat = location.getLatitude();
+        currentLong = location.getLongitude();
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
 }
 
 

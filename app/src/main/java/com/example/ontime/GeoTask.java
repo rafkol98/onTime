@@ -7,6 +7,16 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,10 +41,14 @@ public class GeoTask extends AsyncTask<String, Void, String> {
     Geo geo1;
 
 
+
+
+
+
     //constructor is used to get the context.
     public GeoTask(Context mContext) {
         this.mContext = mContext;
-        geo1= (Geo) mContext;
+        geo1 = (Geo) mContext;
     }
 
 
@@ -53,11 +67,9 @@ public class GeoTask extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String aDouble) {
         super.onPostExecute(aDouble);
-        if(aDouble!=null)
-        {
+        if (aDouble != null) {
             geo1.setDouble(aDouble);
-        }
-        else {
+        } else {
             geo1.tripFromLocation();
         }
     }
@@ -65,37 +77,35 @@ public class GeoTask extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... params) {
         try {
-            URL url=new URL(params[0]);
-            HttpURLConnection con= (HttpURLConnection) url.openConnection();
+            URL url = new URL(params[0]);
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
             con.connect();
-            int statuscode=con.getResponseCode();
-            if(statuscode==HttpURLConnection.HTTP_OK)
-            {
-                BufferedReader br=new BufferedReader(new InputStreamReader(con.getInputStream()));
-                StringBuilder sb=new StringBuilder();
-                String line=br.readLine();
-                while(line!=null)
-                {
+            int statuscode = con.getResponseCode();
+            if (statuscode == HttpURLConnection.HTTP_OK) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                StringBuilder sb = new StringBuilder();
+                String line = br.readLine();
+                while (line != null) {
                     sb.append(line);
-                    line=br.readLine();
+                    line = br.readLine();
                 }
-                String json=sb.toString();
-                Log.d("JSON",json);
-                JSONObject root=new JSONObject(json);
-                JSONArray array_rows=root.getJSONArray("rows");
-                Log.d("JSON","array_rows:"+array_rows);
-                JSONObject object_rows=array_rows.getJSONObject(0);
-                Log.d("JSON","object_rows:"+object_rows);
-                JSONArray array_elements=object_rows.getJSONArray("elements");
-                Log.d("JSON","array_elements:"+array_elements);
-                JSONObject  object_elements=array_elements.getJSONObject(0);
-                Log.d("JSON","object_elements:"+object_elements);
-                JSONObject object_duration=object_elements.getJSONObject("duration");
-                JSONObject object_distance=object_elements.getJSONObject("distance");
+                String json = sb.toString();
+                Log.d("JSON", json);
+                JSONObject root = new JSONObject(json);
+                JSONArray array_rows = root.getJSONArray("rows");
+                Log.d("JSON", "array_rows:" + array_rows);
+                JSONObject object_rows = array_rows.getJSONObject(0);
+                Log.d("JSON", "object_rows:" + object_rows);
+                JSONArray array_elements = object_rows.getJSONArray("elements");
+                Log.d("JSON", "array_elements:" + array_elements);
+                JSONObject object_elements = array_elements.getJSONObject(0);
+                Log.d("JSON", "object_elements:" + object_elements);
+                JSONObject object_duration = object_elements.getJSONObject("duration");
+                JSONObject object_distance = object_elements.getJSONObject("distance");
 
-                Log.d("JSON","object_duration:"+object_duration);
-                return object_duration.getString("value")+","+object_distance.getString("value");
+                Log.d("JSON", "object_duration:" + object_duration);
+                return object_duration.getString("value") + "," + object_distance.getString("value");
 
             }
         } catch (MalformedURLException e) {
@@ -103,15 +113,17 @@ public class GeoTask extends AsyncTask<String, Void, String> {
         } catch (IOException e) {
             Log.d("error", "error2");
         } catch (JSONException e) {
-            Log.d("error","error3");
+            Log.d("error", "error3");
         }
 
 
         return null;
     }
 
-    interface Geo{
+
+    interface Geo {
         public void setDouble(String min);
+
         public void tripFromLocation();
     }
 

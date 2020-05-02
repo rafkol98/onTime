@@ -15,8 +15,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MPage"
-            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".CatchUp"></activity>
+        <activity
+            android:name=".MPage"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".PlanTripFromLocation" />
         <activity android:name=".Navigate" />
         <activity android:name=".SuperScreen" />
