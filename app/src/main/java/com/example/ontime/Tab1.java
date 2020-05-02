@@ -95,7 +95,10 @@ public class Tab1 extends Fragment {
 
                 Intent myIntent = new Intent(getContext(), Upcoming_Walks.class);
 
+//                overridePendingTransition(0,0);
                 startActivity(myIntent);
+                getActivity().overridePendingTransition(0,0);
+
             }
         });
 

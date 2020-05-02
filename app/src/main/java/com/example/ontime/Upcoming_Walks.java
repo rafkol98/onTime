@@ -80,6 +80,7 @@ public class Upcoming_Walks extends AppCompatActivity implements GeoTask.Geo, Lo
     Button deleteBtn;
     GeoTask geoTask;
 
+    static final long ONE_MINUTE_IN_MILLIS=60000;//millisecs
 
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/profiles");
@@ -194,6 +195,11 @@ public class Upcoming_Walks extends AppCompatActivity implements GeoTask.Geo, Lo
                         DateTimeCheck dateTimeCheck = new DateTimeCheck();
                         String dateTrip = dateTimeCheck.convertTime(selectedItem.getTimestamp());
                         Date currentDate = Calendar.getInstance().getTime();
+
+
+                        Date afterAddingTenMins=new Date(currentDate.getTime() + (10 * ONE_MINUTE_IN_MILLIS));
+                        Log.d("here is the date +10",afterAddingTenMins.toString());
+
                         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                         String currentStrDate = dateFormat.format(currentDate);
 
@@ -263,13 +269,6 @@ public class Upcoming_Walks extends AppCompatActivity implements GeoTask.Geo, Lo
 
 
 
-//                else if(){
-//                    Navigate navigate= new Navigate(selectedItem.getDestination());
-//                    String arrivalTime = navigate.getArrivalTime();
-//
-//                    //get difference to find walking distance.
-//                    arrivalTime-currentDate;
-//                }
 
                     }
                 }, 700);
@@ -298,11 +297,17 @@ public class Upcoming_Walks extends AppCompatActivity implements GeoTask.Geo, Lo
 
                         keyList.remove(position);
                         adapter.remove(item);
-                        adapter.notifyDataSetChanged();
-                        mListView.setAdapter(adapter);
-
+//                        adapter.notifyDataSetChanged();
+//                        mListView.setAdapter(adapter);
 
                         deleteBtn.setVisibility(INVISIBLE);
+
+                        //reload activity without animation
+                        finish();
+                        overridePendingTransition(0,0);
+                        startActivity(getIntent());
+                        overridePendingTransition(0,0);
+
 
                     }
                 });
