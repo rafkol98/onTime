@@ -80,7 +80,7 @@ public class Upcoming_Walks extends AppCompatActivity implements GeoTask.Geo, Lo
     Button deleteBtn;
     GeoTask geoTask;
 
-    static final long ONE_MINUTE_IN_MILLIS=60000;//millisecs
+    static final long ONE_MINUTE_IN_MILLIS = 60000;//millisecs
 
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/profiles");
@@ -158,7 +158,7 @@ public class Upcoming_Walks extends AppCompatActivity implements GeoTask.Geo, Lo
         //When a user clicks on a trip open map with directions there.
         mListView.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 
 
                 // Get the selected item text from ListView
@@ -175,8 +175,6 @@ public class Upcoming_Walks extends AppCompatActivity implements GeoTask.Geo, Lo
                 geoTask.execute(url);
 
 
-
-
 //                Log.d("here here trip time ",minutesWalk+"");
 
                 final Handler handler = new Handler();
@@ -186,8 +184,7 @@ public class Upcoming_Walks extends AppCompatActivity implements GeoTask.Geo, Lo
 
                         //get the minutes to walk to destination from current location.
                         String minutesWalkStr = textChange.getText().toString();
-                        int minutesWalk = (int)Double.parseDouble(minutesWalkStr);
-
+                        int minutesWalk = (int) Double.parseDouble(minutesWalkStr);
 
 
                         Log.d("tell me how much it", minutesWalkStr);
@@ -195,20 +192,34 @@ public class Upcoming_Walks extends AppCompatActivity implements GeoTask.Geo, Lo
                         DateTimeCheck dateTimeCheck = new DateTimeCheck();
                         String dateTrip = dateTimeCheck.convertTime(selectedItem.getTimestamp());
                         Date currentDate = Calendar.getInstance().getTime();
+//                        currentDate
+                        Calendar addedM = Calendar.getInstance();
+                        addedM.add(Calendar.MINUTE,minutesWalk);
 
 
-                        Date afterAddingTenMins=new Date(currentDate.getTime() + (10 * ONE_MINUTE_IN_MILLIS));
-                        Log.d("here is the date +10",afterAddingTenMins.toString());
+//                        Date afterAddingTenMins=new Date(currentDate.getTime() + (10 * ONE_MINUTE_IN_MILLIS));
+                        Date afterAddingTenMins = addedM.getTime();
+                        Log.d("here is the date +10", afterAddingTenMins.toString());
+
 
                         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                         String currentStrDate = dateFormat.format(currentDate);
 
+                        String currentDatePlusMins = dateFormat.format(afterAddingTenMins);
+
                         int difference = dateTimeCheck.getDateDiff(new SimpleDateFormat("dd/MM/yyyy HH:mm"), currentStrDate, dateTrip);
 
                         //NEED TO MAKE TEST, WONT MAKE IT ON TIME.
+                        System.out.println(currentDatePlusMins+" here here");
 
+//                        //if difference is less than 2 minutes, start the trip
+//                        if (dateTimeCheck.getDateDiff(new SimpleDateFormat("dd/MM/yyyy HH:mm"), currentDatePlusMins, dateTrip) < 2) {
+//                            Intent myIntent = new Intent(Upcoming_Walks.this, Navigate.class);
+//                            myIntent.putExtra("keyDest", selectedItem.getDestination());
+//                            startActivity(myIntent);
+//                        }
                         //currentStrDate+timeToWalk
-                        if (dateTimeCheck.startEarlier(new SimpleDateFormat("dd/MM/yyyy HH:mm"), currentStrDate, dateTrip)) {
+                        if (dateTimeCheck.startEarlier(new SimpleDateFormat("dd/MM/yyyy HH:mm"), currentDatePlusMins, dateTrip)) {
 
                             final AlertDialog.Builder builder = new AlertDialog.Builder(Upcoming_Walks.this);
                             builder.setMessage("You are about to start the walk earlier than expected, are you sure you want to proceed?")
@@ -223,14 +234,19 @@ public class Upcoming_Walks extends AppCompatActivity implements GeoTask.Geo, Lo
                                     })
                                     .setNegativeButton("No", new DialogInterface.OnClickListener() {
                                         public void onClick(final DialogInterface dialog, final int id) {
-                                            Intent myIntent = new Intent(Upcoming_Walks.this, MPage.class);
-                                            dialog.dismiss();
-                                            startActivity(myIntent);
+                                            finish();
+                                            overridePendingTransition(0, 0);
+                                            startActivity(getIntent());
+                                            overridePendingTransition(0, 0);
                                         }
                                     });
                             final AlertDialog alert = builder.create();
                             alert.show();
-                        }else if (difference < minutesWalk && difference >= (minutesWalk / 2)) {
+                        }
+
+                        //if difference between current date and trip date is less than minutes to walk there AND the difference in time is more than or equal to
+                        //time to walk there/2 then the user can still make the trip but he has to speed up.
+                       if (difference < minutesWalk && difference >= (minutesWalk / 2)) {
                             final AlertDialog.Builder builder = new AlertDialog.Builder(Upcoming_Walks.this);
                             builder.setMessage("YOU CANT MAKE IT THERE ON TIME ON YOUR REGULAR SPEED, WE HAVE TO WALK FASTER. Do you want to proceed?")
                                     .setCancelable(false)
@@ -248,14 +264,22 @@ public class Upcoming_Walks extends AppCompatActivity implements GeoTask.Geo, Lo
                                     });
                             final AlertDialog alert = builder.create();
                             alert.show();
-                        } else {
+                        } else if(difference < minutesWalk && difference < (minutesWalk / 2) ) {
                             //and delete trip
                             final AlertDialog.Builder builder = new AlertDialog.Builder(Upcoming_Walks.this);
                             builder.setMessage("SORRY, YOU CANT MAKE IT THERE ON TIME")
                                     .setCancelable(false)
                                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                         public void onClick(final DialogInterface dialog, final int id) {
+
+
                                             //DELETE TRIP.
+                                            Trip item = adapter.getItem(position);
+                                            dbRef.child(uId).child("trips").child(keyList.get(position)).removeValue();
+
+                                            keyList.remove(position);
+                                            adapter.remove(item);
+
                                             Intent myIntent = new Intent(Upcoming_Walks.this, MPage.class);
                                             dialog.dismiss();
                                             startActivity(myIntent);
@@ -264,10 +288,6 @@ public class Upcoming_Walks extends AppCompatActivity implements GeoTask.Geo, Lo
                             final AlertDialog alert = builder.create();
                             alert.show();
                         }
-
-
-
-
 
 
                     }
@@ -304,9 +324,9 @@ public class Upcoming_Walks extends AppCompatActivity implements GeoTask.Geo, Lo
 
                         //reload activity without animation
                         finish();
-                        overridePendingTransition(0,0);
+                        overridePendingTransition(0, 0);
                         startActivity(getIntent());
-                        overridePendingTransition(0,0);
+                        overridePendingTransition(0, 0);
 
 
                     }
