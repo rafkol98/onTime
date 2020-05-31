@@ -37,6 +37,9 @@ public class Tab2 extends Fragment {
     ArrayList<Trip> tripList = new ArrayList<>();
     ReadTrips readTrips = new ReadTrips();
 
+    String destination;
+    Long timestamp;
+    Trip trip;
 
     public Tab2() {
         // Required empty public constructor
@@ -60,9 +63,34 @@ public class Tab2 extends Fragment {
         //Get uId of the user
         final String uId = currentFirebaseUser.getUid();
 
-        tripList=readTrips.getTrips();
-        TripListAdapter adapter = new TripListAdapter(getContext(), R.layout.adapter_view, tripList);
-        mListView.setAdapter(adapter);
+        dbRef.child(uId).child("trips").orderByChild("timestamp").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    destination = child.child("destination").getValue().toString();
+                    timestamp = child.child("timestamp").getValue(Long.class);
+
+
+                    trip = new Trip(destination, timestamp);
+                    tripList.add(trip);
+                    System.out.println("here"+tripList);
+
+                }
+
+                Collections.sort(tripList);
+                TripListAdapter adapter = new TripListAdapter(getContext(), R.layout.adapter_view, tripList);
+                mListView.setAdapter(adapter);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
 
         //When a user clicks on a trip open map with directions there.
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

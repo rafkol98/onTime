@@ -93,6 +93,19 @@ public class Tab1 extends Fragment {
             @Override
             public void onClick(View v) {
 
+//                Fragment newFragment = new Tab2();
+//                // consider using Java coding conventions (upper first char class names!!!)
+//                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//
+//                // Replace whatever is in the fragment_container view with this fragment,
+//                // and add the transaction to the back stack
+//                transaction.replace(R.id.fragment_container, newFragment);
+//                transaction.addToBackStack(null);
+//
+//                // Commit the transaction
+//                transaction.commit();
+
+
                 Intent myIntent = new Intent(getContext(), Upcoming_Walks.class);
 
 //                overridePendingTransition(0,0);

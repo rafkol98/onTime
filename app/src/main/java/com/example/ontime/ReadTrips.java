@@ -24,13 +24,15 @@ public class ReadTrips {
 
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/profiles");
-    final ArrayList<Trip> tripList = new ArrayList<>();
+    ArrayList<Trip> tripList = new ArrayList<>();
 
     //Get uId of the user
     final String uId = currentFirebaseUser.getUid();
 
     public ArrayList<Trip> getTrips() {
-        if (count == 0) {
+//        System.out.println(uId+"alo");
+//
+//        if (count == 0) {
             //try it again tomorrow.
             dbRef.child(uId).child("trips").orderByChild("timestamp").addValueEventListener(new ValueEventListener() {
                 @Override
@@ -41,10 +43,10 @@ public class ReadTrips {
                         destination = child.child("destination").getValue().toString();
                         timestamp = child.child("timestamp").getValue(Long.class);
 
-
+                        System.out.println("HERE HERE DES"+destination+" "+timestamp);
                         trip = new Trip(destination, timestamp);
                         tripList.add(trip);
-
+                        System.out.println(tripList);
 
                     }
 
@@ -58,9 +60,10 @@ public class ReadTrips {
 
                 }
             });
-            count++;
-        }
 
+            count++;
+//        }
+        System.out.println("count a"+tripList.size());
         return tripList;
     }
 

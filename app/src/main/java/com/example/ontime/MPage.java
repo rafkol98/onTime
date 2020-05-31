@@ -28,6 +28,8 @@ public class MPage extends AppCompatActivity {
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new Tab1()).commit();
+
     }
 //        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
 //        tab0 = (TabItem) findViewById(R.id.tab0);
