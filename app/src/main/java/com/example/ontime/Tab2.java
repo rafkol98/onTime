@@ -35,7 +35,7 @@ public class Tab2 extends Fragment {
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/profiles");
     ArrayList<Trip> tripList = new ArrayList<>();
-    ReadTrips readTrips = new ReadTrips();
+
 
     String destination;
     Long timestamp;

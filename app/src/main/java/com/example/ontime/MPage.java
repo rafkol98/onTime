@@ -2,12 +2,21 @@ package com.example.ontime;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import android.Manifest;
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -23,12 +32,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class MPage extends AppCompatActivity {
 
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
-    private TabItem tab0, tab1, tab2;
-    public PageAdapter pagerAdapter;
-
-    Button btnCounter;
+    private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
 
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/profiles");
@@ -39,6 +43,33 @@ public class MPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_m_page);
+
+
+        findViewById(R.id.buttonStart).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions(MPage.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_CODE_LOCATION_PERMISSION);
+
+                } else {
+                    startLocationService();
+                }
+            }
+        });
+
+
+        findViewById(R.id.buttonStop).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopLocationService();
+            }
+        });
+
+
+
+
+
+
 
         final BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
@@ -68,48 +99,22 @@ public class MPage extends AppCompatActivity {
         });
 
 
+        //to stop location service. call stopLocationService
 
 
     }
-//        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-//        tab0 = (TabItem) findViewById(R.id.tab0);
-//        tab1 = (TabItem) findViewById(R.id.tab1);
-//        tab2 = (TabItem) findViewById(R.id.tab2);
-//        viewPager = findViewById(R.id.viewpager);
-//
-//        pagerAdapter = new PageAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
-//        viewPager.setAdapter(pagerAdapter);
-//        viewPager.setCurrentItem(1);
-//        pagerAdapter.notifyDataSetChanged();
-//
-//
-//        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-//            @Override
-//            public void onTabSelected(TabLayout.Tab tab) {
-//                viewPager.setCurrentItem(tab.getPosition());
-//                if (tab.getPosition() == 0) {
-//                    pagerAdapter.notifyDataSetChanged();
-//                } else if (tab.getPosition() == 1) {
-//                    pagerAdapter.notifyDataSetChanged();
-//                } else if (tab.getPosition() == 2) {
-//                    pagerAdapter.notifyDataSetChanged();
-//                }
-//            }
-//
-//            @Override
-//            public void onTabUnselected(TabLayout.Tab tab) {
-//
-//            }
-//
-//            @Override
-//            public void onTabReselected(TabLayout.Tab tab) {
-//
-//            }
-//        });
-//
-//        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-//
-//    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == REQUEST_CODE_LOCATION_PERMISSION && grantResults.length >0){
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                startLocationService();
+            }else {
+                Toast.makeText(this, "Permission denied!", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -134,8 +139,41 @@ public class MPage extends AppCompatActivity {
             }
         };
 
+    private boolean isLocationServiceRunning(){
+        ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        if(activityManager != null){
+            for (ActivityManager.RunningServiceInfo service: activityManager.getRunningServices(Integer.MAX_VALUE)) {
+                if(LocationService.class.getName().equals(service.service.getClassName())){
+                    if(service.foreground){
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+   return false; }
+
     public void onBackPressed(){
 
     }
+
+    private void startLocationService(){
+        if (!isLocationServiceRunning()){
+            Intent intent = new Intent(getApplicationContext(), LocationService.class);
+            intent.setAction(Constants.ACTION_START_LOCATION_SERVICE);
+            startService(intent);
+            Toast.makeText(this,"Location service started", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void stopLocationService(){
+      if(!isLocationServiceRunning()){
+          Intent intent = new Intent(getApplicationContext(), LocationService.class);
+          intent.setAction(Constants.ACTION_STOP_LOCATION_SERVICE);
+          startService(intent);
+          Toast.makeText(this,"Location service stopped", Toast.LENGTH_SHORT).show();
+      }
+    }
+
 
 }
