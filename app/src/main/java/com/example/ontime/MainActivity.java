@@ -62,27 +62,37 @@ public class MainActivity extends AppCompatActivity {
         // Firebase Authentication
         mAuth = FirebaseAuth.getInstance();
 
-        //AlertDialog Builder
-        builder = new AlertDialog.Builder(this);
+        FirebaseUser user = mAuth.getCurrentUser();
 
-        create_account_txt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, SignUp.class);
-                startActivity(intent);
-            }
+        //check if user is already logged in.
+        if(user != null) {
+        //put intent to go to mainActivity
+            Intent intent = new Intent(MainActivity.this, MPage.class);
+            startActivity(intent);
+            this.finish();
+        } else {
 
-        });
+            //AlertDialog Builder
+            builder = new AlertDialog.Builder(this);
+
+            create_account_txt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(MainActivity.this, SignUp.class);
+                    startActivity(intent);
+                }
+
+            });
 
 
-        sign_in.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signInAccount();
-            }
+            sign_in.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    signInAccount();
+                }
 
-        });
-
+            });
+        }
 
     }
 
