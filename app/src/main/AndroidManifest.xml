@@ -47,7 +47,14 @@
 
         <service android:name=".LocationService"
             android:enabled="true"
-            android:exported="false"/>
+            android:exported="false"></service>
+
+        <receiver
+            android:name=".Restarter"
+            android:enabled="true"
+            android:exported="true"
+            android:label="RestartServiceWhenStopped">
+        </receiver>
 
     </application>
 

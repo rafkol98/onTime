@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -38,37 +39,20 @@ public class MPage extends AppCompatActivity {
     private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/profiles");
 
 
+    Intent mServiceIntent;
+    private LocationService mYourService;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_m_page);
 
-
-        findViewById(R.id.buttonStart).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
-                    ActivityCompat.requestPermissions(MPage.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_CODE_LOCATION_PERMISSION);
-
-                } else {
-                    startLocationService();
-                }
-            }
-        });
-
-
-        findViewById(R.id.buttonStop).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                stopLocationService();
-            }
-        });
-
-
-
-
-
+        mYourService = new LocationService();
+        mServiceIntent = new Intent(this, mYourService.getClass());
+        if (!isLocationServiceRunning()) {
+            startLocationService();
+        }
 
 
         final BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
@@ -78,6 +62,7 @@ public class MPage extends AppCompatActivity {
 
 
         final String uId = currentFirebaseUser.getUid();
+
 
         dbRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -104,6 +89,22 @@ public class MPage extends AppCompatActivity {
 
     }
 
+
+
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                Log.i ("Service status", "Running");
+                return true;
+            }
+        }
+        Log.i ("Service status", "Not running");
+        return false;
+    }
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -116,6 +117,8 @@ public class MPage extends AppCompatActivity {
         }
     }
 
+
+    //Bottom Navigation. Switch tabs.
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -139,6 +142,9 @@ public class MPage extends AppCompatActivity {
             }
         };
 
+
+
+
     private boolean isLocationServiceRunning(){
         ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         if(activityManager != null){
@@ -151,6 +157,7 @@ public class MPage extends AppCompatActivity {
             }
             return false;
         }
+        Log.d ("Service status", "Not running");
    return false; }
 
     public void onBackPressed(){
@@ -166,13 +173,23 @@ public class MPage extends AppCompatActivity {
         }
     }
 
-    private void stopLocationService(){
-      if(!isLocationServiceRunning()){
-          Intent intent = new Intent(getApplicationContext(), LocationService.class);
-          intent.setAction(Constants.ACTION_STOP_LOCATION_SERVICE);
-          startService(intent);
-          Toast.makeText(this,"Location service stopped", Toast.LENGTH_SHORT).show();
-      }
+//    private void stopLocationService(){
+//      if(isLocationServiceRunning()){
+//          Intent intent = new Intent(getApplicationContext(), LocationService.class);
+//          intent.setAction(Constants.ACTION_STOP_LOCATION_SERVICE);
+//          startService(intent);
+//          Toast.makeText(this,"Location service stopped", Toast.LENGTH_SHORT).show();
+//          Log.d("LOCATION_UPDATE","service was tried to be shut down");
+//      }
+//    }
+
+
+    @Override
+    protected void onDestroy() {
+        stopService(mServiceIntent);
+        Log.i("MAINACT", "onDestroy!");
+        super.onDestroy();
+
     }
 
 
