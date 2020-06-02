@@ -1,0 +1,131 @@
+package com.example.ontime.MainClasses.fragments;
+
+import android.content.Intent;
+import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
+
+import com.example.ontime.MapRelatedClasses.Navigate;
+import com.example.ontime.R;
+import com.example.ontime.MainClasses.Trip;
+import com.example.ontime.MainClasses.TripListAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.Collections;
+
+
+/**
+ * This fragment shows the upcoming walks of the user.
+ */
+public class Tab2 extends Fragment {
+
+    //Initialise variables.
+    FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+    private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/profiles");
+
+    ArrayList<Trip> tripList = new ArrayList<>();
+
+
+    String destination;
+    Long timestamp;
+    Trip trip;
+
+    public Tab2() {
+        // Required empty public constructor
+    }
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_tab2, container, false);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        View v = getView();
+
+        final ListView mListView = (ListView) v.findViewById(R.id.listView);
+
+        //Get uId of the user from the database.
+        final String uId = currentFirebaseUser.getUid();
+
+        //Get trips of the user. Order them so that the closest one to the current date is first.
+        dbRef.child(uId).child("trips").orderByChild("timestamp").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    destination = child.child("destination").getValue().toString();
+                    timestamp = child.child("timestamp").getValue(Long.class);
+
+
+                    trip = new Trip(destination, timestamp);
+                    tripList.add(trip);
+                    System.out.println("here"+tripList);
+
+                }
+
+                Collections.sort(tripList);
+                TripListAdapter adapter = new TripListAdapter(getContext(), R.layout.adapter_view, tripList);
+                mListView.setAdapter(adapter);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+        //When a user clicks on a trip open map with directions to there.
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Get the selected item text from ListView
+                Trip selectedItem = (Trip) parent.getItemAtPosition(position);
+
+                //Open Navigate class which shows the path to go there from his current location.
+                Intent myIntent = new Intent(getContext(), Navigate.class);
+                myIntent.putExtra("keyDest", selectedItem.getDestination());
+                startActivity(myIntent);
+
+
+            }
+        });
+
+        //NOT YET IMPLEMENTED. On long click delete from database.
+        mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            public boolean onItemLongClick(AdapterView<?> parent, View view,
+                                           int position, long id) {
+
+                //need to remove it from the database.
+
+                return false;
+            }
+        });
+
+    }
+
+
+}

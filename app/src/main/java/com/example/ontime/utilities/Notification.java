@@ -13,7 +13,7 @@ import androidx.core.content.ContextCompat;
 
 
 
-import com.example.ontime.MPage;
+import com.example.ontime.MainClasses.MPage;
 import com.example.ontime.R;
 
 public class Notification {

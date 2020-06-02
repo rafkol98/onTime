@@ -7,7 +7,7 @@
     android:background="@drawable/countbackground"
     android:paddingLeft="50dp"
     android:paddingRight="50dp"
-    tools:context=".Countdown">
+    tools:context=".SignIn_UpClasses.Countdown">
 
     <TextView
         android:id="@+id/timer"

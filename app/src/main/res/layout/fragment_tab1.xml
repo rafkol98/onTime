@@ -8,7 +8,7 @@
     android:background="@drawable/home_bg1"
     android:paddingTop="40dp"
     android:paddingBottom="0dp"
-    tools:context=".MPage">
+    tools:context=".MainClasses.MPage">
 
 
     <ImageView
@@ -32,17 +32,7 @@
         app:layout_constraintTop_toBottomOf="@+id/autoComplete1"
         app:srcCompat="@drawable/transport" />
 
-    <!--    <EditText-->
-    <!--        android:id="@+id/writePlace"-->
-    <!--        android:layout_width="231dp"-->
-    <!--        android:layout_height="35dp"-->
-    <!--        android:layout_marginTop="16dp"-->
-    <!--        android:background="@drawable/search_button"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintHorizontal_bias="0.489"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/where"-->
-    <!--        ></EditText>-->
+
 
     <AutoCompleteTextView
         android:id="@+id/autoComplete1"
@@ -69,38 +59,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline4" />
 
-
-    <Button
-        android:id="@+id/buttonTrips"
-        android:layout_width="181dp"
-        android:layout_height="50dp"
-
-        android:layout_marginEnd="56dp"
-        android:layout_marginRight="56dp"
-        android:layout_marginBottom="56dp"
-
-        android:background="@drawable/custom_button"
-        android:text=" Upcoming Walks "
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:textStyle="italic"
-        android:visibility="invisible"
-
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Button
-        android:id="@+id/button_counter"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:background="@drawable/circle_button"
-        android:visibility="invisible"
-        android:text="0"
-        app:layout_constraintBottom_toTopOf="@+id/buttonTrips"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/buttonTrips" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"
