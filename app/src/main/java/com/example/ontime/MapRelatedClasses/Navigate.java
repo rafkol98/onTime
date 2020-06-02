@@ -62,6 +62,9 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
+/**
+ * Navigate class.
+ */
 public class Navigate extends FragmentActivity implements OnMapReadyCallback, LocationListener, GeoTask.Geo {
 
     static final long ONE_MINUTE_IN_MILLIS = 60000;//millisecs
