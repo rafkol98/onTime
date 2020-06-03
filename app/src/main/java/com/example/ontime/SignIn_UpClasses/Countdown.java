@@ -31,8 +31,12 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * This class is used to calculate the user's average speed, It has a countdown of 2 minutes.
+ */
 public class Countdown extends AppCompatActivity implements LocationListener {
 
+    //Initialise variables.
     SwitchCompat sw_metric;
     TextView txt, avgTxt;
 
@@ -151,6 +155,7 @@ public class Countdown extends AppCompatActivity implements LocationListener {
         Toast.makeText(this, "Waiting for GPS connection!", Toast.LENGTH_SHORT).show();
     }
 
+    //Update speed of the user.
     private void updateSpeed(CLocation location) {
         double nCurrentSpeed = 0;
         if (location != null) {
@@ -167,14 +172,13 @@ public class Countdown extends AppCompatActivity implements LocationListener {
         if (this.useMetricUnits()) {
             txt.setText(strCurrentSpeed + " km/h");
             avgTxt.setText("total " + totalSpeed + " km/h");
-//            totalSpeed = totalSpeed + nCurrentSpeed;
         } else {
             txt.setText(strCurrentSpeed + " miles/h");
             avgTxt.setText("total " + totalSpeed + " miles/h");
-//            totalSpeed = totalSpeed + nCurrentSpeed;
         }
     }
 
+    //Grant permission.
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == 1000) {
@@ -214,12 +218,6 @@ public class Countdown extends AppCompatActivity implements LocationListener {
         return sw_metric.isChecked();
     }
 
-    private void writeNewUser(String userId, double avgSpeed) {
-        User user = new User(userId, avgSpeed);
-
-//        reff.child("Users").setValue(user);
-
-    }
 
     public void onBackPressed() {
 

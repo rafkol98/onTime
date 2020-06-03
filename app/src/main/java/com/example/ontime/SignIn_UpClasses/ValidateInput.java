@@ -5,6 +5,9 @@ import android.util.Patterns;
 import android.widget.EditText;
 import android.widget.Toast;
 
+/**
+ * Class used to validate input when signing up.
+ */
 public class ValidateInput {
 
     Context context;

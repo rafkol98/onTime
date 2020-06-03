@@ -19,6 +19,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+/**
+ * Enables the user to Sign Up.
+ */
 public class SignUp extends AppCompatActivity {
 
     EditText name_in, sign_up_email, sign_up_password, repeat_password;

@@ -2,6 +2,9 @@ package com.example.ontime.SignIn_UpClasses;
 
 import android.location.Location;
 
+/**
+ * Class that is used to update the speed of the user as he completed the test.
+ */
 public class CLocation extends Location {
 
     private boolean bUserMetricUnits = false;

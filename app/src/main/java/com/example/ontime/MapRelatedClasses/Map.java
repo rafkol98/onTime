@@ -346,7 +346,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
 
     //Calculates how many minutes the user needs based on his own unique average walking speed to go there.
     @Override
-    public void setDouble(String result) {
+    public void calculateTimeAndDist(String result) {
         String res[] = result.split(",");
         Double min = Double.parseDouble(res[0]) / 60;
         Double dist = Double.parseDouble(res[1]) / 1000;

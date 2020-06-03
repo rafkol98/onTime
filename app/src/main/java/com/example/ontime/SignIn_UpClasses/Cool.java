@@ -9,6 +9,9 @@ import android.os.Handler;
 import com.example.ontime.MainClasses.MPage;
 import com.example.ontime.R;
 
+/**
+ * Class shown for a few seconds after the user has completed his account.
+ */
 public class Cool extends AppCompatActivity {
 
     private Handler mHandler = new Handler();

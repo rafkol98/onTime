@@ -5,11 +5,15 @@ import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 
-public class ProcessMainClass {
-    public static final String TAG = ProcessMainClass.class.getSimpleName();
+/**
+ * This class is used to launch the service for Build SDK Versions BELOW Lollipop.
+ * The service is launched in the MPage class (in the MainClasses Package).
+ */
+public class ProcessClass {
+    public static final String TAG = ProcessClass.class.getSimpleName();
     private static Intent serviceIntent = null;
 
-    public ProcessMainClass() {
+    public ProcessClass() {
     }
 
 
@@ -18,9 +22,8 @@ public class ProcessMainClass {
             serviceIntent = new Intent(context, Service.class);
         }
     }
-    /**
-     * launching the service
-     */
+
+    //launching the service
     public void launchService(Context context) {
         if (context == null) {
             return;

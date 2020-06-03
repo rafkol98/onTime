@@ -7,7 +7,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageInfo;
 import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
@@ -16,31 +15,14 @@ import androidx.annotation.RequiresApi;
 
 import static android.content.Context.JOB_SCHEDULER_SERVICE;
 
+/**
+ * Restart the service
+ */
 public class RestartServiceBroadcastReceiver extends BroadcastReceiver {
 
     public static final String TAG = RestartServiceBroadcastReceiver.class.getSimpleName();
     private static JobScheduler jobScheduler;
     private RestartServiceBroadcastReceiver restartSensorServiceReceiver;
-
-    /**
-     * it returns the number of version code
-     *
-     * @param context
-     * @return
-     */
-    public static long getVersionCode(Context context) {
-        PackageInfo pInfo;
-        try {
-            pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-            long versionCode = System.currentTimeMillis();  //PackageInfoCompat.getLongVersionCode(pInfo);
-            return versionCode;
-
-        } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
-        }
-        return 0;
-    }
-
 
 
     @Override
@@ -50,7 +32,7 @@ public class RestartServiceBroadcastReceiver extends BroadcastReceiver {
             scheduleJob(context);
         } else {
             registerRestarterReceiver(context);
-            ProcessMainClass bck = new ProcessMainClass();
+            ProcessClass bck = new ProcessClass();
             bck.launchService(context);
         }
     }
@@ -84,7 +66,7 @@ public class RestartServiceBroadcastReceiver extends BroadcastReceiver {
 
         // the context can be null if app just installed and this is called from restartsensorservice
         // https://stackoverflow.com/questions/24934260/intentreceiver-components-are-not-allowed-to-register-to-receive-intents-when
-        // Final decision: in case it is called from installation of new version (i.e. from manifest, the application is
+        // In case it is called from installation of new version (i.e. from manifest, the application is
         // null. So we must use context.registerReceiver. Otherwise this will crash and we try with context.getApplicationContext
         if (restartSensorServiceReceiver == null)
             restartSensorServiceReceiver = new RestartServiceBroadcastReceiver();

@@ -11,7 +11,10 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
-
+/**
+ * This class is used to launch the service for Build SDK Versions ABOVE Lollipop.
+ * The service is launched in the MPage class (in the MainClasses Package).
+ */
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class JobService extends android.app.job.JobService {
     private static String TAG= JobService.class.getSimpleName();
@@ -21,7 +24,7 @@ public class JobService extends android.app.job.JobService {
 
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
-        ProcessMainClass bck = new ProcessMainClass();
+        ProcessClass bck = new ProcessClass();
         bck.launchService(this);
         registerRestarterReceiver();
         instance= this;
@@ -65,11 +68,7 @@ public class JobService extends android.app.job.JobService {
 
     }
 
-    /**
-     * called if Android kills the job service
-     * @param jobParameters
-     * @return
-     */
+    //called if Android kills the job service
     @Override
     public boolean onStopJob(JobParameters jobParameters) {
         Log.i(TAG, "Stopping job");
@@ -87,10 +86,7 @@ public class JobService extends android.app.job.JobService {
     }
 
 
-    /**
-     * called when the tracker is stopped for whatever reason
-     * @param context
-     */
+    //called when the tracker is stopped for whatever reason
     public static void stopJob(Context context) {
         if (instance!=null && jobParameters!=null) {
             try{

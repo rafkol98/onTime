@@ -63,15 +63,16 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 /**
- * Navigate class.
+ * Navigate class. This class is used to navigate a current user
  */
 public class Navigate extends FragmentActivity implements OnMapReadyCallback, LocationListener, GeoTask.Geo {
 
+
+    //Initialise variables.
     static final long ONE_MINUTE_IN_MILLIS = 60000;//millisecs
 
     private GoogleMap mMap;
-    private FusedLocationProviderClient client;
-    //    private FusedLocationProviderClient
+
     String currentOrigin;
     double latitude, longitude;
     MarkerOptions origin, destination;
@@ -80,10 +81,9 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
     String destinationPassed;
     private String bestProvider, url;
     private Criteria criteria;
-    private Location lcn;
+
     LatLng desLatLgn;
     TextView arrivalTxt;
-
 
 
     public Navigate() {
@@ -91,12 +91,13 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
 
     GeoTask geoTask;
 
-    //Used to get the User's speed from firebase.
+    //Used to get the User's speed from firebase databse.
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/profiles");
     private String tempAverageSpeed;
     private String averageSpeed;
 
+    //Getters and setters.
     public String getAverageSpeed() {
         return averageSpeed;
     }
@@ -110,6 +111,9 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigate);
 
+        arrivalTxt = findViewById(R.id.textArrival);
+
+        //Get uId of the user.
         final String uId = currentFirebaseUser.getUid();
 
 
@@ -129,8 +133,9 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
             }
         });
 
+        //Gets location service.
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        arrivalTxt = findViewById(R.id.textArrival);
+
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -143,14 +148,15 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
             return;
         }
 
+        //Initialise Geotask class.
         geoTask = new GeoTask(Navigate.this);
 
+        //Get destination passed and set the destination Lat/Lng to the one we get when we pass in the destination's address.
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             destinationPassed = extras.getString("keyDest");
             desLatLgn = getLatLngFromAddress(destinationPassed);
         }
-        Log.d("HERE HERE DEST", " " + destinationPassed);
 
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -159,9 +165,9 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
         mapFragment.getMapAsync(this);
 
         getLocation();
+        Log.d("Des LatLng LOG", " " + desLatLgn);
 
 
-        Log.d("HERE HERE LOG", " " + desLatLgn);
         //Setting marker to draw route between these two points
         origin = new MarkerOptions().position(new LatLng(latitude, longitude)).title("Current Position").snippet("origin");
         if (desLatLgn != null) {
@@ -173,36 +179,37 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
             url = getDirectionsUrl(origin.getPosition(), origin.getPosition());
         }
 
-        // Getting URL to the Google Directions API
 
-        Log.d("here here latlong",latitude+","+longitude);
+        // Getting URL to the Google Directions API
+        Log.d("here here latlong", latitude + "," + longitude);
+        //Get address of user's current location
         currentOrigin = getAddressFromLatLng(latitude, longitude);
 
-
-        DownloadTask downloadTask = new DownloadTask();
-
         // Start downloading json data from Google Directions API
+        DownloadTask downloadTask = new DownloadTask();
         downloadTask.execute(url);
-
 
 
     }
 
-
+    //When the user clicks the home icon, go back to MPage
     public void onHomeIcon(View v) {
         Intent intent = new Intent(Navigate.this, MPage.class);
         startActivity(intent);
         finish();
     }
 
+    //Override onBackPressed.
     public void onBackPressed() {
 
     }
 
+    //When the map is ready, do this.
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        //Load style.
         try {
             boolean success = googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.b_w_style1));
 
@@ -226,6 +233,8 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
         geoTask.execute(url);
     }
 
+
+    //When the user moves update his location.
     @Override
     public void onLocationChanged(Location location) {
         currentLat = location.getLatitude();
@@ -253,10 +262,11 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
 
     }
 
+    //Get arrival time based on user's unique speed. This is an abstract method's implementation from Geo interface in Geotask.
+    //The result passed in is returned from the doInBackground method in GeoTask.
     @Override
-    public void setDouble(String result) {
-
-
+    public void calculateTimeAndDist(String result) {
+        //Create a calendar instance.
         Calendar date = Calendar.getInstance();
         long t = date.getTimeInMillis();
 
@@ -266,26 +276,210 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
         // the string representation of date according to the chosen pattern
         DateFormat df = new SimpleDateFormat(pattern);
 
-
+        //Split the result returned by the Geotask.
         String res[] = result.split(",");
-        Double min = Double.parseDouble(res[0]) / 60;
+//        Double min = Double.parseDouble(res[0]) / 60;
+
+        //Get the distance.
         Double dist = Double.parseDouble(res[1]) / 1000;
 
+
+        //Get time to dest based on user's speed.
         Double d = Double.valueOf(dist);
         Double s = Double.valueOf(getAverageSpeed());
-
         int timeToDest = (int) ((d / s) * 60);
 
         //Add timeToDest to current time
         Date afterAddingTimeToDest = new Date(t + (timeToDest * ONE_MINUTE_IN_MILLIS));
         String todayAsString = df.format(afterAddingTimeToDest.getTime());
 
+        //Set arrival txt to estimate arrival time.
         arrivalTxt.setText(todayAsString);
 
     }
 
 
+    private String getDirectionsUrl(LatLng origin, LatLng dest) {
 
+        // Origin of route
+        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+
+        // Destination of route
+        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+
+        //setting transportation mode
+        String mode = "mode=walking";
+
+        // Building the parameters to the web service
+        String parameters = str_origin + "&" + str_dest + "&" + mode;
+
+        // Output format
+        String output = "json";
+
+        // Building the url to the web service
+        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=" + "AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
+
+
+        return url;
+    }
+
+    //A method to download json data from url.
+    private String downloadUrl(String strUrl) throws IOException {
+        String data = "";
+        InputStream iStream = null;
+        HttpURLConnection urlConnection = null;
+        try {
+            URL url = new URL(strUrl);
+
+            urlConnection = (HttpURLConnection) url.openConnection();
+
+            urlConnection.connect();
+
+            iStream = urlConnection.getInputStream();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
+
+            StringBuffer sb = new StringBuffer();
+
+            String line = "";
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+
+            data = sb.toString();
+
+            br.close();
+
+        } catch (Exception e) {
+            Log.d("Exception", e.toString());
+        } finally {
+            iStream.close();
+            urlConnection.disconnect();
+        }
+        return data;
+    }
+
+    //Get Latitude and Longitude from Address.
+    public LatLng getLatLngFromAddress(String address) {
+        Geocoder geocoder = new Geocoder(Navigate.this);
+        List<Address> addressList;
+
+        try {
+            addressList = geocoder.getFromLocationName(address, 1);
+            if (addressList != null) {
+                Address singleAddress = addressList.get(0);
+                LatLng latLng = new LatLng(singleAddress.getLatitude(), singleAddress.getLongitude());
+                return latLng;
+            } else {
+                return null;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    //Get Current Location. This can later be changed from read from the database. Once we finalise the get of the location of the user constantly in the background.
+    protected void getLocation() {
+        if (isLocationEnabled(Navigate.this)) {
+            locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+            criteria = new Criteria();
+            bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
+
+            //You can still do this if you like, you might get lucky:
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            Location location = locationManager.getLastKnownLocation(bestProvider);
+            if (location != null) {
+                Log.e("TAG", "GPS is on");
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+            } else {
+                //This is what you need:
+                locationManager.requestLocationUpdates(bestProvider, 1000, 0, this);
+            }
+        } else {
+//            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//            builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
+//                    .setCancelable(false)
+//                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                        public void onClick(final DialogInterface dialog, final int id) {
+//                            startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+//                        }
+//                    })
+//                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+//                        public void onClick(final DialogInterface dialog, final int id) {
+//                            dialog.cancel();
+//                        }
+//                    });
+//            final AlertDialog alert = builder.create();
+//            alert.show();
+        }
+    }
+
+
+    //Get Address from Latitude and Longitude.
+    public String getAddressFromLatLng(double latitude, double longitude) {
+
+        String strAdd = "";
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            if (addresses != null) {
+                Address returnedAddress = addresses.get(0);
+                StringBuilder strReturnedAddress = new StringBuilder("");
+
+                for (int i = 0; i <= returnedAddress.getMaxAddressLineIndex(); i++) {
+                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
+                }
+                strAdd = strReturnedAddress.toString();
+                Log.d("Address Log", strReturnedAddress.toString());
+            } else {
+                Log.d("Address Log", "No Address returned!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("Address Log", "Cannot get Address!");
+        }
+        return strAdd;
+    }
+
+
+    //Check if location is enabled.
+    public static boolean isLocationEnabled(Context context) {
+        int locationMode = 0;
+        String locationProviders;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            try {
+                locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
+            } catch (Settings.SettingNotFoundException e) {
+                e.printStackTrace();
+            }
+            return locationMode != Settings.Secure.LOCATION_MODE_OFF;
+        } else {
+            locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+            return !TextUtils.isEmpty(locationProviders);
+        }
+    }
+
+
+    @Override
+    public void tripFromLocation() {
+
+    }
+
+    /**
+     * Private class to get the data from the instructions.
+     */
 
     private class DownloadTask extends AsyncTask<String, Void, String> {
 
@@ -316,7 +510,7 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
 
 
     /**
-     * A class to parse the JSON format
+     * A class to parse the JSON format.
      */
     private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
 
@@ -364,217 +558,10 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
 
             }
 
-// Drawing polyline in the Google Map for the i-th route
-
+            // Drawing polyline in the Google Map for the i-th route
             if (points.size() != 0)
                 mMap.addPolyline(lineOptions);
         }
-    }
-
-    private String getDirectionsUrl(LatLng origin, LatLng dest) {
-
-        // Origin of route
-        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
-
-        // Destination of route
-        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
-
-        //setting transportation mode
-        String mode = "mode=walking";
-
-        // Building the parameters to the web service
-        String parameters = str_origin + "&" + str_dest + "&" + mode;
-
-        // Output format
-        String output = "json";
-
-        // Building the url to the web service
-        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=" + "AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
-
-
-        return url;
-    }
-
-    /**
-     * A method to download json data from url
-     */
-    private String downloadUrl(String strUrl) throws IOException {
-        String data = "";
-        InputStream iStream = null;
-        HttpURLConnection urlConnection = null;
-        try {
-            URL url = new URL(strUrl);
-
-            urlConnection = (HttpURLConnection) url.openConnection();
-
-            urlConnection.connect();
-
-            iStream = urlConnection.getInputStream();
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
-
-            StringBuffer sb = new StringBuffer();
-
-            String line = "";
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-            }
-
-            data = sb.toString();
-
-            br.close();
-
-        } catch (Exception e) {
-            Log.d("Exception", e.toString());
-        } finally {
-            iStream.close();
-            urlConnection.disconnect();
-        }
-        return data;
-    }
-
-    public LatLng getLatLngFromAddress(String address) {
-        Geocoder geocoder = new Geocoder(Navigate.this);
-        List<Address> addressList;
-
-        try {
-            addressList = geocoder.getFromLocationName(address, 1);
-            if (addressList != null) {
-                Address singleAddress = addressList.get(0);
-                LatLng latLng = new LatLng(singleAddress.getLatitude(), singleAddress.getLongitude());
-                return latLng;
-            } else {
-                return null;
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    protected void getLocation() {
-        if (isLocationEnabled(Navigate.this)) {
-            locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-            criteria = new Criteria();
-            bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
-
-            //You can still do this if you like, you might get lucky:
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
-            }
-            Location location = locationManager.getLastKnownLocation(bestProvider);
-            if (location != null) {
-                Log.e("TAG", "GPS is on");
-                latitude = location.getLatitude();
-                longitude = location.getLongitude();
-            } else {
-                //This is what you need:
-                locationManager.requestLocationUpdates(bestProvider, 1000, 0, this);
-            }
-        } else {
-//            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//            builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
-//                    .setCancelable(false)
-//                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                        public void onClick(final DialogInterface dialog, final int id) {
-//                            startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-//                        }
-//                    })
-//                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
-//                        public void onClick(final DialogInterface dialog, final int id) {
-//                            dialog.cancel();
-//                        }
-//                    });
-//            final AlertDialog alert = builder.create();
-//            alert.show();
-        }
-    }
-
-
-    public String getAddressFromLatLng(double latitude, double longitude) {
-
-        String strAdd = "";
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-        try {
-            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
-            if (addresses != null) {
-                Address returnedAddress = addresses.get(0);
-                StringBuilder strReturnedAddress = new StringBuilder("");
-
-                for (int i = 0; i <= returnedAddress.getMaxAddressLineIndex(); i++) {
-                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
-                }
-                strAdd = strReturnedAddress.toString();
-                Log.d("HERE HEREEE address", strReturnedAddress.toString());
-            } else {
-                Log.d("HERE HEREEE address", "No Address returned!");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.d("HERE HEREEE address", "Cannot get Address!");
-        }
-        return strAdd;
-    }
-
-
-    public static boolean isLocationEnabled(Context context) {
-        int locationMode = 0;
-        String locationProviders;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            try {
-                locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
-            } catch (Settings.SettingNotFoundException e) {
-                e.printStackTrace();
-            }
-            return locationMode != Settings.Secure.LOCATION_MODE_OFF;
-        } else {
-            locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
-            return !TextUtils.isEmpty(locationProviders);
-        }
-    }
-
-    private LatLng updateWithNewLocation(Location location) {
-        LatLng latLng;
-        String latLongString = "";
-        if (location != null) {
-            double lat = location.getLatitude();
-            double lng = location.getLongitude();
-            latLng = new LatLng(lat, lng);
-
-        } else {
-            latLng = new LatLng(1, 1);
-        }
-        return latLng;
-    }
-
-    private final LocationListener locationListener = new LocationListener() {
-
-        public void onLocationChanged(Location location) {
-            updateWithNewLocation(location);
-        }
-
-        public void onProviderDisabled(String provider) {
-            updateWithNewLocation(null);
-        }
-
-        public void onProviderEnabled(String provider) {
-        }
-
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-        }
-    };
-
-    @Override
-    public void tripFromLocation() {
-
     }
 
 

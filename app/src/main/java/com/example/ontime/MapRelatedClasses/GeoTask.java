@@ -19,7 +19,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**The instance of this class is called by "MainActivty". It gets the time taken reach the destination from Google Distance Matrix API in the background.
-  This class contains interface "Geo" to call the function setDouble(String) defined in "MainActivity.class" to display the result.*/
+  This class contains interface "Geo" to call the function setDouble(String) defined in "MainActivity.class" to display the result. This class is essential as
+ this is what allows me to calculate how many minutes the user needs to go from his current location to a destination based on his own unique speed.
+ This is achieved with the implementation of the calculateTimeAndDist method in the desired class from the Geo interface.*/
 public class GeoTask extends AsyncTask<String, Void, String> {
     ProgressDialog pd;
     Context mContext;
@@ -40,12 +42,13 @@ public class GeoTask extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String aDouble) {
         super.onPostExecute(aDouble);
         if (aDouble != null) {
-            geo1.setDouble(aDouble);
+            geo1.calculateTimeAndDist(aDouble);
         } else {
             geo1.tripFromLocation();
         }
     }
 
+    //gets duration and distance in the background. Remember, this is an AsyncTask so it doesnt run with the natural flow of the program. It runs in the background.
     @Override
     protected String doInBackground(String... params) {
         try {
@@ -94,7 +97,7 @@ public class GeoTask extends AsyncTask<String, Void, String> {
 
 
     interface Geo {
-        public void setDouble(String min);
+        public void calculateTimeAndDist(String min);
 
         public void tripFromLocation();
     }

@@ -1,4 +1,4 @@
-package com.example.ontime.SignIn_UpClasses;
+package com.example.ontime.MainClasses;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,9 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
-import com.example.ontime.MainClasses.MPage;
 import com.example.ontime.R;
 
+/**
+ * Screen showed when the trip has been succesfully planned.
+ */
 public class SuperScreen extends AppCompatActivity {
 
 

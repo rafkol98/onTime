@@ -42,7 +42,7 @@ public class Notification {
             //mContext.getString(R.string.channel_name);
             int importance = NotificationManager.IMPORTANCE_LOW;
 
-            String CHANNEL_ID = "uk.ac.shef.oak.channel";
+            String CHANNEL_ID = "com.example.ontime.channel";
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
             //String description = mContext.getString(R.string.notifications_description);
             String description = "I would like to receive travel alerts and notifications for:";
@@ -60,9 +60,12 @@ public class Notification {
                     .setContentIntent(notificationPendingIntent)
                     .build();
 
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        }
+        /**
+         * Notification is above Lollipop Versions.
+         */
+        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             notification = new NotificationCompat.Builder(context, "channel")
-                    // to be defined in the MainActivity of the app
                     .setSmallIcon(icon)
                     .setContentTitle(title)
 //                    .setColor(mContext.getResources().getColor(R.color.colorAccent))
@@ -71,7 +74,6 @@ public class Notification {
                     .setContentIntent(notificationPendingIntent).build();
         } else {
             notification = new NotificationCompat.Builder(context, "channel")
-                    // to be defined in the MainActivity of the app
                     .setSmallIcon(icon)
                     .setContentTitle(title)
                     .setContentText(text)

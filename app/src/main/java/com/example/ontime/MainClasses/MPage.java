@@ -12,7 +12,7 @@ import com.example.ontime.R;
 import com.example.ontime.MainClasses.fragments.Tab0;
 import com.example.ontime.MainClasses.fragments.Tab1;
 import com.example.ontime.MainClasses.fragments.Tab2;
-import com.example.ontime.RestarterAndServices.ProcessMainClass;
+import com.example.ontime.RestarterAndServices.ProcessClass;
 import com.example.ontime.RestarterAndServices.RestartServiceBroadcastReceiver;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -79,7 +79,7 @@ public class MPage extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             RestartServiceBroadcastReceiver.scheduleJob(getApplicationContext());
         } else {
-            ProcessMainClass bck = new ProcessMainClass();
+            ProcessClass bck = new ProcessClass();
             bck.launchService(getApplicationContext());
         }
     }

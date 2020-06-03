@@ -26,7 +26,7 @@
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".MainClasses.PlanTripFromLocation" />
         <activity android:name=".MapRelatedClasses.Navigate" />
-        <activity android:name=".SignIn_UpClasses.SuperScreen" />
+        <activity android:name=".MainClasses.SuperScreen" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

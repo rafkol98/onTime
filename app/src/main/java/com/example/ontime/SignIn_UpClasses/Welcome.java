@@ -10,6 +10,9 @@ import android.widget.Button;
 
 import com.example.ontime.R;
 
+/**
+ * Welcome screen.
+ */
 public class Welcome extends AppCompatActivity {
 
     Button start;
@@ -20,6 +23,7 @@ public class Welcome extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
+        //On click of the start button, go to the Countdown class.
         start = findViewById(R.id.start_button);
 
         start.setOnClickListener(new View.OnClickListener() {

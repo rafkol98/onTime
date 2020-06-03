@@ -22,7 +22,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
+/**
+ * Service class. I first experimented to make it work with seconds - every second there is a log. This works even if the app is terminated.
+ * I want to do the same for the location of the user. That is, get the location of the user constantly. This works only for a few seconds after the app was terminated as of now.
+ */
 public class Service extends android.app.Service {
     protected static final int NOTIFICATION_ID = 1337;
     private static String TAG = "Service";
@@ -33,7 +36,7 @@ public class Service extends android.app.Service {
         super();
     }
 
-        //get firebase user.
+    //get firebase user.
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/profiles");
 
@@ -48,6 +51,7 @@ public class Service extends android.app.Service {
         mCurrentService = this;
     }
 
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
@@ -56,7 +60,7 @@ public class Service extends android.app.Service {
 
         // it has been killed by Android and now it is restarted. We must make sure to have reinitialised everything
         if (intent == null) {
-            ProcessMainClass bck = new ProcessMainClass();
+            ProcessClass bck = new ProcessClass();
             bck.launchService(this);
         }
 
@@ -82,14 +86,8 @@ public class Service extends android.app.Service {
     }
 
 
-    /**
-     * it starts the process in foreground. Normally this is done when screen goes off
-     * THIS IS REQUIRED IN ANDROID 8 :
-     * "The system allows apps to call Context.startForegroundService()
-     * even while the app is in the background.
-     * However, the app must call that service's startForeground() method within five seconds
-     * after the service is created."
-     */
+
+    //it starts the process in foreground. Normally this is done when screen goes off
     public void restartForeground() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Log.i(TAG, "restarting foreground");
@@ -119,12 +117,7 @@ public class Service extends android.app.Service {
     }
 
 
-    /**
-     * this is called when the process is killed by Android
-     *
-     * @param rootIntent
-     */
-
+    //this is called when the process is killed by Android
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         super.onTaskRemoved(rootIntent);
@@ -132,20 +125,15 @@ public class Service extends android.app.Service {
         // restart the never ending service
         Intent broadcastIntent = new Intent(Constants.RESTART_INTENT);
         sendBroadcast(broadcastIntent);
-        // do not call stoptimertask because on some phones it is called asynchronously
-        // after you swipe out the app and therefore sometimes
-        // it will stop the timer after it was restarted
-        // stoptimertask();
     }
 
 
-    /**
-     * static to avoid multiple timers to be created when the service is called several times
-     */
+    //static to avoid multiple timers to be created when the service is called several times
     private static Timer timer;
     private static TimerTask timerTask;
     long oldTime = 0;
 
+    //Method that starts the timer.
     public void startTimer() {
         Log.i(TAG, "Starting timer");
 
@@ -155,8 +143,10 @@ public class Service extends android.app.Service {
         timer = new Timer();
 
         //initialize the TimerTask's job
-        initializeTimerTask();
+        LogTimerTask();
 
+        //I also tried to start the location service. Which gets the user's location every 4 seconds.
+        // This works, but once the app is restarted or goes in to background, it stops working after a few seconds.
         startLocationService();
         Log.i(TAG, "Scheduling...");
         //schedule the timer, to wake up every 1 second
@@ -188,7 +178,7 @@ public class Service extends android.app.Service {
 
 
 
-    //Start the service
+    //Start the service, get location of the user every 4 seconds.
     private void startLocationService() {
 
         Log.d(TAG,"Trying to start location......");
@@ -201,16 +191,15 @@ public class Service extends android.app.Service {
         LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
     }
 
+    //Stop the Location service.
         private void stopLocationService() {
         LocationServices.getFusedLocationProviderClient(this).removeLocationUpdates(locationCallback);
 //        stopForeground(true);
 //        stopSelf();
     }
 
-    /**
-     * it sets the timer to print the counter every x seconds
-     */
-    public void initializeTimerTask() {
+    //Log the counter every 1 second.
+    public void LogTimerTask() {
         Log.i(TAG, "initialising TimerTask");
         timerTask = new TimerTask() {
             public void run() {
@@ -219,9 +208,7 @@ public class Service extends android.app.Service {
         };
     }
 
-    /**
-     * not needed
-     */
+    //Stop the timer.
     public void stoptimertask() {
         //stop the timer, if it's not already null
         if (timer != null) {
@@ -230,13 +217,6 @@ public class Service extends android.app.Service {
         }
     }
 
-    public static Service getmCurrentService() {
-        return mCurrentService;
-    }
-
-    public static void setmCurrentService(Service mCurrentService) {
-        Service.mCurrentService = mCurrentService;
-    }
 
 
 }

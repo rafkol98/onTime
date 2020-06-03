@@ -28,11 +28,8 @@ import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextView name_txt;
-    EditText name_in;
-    String name_input;
 
-
+    //Initialise variables.
     EditText sign_in_email, sign_in_password;
     TextView create_account_txt;
     Button sign_in;
@@ -44,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
     AlertDialog.Builder builder;
     AlertDialog dialog;
 
-    DatabaseReference reff;
 
     private FirebaseAuth mAuth;
 
@@ -99,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //Sign in to you account using firbase database authentication.
     public void signInAccount() {
 
         loadingAnimation();
@@ -127,19 +124,13 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.makeText(MainActivity.this, "Password and Email mismatch.", Toast.LENGTH_SHORT).show();
 
                             }
-
-                            // ...
                         }
                     });
         }
     }
 
-    public void addListenerOnButton() {
-        Intent myIntent = new Intent(MainActivity.this, Suggestion.class);
-        startActivity(myIntent);
-    }
 
-
+    //Generate a Loading Animation.
     public void loadingAnimation() {
         LayoutInflater inflater = getLayoutInflater();
         builder.setView(inflater.inflate(R.layout.loading, null));
@@ -149,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    //There was a googleMap bug that affected every device using the google maps. This fixes that bug.
     private void fixGoogleMapBug() {
         SharedPreferences googleBug = getSharedPreferences("google_bug", Context.MODE_PRIVATE);
         if (!googleBug.contains("fixed")) {
