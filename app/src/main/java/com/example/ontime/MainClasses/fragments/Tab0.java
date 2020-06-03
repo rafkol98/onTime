@@ -2,7 +2,9 @@ package com.example.ontime.MainClasses.fragments;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Criteria;
@@ -13,6 +15,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -45,6 +48,8 @@ public class Tab0 extends Fragment implements OnMapReadyCallback, LocationListen
     public LocationManager locationManager;
     MarkerOptions origin;
 
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+
     public Tab0() {
         // Required empty public constructor
     }
@@ -72,40 +77,59 @@ public class Tab0 extends Fragment implements OnMapReadyCallback, LocationListen
         super.onActivityCreated(savedInstanceState);
         View v = getView();
 
+        permissionEnabled();
         //get the best providers to find location.
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         criteria = new Criteria();
         bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
 
         //Get and show current location of the user.
-        getCurrentLocation();
-
-
+//        if (permissionEnabled()) {
+            getCurrentLocation();
+//        }
 
     }
 
     //This method gets the user's current location.
+
     public void getCurrentLocation() {
 
-        @SuppressLint("MissingPermission") Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
         if (location != null) {
             currentLong = location.getLongitude();
             currentLat = location.getLatitude();
         } else {
-            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
-            }
+
             locationManager.requestLocationUpdates(bestProvider, 1000, 0, this);
         }
     }
 
+    public void permissionEnabled(){
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            requestPermissions( //Method of Fragment
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_LOCATION
+            );
+
+    }
+    }
     //once the map fragment has loaded do this
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -124,12 +148,27 @@ public class Tab0 extends Fragment implements OnMapReadyCallback, LocationListen
 
         //enable the zoom in and out buttons bottom right
         float zoom = 18.0f;
-        map.setMyLocationEnabled(true);
-        LatLng current = new LatLng(currentLat, currentLong);
+        //Check if we have permission.
+        if (ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) ==
+                        PackageManager.PERMISSION_GRANTED) {
+            map.setMyLocationEnabled(true);
+            LatLng current = new LatLng(currentLat, currentLong);
 
-        map.getUiSettings().setZoomControlsEnabled(true);
-        //set the camera to user's current location.
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(current, zoom));
+            map.getUiSettings().setZoomControlsEnabled(true);
+            //set the camera to user's current location.
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(current, zoom));
+    }
+        //if not, ask for permission.
+        else {
+        ActivityCompat.requestPermissions(getActivity(), new String[] {
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION },
+                MY_PERMISSIONS_REQUEST_LOCATION);
+
+    }
+
     }
 
     //Get user's location if he moves/walks.
@@ -153,5 +192,7 @@ public class Tab0 extends Fragment implements OnMapReadyCallback, LocationListen
     public void onProviderDisabled(String provider) {
 
     }
+
+
 
 }

@@ -22,10 +22,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.ontime.MainClasses.MPage;
 import com.example.ontime.MainClasses.PlanTripFromLocation;
+import com.example.ontime.MainClasses.fragments.Tab0;
 import com.example.ontime.R;
 import com.example.ontime.DateTimeClasses.SelectTime;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -99,6 +101,8 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
         criteria = new Criteria();
         bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
 
+        checkLocationPermission();
+
         //Initialise the GeoTask class.
         geoTask = new GeoTask(Map.this);
 
@@ -143,7 +147,8 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
 
     //Get current location of the user.
     public void getCurrentLocation() {
-        @SuppressLint("MissingPermission") Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
+        if(checkLocationPermission()){
+       Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
         if (location != null) {
             currentLong = location.getLongitude();
             currentLat = location.getLatitude();
@@ -159,7 +164,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
                 return;
             }
             locationManager.requestLocationUpdates(bestProvider, 1000, 0, this);
-        }
+        }}
     }
 
     //Once the map fragment has loaded do this.
@@ -183,44 +188,46 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
         map.getUiSettings().setZoomControlsEnabled(true);
 
         //enables the set view to current location.
-        map.setMyLocationEnabled(true);
-        LatLng destinationLatLng = getLatLngFromAddress(destinationPassed);
+        if(checkLocationPermission()) {
+            map.setMyLocationEnabled(true);
+            LatLng destinationLatLng = getLatLngFromAddress(destinationPassed);
 
-        float zoom = 14.5f;
+            float zoom = 14.5f;
 
-        //Adds a marker to the target destination.
-        if (destinationLatLng != null) {
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(destinationLatLng, zoom));
-            googleMap.addMarker(new MarkerOptions().position(destinationLatLng)
-                    .title(destinationPassed));
+            //Adds a marker to the target destination.
+            if (destinationLatLng != null) {
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(destinationLatLng, zoom));
+                googleMap.addMarker(new MarkerOptions().position(destinationLatLng)
+                        .title(destinationPassed));
 
+            }
+            //if it cannot find the location, it puts a market to current location and it notifies the user.
+            else {
+                LatLng current = new LatLng(currentLat, currentLong);
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(current, zoom));
+                textChange.setText(" ");
+                final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("We could't find the location. Make sure you are connected to the internet and double check the address you entered.")
+                        .setCancelable(false)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(final DialogInterface dialog, final int id) {
+                                startActivity(new Intent(Map.this, MPage.class));
+                            }
+                        });
+                final AlertDialog alert = builder.create();
+                alert.show();
+            }
+
+
+            //Get address of the current origin.
+            currentOrigin = getAddressFromLatLng(currentLat, currentLong);
+
+
+            //Use Geocoder class to calculate minutes walking from current location.
+            String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + currentOrigin + "&destinations=" + destinationPassed + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
+            Log.d("url string", url);
+            geoTask.execute(url);
         }
-        //if it cannot find the location, it puts a market to current location and it notifies the user.
-        else {
-            LatLng current = new LatLng(currentLat, currentLong);
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(current, zoom));
-            textChange.setText(" ");
-            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("We could't find the location. Make sure you are connected to the internet and double check the address you entered.")
-                    .setCancelable(false)
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(final DialogInterface dialog, final int id) {
-                            startActivity(new Intent(Map.this, MPage.class));
-                        }
-                    });
-            final AlertDialog alert = builder.create();
-            alert.show();
-        }
-
-
-        //Get address of the current origin.
-        currentOrigin = getAddressFromLatLng(currentLat, currentLong);
-
-
-        //Use Geocoder class to calculate minutes walking from current location.
-        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + currentOrigin + "&destinations=" + destinationPassed + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
-        Log.d("url string", url);
-        geoTask.execute(url);
 
     }
 
@@ -373,6 +380,83 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
     @Override
     public void tripFromLocation() {
 
+    }
+
+
+
+
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+
+    public boolean checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+                new AlertDialog.Builder(this)
+                        .setTitle("PERMISSION")
+                        .setMessage("We need to acces your current location")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //Prompt the user once explanation has been shown
+                                ActivityCompat.requestPermissions(Map.this,
+                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                        MY_PERMISSIONS_REQUEST_LOCATION);
+                            }
+                        })
+                        .create()
+                        .show();
+
+
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOCATION);
+            }
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // location-related task you need to do.
+                    if (ContextCompat.checkSelfPermission(this,
+                            Manifest.permission.ACCESS_FINE_LOCATION)
+                            == PackageManager.PERMISSION_GRANTED) {
+
+                        //Request location updates:
+                        bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
+                        locationManager.requestLocationUpdates(bestProvider, 400, 1, this);
+                    }
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+
+                }
+                return;
+            }
+
+        }
     }
 
 
