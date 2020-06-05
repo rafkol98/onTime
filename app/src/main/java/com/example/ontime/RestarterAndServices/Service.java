@@ -7,6 +7,7 @@ import android.os.Looper;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 
 import com.example.ontime.R;
 import com.example.ontime.utilities.Notification;
@@ -18,15 +19,34 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.example.ontime.utilities.Notification;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
+public class Service extends android.app.Service {
+    private static final String CHANNEL_ID = "ServiceChannel";
+
+    public int onStartCommand(Intent intent, int flags, int startId){
+
+        startForeground(1, Notification.setNotification(this,
+                "Location Services Running",
+                "To ensure accuracy please do not cancel.",
+                R.drawable.ic_notification));
+        return START_STICKY;
+    }
+
+    @Override
+    public IBinder onBind(Intent intent)
+    {
+        return null;
+    }
+}
 /**
  * Service class. I first experimented to make it work with seconds - every second there is a log. This works even if the app is terminated.
  * I want to do the same for the location of the user. That is, get the location of the user constantly. This works only for a few seconds after the app was terminated as of now.
  */
-public class Service extends android.app.Service {
+/*public class Service extends android.app.Service {
     protected static final int NOTIFICATION_ID = 1337;
     private static String TAG = "Service";
     private static Service mCurrentService;
@@ -218,5 +238,5 @@ public class Service extends android.app.Service {
     }
 
 
-
 }
+        */
