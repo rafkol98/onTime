@@ -26,7 +26,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MapRelatedClasses.CatchUp"></activity>
+        <activity android:name=".MapRelatedClasses.CatchUp" />
         <activity
             android:name=".MainClasses.MPage"
             android:windowSoftInputMode="adjustPan" />
