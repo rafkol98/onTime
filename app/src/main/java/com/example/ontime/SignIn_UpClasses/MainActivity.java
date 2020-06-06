@@ -3,10 +3,15 @@ package com.example.ontime.SignIn_UpClasses;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +48,16 @@ public class MainActivity extends AppCompatActivity {
 
 
     private FirebaseAuth mAuth;
+
+    private final String[] PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION,
+                                        Manifest.permission.ACCESS_COARSE_LOCATION};
+
+    @SuppressLint("InlinedApi")
+    private final String[] PERMISSIONS_Q = {Manifest.permission.ACCESS_FINE_LOCATION,
+                                            Manifest.permission.ACCESS_COARSE_LOCATION,
+                                            Manifest.permission.ACCESS_BACKGROUND_LOCATION};
+
+    static final int PERMISSION_ALL = 134;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +108,19 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
+        // Determine if permissions should be requested at Runtime
+        if (Build.VERSION.SDK_INT >= 23) {
+            // If prior to Android Q request normal permissions else request background location
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q){
+                if(!hasPermissions(this, PERMISSIONS)){
+                    ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
+                }
+            } else {
+                if(!hasPermissions(this, PERMISSIONS_Q)){
+                    ActivityCompat.requestPermissions(this, PERMISSIONS_Q, PERMISSION_ALL);
+                }
+            }
+        }
     }
 
     //Sign in to you account using firbase database authentication.
@@ -148,5 +176,16 @@ public class MainActivity extends AppCompatActivity {
             corruptedZoomTables.delete();
             googleBug.edit().putBoolean("fixed", true).apply();
         }
+    }
+
+    private static boolean hasPermissions(Context context, String... permissions) {
+        if (context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
