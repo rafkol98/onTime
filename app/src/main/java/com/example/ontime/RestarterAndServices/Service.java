@@ -6,6 +6,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.ontime.R;
@@ -16,6 +17,7 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -155,7 +157,17 @@ public class Service extends android.app.Service {
                 DatabaseReference childReff = dbRef.child(uId).child("Current Location");
 
                 String cLocation = latitude + "," + longitude;
-                childReff.setValue(cLocation);
+                childReff.setValue(cLocation, new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                        if (databaseError != null) {
+                            Log.i("Error Message", databaseError.getMessage());
+                            Log.i("Error Details", databaseError.getDetails());
+                        } else {
+                            Log.i("Success", "Successful write of of location");
+                        }
+                    }
+                });
 
 
                 Log.d("LOCATION_UPDATE", latitude + "," + longitude);
