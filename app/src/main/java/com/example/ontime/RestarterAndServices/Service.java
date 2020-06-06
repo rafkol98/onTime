@@ -6,6 +6,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.ontime.R;
@@ -16,43 +17,28 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-/**
- * Service class. I first experimented to make it work with seconds - every second there is a log. This works even if the app is terminated.
- * I want to do the same for the location of the user. That is, get the location of the user constantly. This works only for a few seconds after the app was terminated as of now.
- */
 public class Service extends android.app.Service {
+    private static final String CHANNEL_ID = "ServiceChannel";
     protected static final int NOTIFICATION_ID = 1337;
     private static String TAG = "Service";
     private static Service mCurrentService;
     private int counter = 0;
 
-    public Service() {
-        super();
-    }
-
     //get firebase user.
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/profiles");
 
-
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            restartForeground();
-        }
-        mCurrentService = this;
+    public Service() {
+        super();
     }
 
-
-    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
         Log.d(TAG, "restarting Service !!");
@@ -64,45 +50,32 @@ public class Service extends android.app.Service {
             bck.launchService(this);
         }
 
-        // make sure you call the startForeground on onStartCommand because otherwise
-        // when we hide the notification on onScreen it will nto restart in Android 6 and 7
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            restartForeground();
-        }
-
+        startForeground(1, Notification.setNotification(this,
+                "Location Services Running",
+                "To ensure accuracy please do not cancel.",
+                R.drawable.ic_notification));
 
         startTimer();
         startLocationService();
 
-        // return start sticky so if it is killed by android, it will be restarted with Intent null
+        // return START_STICKY so if it is killed by android, it will be restarted with Intent null
         return START_STICKY;
     }
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            restartForeground();
+        }
+        mCurrentService = this;
+    }
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
-
-
-
-    //it starts the process in foreground. Normally this is done when screen goes off
-    public void restartForeground() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            Log.i(TAG, "restarting foreground");
-            try {
-                Notification notification = new Notification();
-                startForeground(NOTIFICATION_ID, notification.setNotification(this, "Service notification", "This is the service's notification", R.drawable.home));
-                Log.i(TAG, "restarting foreground successful");
-                startTimer();
-                startLocationService();
-            } catch (Exception e) {
-                Log.e(TAG, "Error in notification " + e.getMessage());
-            }
-        }
-    }
-
 
     @Override
     public void onDestroy() {
@@ -116,6 +89,22 @@ public class Service extends android.app.Service {
 
     }
 
+    //it starts the process in foreground. Normally this is done when screen goes off
+    public void restartForeground() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Log.i(TAG, "restarting foreground");
+            try {
+                startForeground(1, Notification.setNotification(this,
+                        "Location Services Running",
+                        "To ensure accuracy please do not cancel.",
+                        R.drawable.ic_notification));
+                startTimer();
+                startLocationService();
+            } catch (Exception e) {
+                Log.e(TAG, "Error in notification " + e.getMessage());
+            }
+        }
+    }
 
     //this is called when the process is killed by Android
     @Override
@@ -168,7 +157,17 @@ public class Service extends android.app.Service {
                 DatabaseReference childReff = dbRef.child(uId).child("Current Location");
 
                 String cLocation = latitude + "," + longitude;
-                childReff.setValue(cLocation);
+                childReff.setValue(cLocation, new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                        if (databaseError != null) {
+                            Log.i("Error Message", databaseError.getMessage());
+                            Log.i("Error Details", databaseError.getDetails());
+                        } else {
+                            Log.i("Success", "Successful write of of location");
+                        }
+                    }
+                });
 
 
                 Log.d("LOCATION_UPDATE", latitude + "," + longitude);
@@ -177,11 +176,10 @@ public class Service extends android.app.Service {
     };
 
 
-
     //Start the service, get location of the user every 4 seconds.
     private void startLocationService() {
 
-        Log.d(TAG,"Trying to start location......");
+        Log.d(TAG, "Trying to start location......");
         LocationRequest locationRequest = new LocationRequest();
 
         locationRequest.setInterval(4000);
@@ -192,7 +190,7 @@ public class Service extends android.app.Service {
     }
 
     //Stop the Location service.
-        private void stopLocationService() {
+    private void stopLocationService() {
         LocationServices.getFusedLocationProviderClient(this).removeLocationUpdates(locationCallback);
 //        stopForeground(true);
 //        stopSelf();
@@ -216,7 +214,4 @@ public class Service extends android.app.Service {
             timer = null;
         }
     }
-
-
-
 }
