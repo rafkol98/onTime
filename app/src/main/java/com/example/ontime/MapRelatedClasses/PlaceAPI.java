@@ -1,5 +1,7 @@
 package com.example.ontime.MapRelatedClasses;
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,9 +35,11 @@ public class PlaceAPI {
             }
         }
         catch (MalformedURLException e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
         catch (IOException e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
         finally {
@@ -56,6 +60,7 @@ public class PlaceAPI {
 
         }
         catch (JSONException e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
         return arrayList;

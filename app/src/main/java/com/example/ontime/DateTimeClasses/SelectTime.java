@@ -1,5 +1,7 @@
 package com.example.ontime.DateTimeClasses;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
@@ -21,6 +23,8 @@ import com.example.ontime.MainClasses.SuperScreen;
 import com.example.ontime.MainClasses.Trip;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -159,6 +163,7 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
                             try {
                                 doTrip();
                             } catch (ParseException e) {
+                                FirebaseCrashlytics.getInstance().recordException(e);
                                 e.printStackTrace();
                             }
                         }
@@ -189,6 +194,7 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
             try {
                 doTrip();
             } catch (ParseException e) {
+                FirebaseCrashlytics.getInstance().recordException(e);
                 e.printStackTrace();
             }
 
@@ -216,7 +222,17 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
 
         //Store the trip on Firebase RealTime Database.
         DatabaseReference childReff = dbRef.child(uId).child("trips").child(tripId);
-        childReff.setValue(trip);
+        childReff.setValue(trip, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                if (databaseError != null) {
+                    FirebaseCrashlytics.getInstance().log(databaseError.getMessage());
+                    FirebaseCrashlytics.getInstance().log(databaseError.getDetails());
+                } else {
+                    FirebaseCrashlytics.getInstance().log("Successful write of Location");
+                }
+            }
+        });
 
 
         Intent myIntent = new Intent(SelectTime.this, SuperScreen.class);

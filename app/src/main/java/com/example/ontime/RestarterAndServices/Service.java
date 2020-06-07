@@ -17,6 +17,7 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -101,6 +102,7 @@ public class Service extends android.app.Service {
                 startTimer();
                 startLocationService();
             } catch (Exception e) {
+                FirebaseCrashlytics.getInstance().recordException(e);
                 Log.e(TAG, "Error in notification " + e.getMessage());
             }
         }
@@ -161,10 +163,10 @@ public class Service extends android.app.Service {
                     @Override
                     public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                         if (databaseError != null) {
-                            Log.i("Error Message", databaseError.getMessage());
-                            Log.i("Error Details", databaseError.getDetails());
+                            FirebaseCrashlytics.getInstance().log(databaseError.getMessage());
+                            FirebaseCrashlytics.getInstance().log(databaseError.getDetails());
                         } else {
-                            Log.i("Success", "Successful write of of location");
+                            FirebaseCrashlytics.getInstance().log("Successful write of Location");
                         }
                     }
                 });

@@ -1,5 +1,7 @@
 package com.example.ontime.DateTimeClasses;
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
+
 import java.text.DateFormat;
 import java.text.Format;
 import java.text.ParseException;
@@ -17,6 +19,7 @@ public class DateTimeCheck {
         try {
             return (int) TimeUnit.MINUTES.convert(format.parse(newDate).getTime() - format.parse(oldDate).getTime(), TimeUnit.MILLISECONDS);
         } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
             return 0;
         }
@@ -27,6 +30,7 @@ public class DateTimeCheck {
         try {
             return format.parse(currentDate).before(format.parse(tripDate));
         } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
         return false;

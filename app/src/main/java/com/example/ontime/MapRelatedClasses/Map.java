@@ -39,6 +39,7 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -181,6 +182,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
                 Log.d("MapActivity", "Style parsing failes");
             }
         } catch (Resources.NotFoundException e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
             Log.d("MapActivity", "Can't find style");
         }
 
@@ -269,6 +271,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
             }
 
         } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
             return null;
         }
@@ -294,6 +297,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
                 Log.d("Address", "No Address returned!");
             }
         } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
             Log.d("Address", "Cannot get Address!");
         }

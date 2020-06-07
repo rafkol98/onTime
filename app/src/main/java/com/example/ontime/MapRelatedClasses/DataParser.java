@@ -2,6 +2,7 @@ package com.example.ontime.MapRelatedClasses;
 
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,8 +55,10 @@ public class DataParser {
             }
 
         } catch (JSONException e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
         }
 
         return routes;

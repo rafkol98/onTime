@@ -10,6 +10,8 @@ import android.widget.TimePicker;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
+
 import java.util.Calendar;
 
 /**
@@ -29,6 +31,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         try {
             mListener = (TimePickerListener) context;
         }catch (Exception e){
+            FirebaseCrashlytics.getInstance().recordException(e);
             throw new ClassCastException(getActivity().toString()+" must implement TimePickerListner");
         }
     }

@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.ontime.DateTimeClasses.SelectTime;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -84,10 +85,13 @@ public class GeoTask extends AsyncTask<String, Void, String> {
 
             }
         } catch (MalformedURLException e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
             Log.d("error", "error1");
         } catch (IOException e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
             Log.d("error", "error2");
         } catch (JSONException e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
             Log.d("error", "error3");
         }
 

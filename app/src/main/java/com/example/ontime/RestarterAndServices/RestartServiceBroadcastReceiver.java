@@ -13,6 +13,8 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
+
 import static android.content.Context.JOB_SCHEDULER_SERVICE;
 
 /**
@@ -73,6 +75,7 @@ public class RestartServiceBroadcastReceiver extends BroadcastReceiver {
         else try{
             context.unregisterReceiver(restartSensorServiceReceiver);
         } catch (Exception e){
+            FirebaseCrashlytics.getInstance().recordException(e);
             // not registered
         }
         // give the time to run
@@ -86,10 +89,11 @@ public class RestartServiceBroadcastReceiver extends BroadcastReceiver {
                 try {
                     context.registerReceiver(restartSensorServiceReceiver, filter);
                 } catch (Exception e) {
+                    FirebaseCrashlytics.getInstance().recordException(e);
                     try {
                         context.getApplicationContext().registerReceiver(restartSensorServiceReceiver, filter);
                     } catch (Exception ex) {
-
+                        FirebaseCrashlytics.getInstance().recordException(ex);
                     }
                 }
             }
