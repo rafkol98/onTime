@@ -35,6 +35,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -217,6 +218,7 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
                 Log.d("MapActivity", "Style parsing failes");
             }
         } catch (Resources.NotFoundException e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
             Log.d("MapActivity", "Can't find style");
         }
 
@@ -351,6 +353,7 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
             br.close();
 
         } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
             Log.d("Exception", e.toString());
         } finally {
             iStream.close();
@@ -375,6 +378,7 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
             }
 
         } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
             return null;
         }
@@ -447,6 +451,7 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
                 Log.d("Address Log", "No Address returned!");
             }
         } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
             Log.d("Address Log", "Cannot get Address!");
         }
@@ -462,6 +467,7 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
             try {
                 locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
             } catch (Settings.SettingNotFoundException e) {
+                FirebaseCrashlytics.getInstance().recordException(e);
                 e.printStackTrace();
             }
             return locationMode != Settings.Secure.LOCATION_MODE_OFF;
@@ -491,6 +497,7 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
             try {
                 data = downloadUrl(url[0]);
             } catch (Exception e) {
+                FirebaseCrashlytics.getInstance().recordException(e);
                 Log.d("Background Task", e.toString());
             }
             return data;
@@ -527,6 +534,7 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
 
                 routes = parser.parse(jObject);
             } catch (Exception e) {
+                FirebaseCrashlytics.getInstance().recordException(e);
                 e.printStackTrace();
             }
             return routes;

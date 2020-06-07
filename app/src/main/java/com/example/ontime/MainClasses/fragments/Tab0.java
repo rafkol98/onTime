@@ -31,6 +31,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 
 /**
@@ -143,6 +144,7 @@ public class Tab0 extends Fragment implements OnMapReadyCallback, LocationListen
                 Log.d("MapActivity", "Style parsing failes");
             }
         } catch (Resources.NotFoundException e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
             Log.d("MapActivity", "Can't find style");
         }
 

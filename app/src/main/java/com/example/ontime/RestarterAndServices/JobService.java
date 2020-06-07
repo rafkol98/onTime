@@ -11,6 +11,8 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
+
 /**
  * This class is used to launch the service for Build SDK Versions ABOVE Lollipop.
  * The service is launched in the MPage class (in the MainClasses Package).
@@ -44,6 +46,7 @@ public class JobService extends android.app.job.JobService {
         else try{
             unregisterReceiver(restartSensorServiceReceiver);
         } catch (Exception e){
+            FirebaseCrashlytics.getInstance().recordException(e);
             // not registered
         }
         // give the time to run
@@ -57,10 +60,11 @@ public class JobService extends android.app.job.JobService {
                 try {
                     registerReceiver(restartSensorServiceReceiver, filter);
                 } catch (Exception e) {
+                    FirebaseCrashlytics.getInstance().recordException(e);
                     try {
                         getApplicationContext().registerReceiver(restartSensorServiceReceiver, filter);
                     } catch (Exception ex) {
-
+                        FirebaseCrashlytics.getInstance().recordException(ex);
                     }
                 }
             }
@@ -92,6 +96,7 @@ public class JobService extends android.app.job.JobService {
             try{
                 instance.unregisterReceiver(restartSensorServiceReceiver);
             } catch (Exception e){
+                FirebaseCrashlytics.getInstance().recordException(e);
                 // not registered
             }
             Log.i(TAG, "Finishing job");
