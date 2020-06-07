@@ -11,8 +11,11 @@ import android.widget.Button;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.ontime.MapRelatedClasses.Map;
-import com.example.ontime.AutoSuggestClasses.PlaceAutoSuggestAdapter;
+//import com.example.ontime.AutoSuggestClasses.PlaceAutoSuggestAdapter;
+//import com.example.ontime.MapRelatedClasses.Map;
+
+import com.example.ontime.AutoSuggestClasses.*;
+import com.example.ontime.MapRelatedClasses.*;
 import com.example.ontime.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
