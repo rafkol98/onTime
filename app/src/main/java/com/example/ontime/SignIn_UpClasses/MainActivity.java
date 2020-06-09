@@ -22,12 +22,10 @@ import android.widget.Toast;
 
 import com.example.ontime.MainClasses.MPage;
 import com.example.ontime.R;
-import com.example.ontime.AutoSuggestClasses.Suggestion;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.*;
-import com.google.firebase.database.DatabaseReference;
 
 import java.io.File;
 
