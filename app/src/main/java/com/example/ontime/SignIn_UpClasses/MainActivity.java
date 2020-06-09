@@ -26,6 +26,8 @@ import com.example.ontime.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.*;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.File;
 
@@ -62,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setPersistence();
         fixGoogleMapBug();
 
         create_account_txt = findViewById(R.id.sign_up_text);
@@ -118,6 +121,18 @@ public class MainActivity extends AppCompatActivity {
                     ActivityCompat.requestPermissions(this, PERMISSIONS_Q, PERMISSION_ALL);
                 }
             }
+        }
+    }
+
+    private void setPersistence() {
+        // Get instance of the Firebase database
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+
+        // Try to set persistence enabled on the database
+        try {
+            firebaseDatabase.setPersistenceEnabled(true);
+        } catch (RuntimeException e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
         }
     }
 

@@ -552,11 +552,16 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
                 for (int j = 0; j < path.size(); j++) {
                     HashMap<String, String> point = path.get(j);
 
-                    double lat = Double.parseDouble(point.get("lat"));
-                    double lng = Double.parseDouble(point.get("lng"));
-                    LatLng position = new LatLng(lat, lng);
+                    try{
+                        double lat = Double.parseDouble(point.get("lat"));
+                        double lng = Double.parseDouble(point.get("lng"));
+                        LatLng position = new LatLng(lat, lng);
 
-                    points.add(position);
+                        points.add(position);
+                    } catch (NullPointerException e) {
+                        FirebaseCrashlytics.getInstance().recordException(e);
+                    }
+
                 }
 
                 lineOptions.addAll(points);
