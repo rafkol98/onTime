@@ -25,6 +25,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ *
+ */
 public class Service extends android.app.Service {
     private static final String CHANNEL_ID = "ServiceChannel";
     protected static final int NOTIFICATION_ID = 1337;
@@ -36,10 +39,20 @@ public class Service extends android.app.Service {
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/profiles");
 
+    /**
+     *
+     */
     public Service() {
         super();
     }
 
+    /**
+     *
+     * @param intent
+     * @param flags
+     * @param startId
+     * @return
+     */
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
         Log.d(TAG, "restarting Service !!");
@@ -63,6 +76,9 @@ public class Service extends android.app.Service {
         return START_STICKY;
     }
 
+    /**
+     *
+     */
     @Override
     public void onCreate() {
         super.onCreate();
@@ -72,12 +88,20 @@ public class Service extends android.app.Service {
         mCurrentService = this;
     }
 
+    /**
+     *
+     * @param intent
+     * @return
+     */
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
 
+    /**
+     *
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -90,7 +114,9 @@ public class Service extends android.app.Service {
 
     }
 
-    //it starts the process in foreground. Normally this is done when screen goes off
+    /**
+     * It starts the process in foreground. Normally this is done when screen goes off
+     */
     public void restartForeground() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Log.i(TAG, "restarting foreground");
@@ -108,7 +134,10 @@ public class Service extends android.app.Service {
         }
     }
 
-    //this is called when the process is killed by Android
+    /**
+     * This is called when the process is killed by Android
+     * @param rootIntent
+     */
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         super.onTaskRemoved(rootIntent);
@@ -124,7 +153,9 @@ public class Service extends android.app.Service {
     private static TimerTask timerTask;
     long oldTime = 0;
 
-    //Method that starts the timer.
+    /**
+     * Method that starts the timer.
+     */
     public void startTimer() {
         Log.i(TAG, "Starting timer");
 
@@ -144,8 +175,11 @@ public class Service extends android.app.Service {
         timer.schedule(timerTask, 1000, 1000);
     }
 
-
     private LocationCallback locationCallback = new LocationCallback() {
+        /**
+         *
+         * @param locationResult
+         */
         @Override
         public void onLocationResult(LocationResult locationResult) {
             super.onLocationResult(locationResult);
@@ -160,6 +194,11 @@ public class Service extends android.app.Service {
 
                 String cLocation = latitude + "," + longitude;
                 childReff.setValue(cLocation, new DatabaseReference.CompletionListener() {
+                    /**
+                     *
+                     * @param databaseError
+                     * @param databaseReference
+                     */
                     @Override
                     public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                         if (databaseError != null) {
@@ -177,8 +216,9 @@ public class Service extends android.app.Service {
         }
     };
 
-
-    //Start the service, get location of the user every 4 seconds.
+    /**
+     * Start the service, get location of the user every 4 seconds.
+     */
     private void startLocationService() {
 
         Log.d(TAG, "Trying to start location......");
@@ -191,14 +231,18 @@ public class Service extends android.app.Service {
         LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
     }
 
-    //Stop the Location service.
+    /**
+     * Stop the Location service.
+     */
     private void stopLocationService() {
         LocationServices.getFusedLocationProviderClient(this).removeLocationUpdates(locationCallback);
 //        stopForeground(true);
 //        stopSelf();
     }
 
-    //Log the counter every 1 second.
+    /**
+     * Log the counter every 1 second.
+     */
     public void LogTimerTask() {
         Log.i(TAG, "initialising TimerTask");
         timerTask = new TimerTask() {
@@ -208,7 +252,9 @@ public class Service extends android.app.Service {
         };
     }
 
-    //Stop the timer.
+    /**
+     * Stop the timer.
+     */
     public void stoptimertask() {
         //stop the timer, if it's not already null
         if (timer != null) {

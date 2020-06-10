@@ -19,10 +19,15 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-/**The instance of this class is called by "MainActivty". It gets the time taken reach the destination from Google Distance Matrix API in the background.
-  This class contains interface "Geo" to call the function setDouble(String) defined in "MainActivity.class" to display the result. This class is essential as
- this is what allows me to calculate how many minutes the user needs to go from his current location to a destination based on his own unique speed.
- This is achieved with the implementation of the calculateTimeAndDist method in the desired class from the Geo interface.*/
+/**
+ * The instance of this class is called by "MainActivty". It gets the time taken reach the
+ * destination from Google Distance Matrix API in the background. This class contains interface
+ * "Geo" to call the function setDouble(String) defined in "MainActivity.class" to display the
+ * result. This class is essential as this is what allows me to calculate how many minutes the user
+ * needs to go from his current location to a destination based on his own unique speed. This is
+ * achieved with the implementation of the calculateTimeAndDist method in the desired class from
+ * the Geo interface.
+ */
 public class GeoTask extends AsyncTask<String, Void, String> {
     ProgressDialog pd;
     Context mContext;
@@ -30,15 +35,22 @@ public class GeoTask extends AsyncTask<String, Void, String> {
     SelectTime selectTime;
     Geo geo1;
 
-
-    //constructor is used to get the context.
+    /**
+     * Constructor is used to get the context.
+     * @param mContext
+     */
     public GeoTask(Context mContext) {
         this.mContext = mContext;
         geo1 = (Geo) mContext;
     }
 
 
-    //This function is executed after the execution of "doInBackground(String...params)" to dismiss the dispalyed progress dialog and call "setDouble(Double)" defined in "MainActivity.java"
+    //
+    /**
+     * This function is executed after the execution of "doInBackground(String...params)" to dismiss
+     * the displayed progress dialog and call "setDouble(Double)" defined in "MainActivity.java"
+     * @param aDouble
+     */
     @Override
     protected void onPostExecute(String aDouble) {
         super.onPostExecute(aDouble);
@@ -49,7 +61,12 @@ public class GeoTask extends AsyncTask<String, Void, String> {
         }
     }
 
-    //gets duration and distance in the background. Remember, this is an AsyncTask so it doesnt run with the natural flow of the program. It runs in the background.
+    /**
+     * Gets duration and distance in the background. Remember, this is an AsyncTask so it doesn't
+     * run with the natural flow of the program. It runs in the background.
+     * @param params
+     * @return
+     */
     @Override
     protected String doInBackground(String... params) {
         try {
@@ -99,7 +116,9 @@ public class GeoTask extends AsyncTask<String, Void, String> {
         return null;
     }
 
-
+    /**
+     *
+     */
     interface Geo {
         public void calculateTimeAndDist(String min);
 

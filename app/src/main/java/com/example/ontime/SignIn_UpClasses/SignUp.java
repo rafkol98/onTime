@@ -35,6 +35,10 @@ public class SignUp extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +77,9 @@ public class SignUp extends AppCompatActivity {
         });
     }
 
-
+    /**
+     *
+     */
     public void signUpNewAccount() {
 
         loadingAnimation();
@@ -110,6 +116,9 @@ public class SignUp extends AppCompatActivity {
         }
     }
 
+    /**
+     *
+     */
     public void loadingAnimation(){
         LayoutInflater inflater = getLayoutInflater();
         builder.setView(inflater.inflate(R.layout.loading, null));

@@ -11,9 +11,6 @@ import android.widget.Button;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-//import com.example.ontime.AutoSuggestClasses.PlaceAutoSuggestAdapter;
-//import com.example.ontime.MapRelatedClasses.Map;
-
 import com.example.ontime.AutoSuggestClasses.*;
 import com.example.ontime.MapRelatedClasses.*;
 import com.example.ontime.R;
@@ -35,11 +32,18 @@ public class Tab1 extends Fragment {
     private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/profiles");
 
 
-    public Tab1() {
-        // Required empty public constructor
-    }
+    /**
+     * Required empty public constructor
+     */
+    public Tab1() { }
 
-
+    /**
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -48,6 +52,10 @@ public class Tab1 extends Fragment {
 
     }
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);

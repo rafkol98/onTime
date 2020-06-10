@@ -15,12 +15,27 @@ public class ValidateInput {
 
     String nameInput, emailInput, passwordInput, repeatPasswordInput;
 
+    /**
+     *
+     * @param myContext
+     * @param myEmail
+     * @param myPassword
+     */
     ValidateInput(Context myContext, EditText myEmail, EditText myPassword){
          context = myContext;
          email = myEmail;
          password = myPassword;
 
     }
+
+    /**
+     *
+     * @param myContext
+     * @param myName
+     * @param myEmail
+     * @param myPassword
+     * @param myRepeatPassword
+     */
     ValidateInput(Context myContext, EditText myName,EditText myEmail, EditText myPassword, EditText myRepeatPassword){
         context = myContext;
         name = myName;
@@ -30,7 +45,10 @@ public class ValidateInput {
 
     }
 
-
+    /**
+     *
+     * @return
+     */
     boolean ValidateEmail(){
         emailInput = email.getText().toString().trim();
 
@@ -45,6 +63,10 @@ public class ValidateInput {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     boolean ValidatePassword(){
         passwordInput = password.getText().toString().trim();
 
@@ -60,6 +82,10 @@ public class ValidateInput {
 
     }
 
+    /**
+     *
+     * @return
+     */
     boolean repeatPasswordValidation(){
         nameInput= name.getText().toString().trim();
         repeatPasswordInput = repeatPassword.getText().toString().trim();

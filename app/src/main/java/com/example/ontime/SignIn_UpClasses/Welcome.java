@@ -17,6 +17,10 @@ public class Welcome extends AppCompatActivity {
 
     Button start;
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +41,8 @@ public class Welcome extends AppCompatActivity {
         });
     }
 
-    public void onBackPressed() {
-
-    }
+    /**
+     *
+     */
+    public void onBackPressed() { }
 }

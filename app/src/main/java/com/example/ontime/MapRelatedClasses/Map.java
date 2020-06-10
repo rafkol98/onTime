@@ -51,10 +51,13 @@ import java.util.concurrent.ExecutionException;
 
 
 /**
- * This is the Map class. It is the map that shows the user the location of the place that they selected to
- * go in the Tab1 fragment (the main page of the app-where the user selects where he wants to go).
+ * This is the Map class. It is the map that shows the user the location of the place that they
+ * selected to go in the Tab1 fragment (the main page of the app-where the user selects where he
+ * wants to go).
  */
-public class Map extends FragmentActivity implements OnMapReadyCallback, LocationListener, GeoTask.Geo {
+public class Map extends FragmentActivity implements OnMapReadyCallback,
+                                                     LocationListener,
+                                                     GeoTask.Geo {
 
     //Initialise variables.
     GoogleMap map;

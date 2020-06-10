@@ -10,7 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.ontime.MainClasses.Trip;
 import com.example.ontime.R;
 
 import java.text.Format;
@@ -19,20 +18,33 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Adapter used to store in a list all the upcoming trips and all the necessary information about each trip.
+ * Adapter used to store in a list all the upcoming trips and all the necessary information about
+ * each trip.
  */
 public class TripListAdapter extends ArrayAdapter<Trip> {
 
     private Context mContext;
     int mResource;
 
-
+    /**
+     *
+     * @param context
+     * @param resource
+     * @param objects
+     */
     public TripListAdapter(@NonNull Context context, int resource, List<Trip> objects) {
         super(context, resource, objects);
         mContext = context;
         mResource=resource;
     }
 
+    /**
+     *
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return
+     */
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -59,7 +71,11 @@ public class TripListAdapter extends ArrayAdapter<Trip> {
         return convertView;
     }
 
-    //Convert time from Long to Human readable date format.
+    /**
+     * Convert time from Long to Human readable date format.
+     * @param time
+     * @return
+     */
     public String convertTime(long time){
         Date date = new Date(time);
         Format format = new SimpleDateFormat("dd/MM/yyyy HH:mm");

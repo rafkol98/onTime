@@ -26,19 +26,37 @@ public class PlaceAutoSuggestAdapter extends ArrayAdapter implements Filterable 
 
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int getCount() {
         return results.size();
     }
 
+    /**
+     *
+     * @param position
+     * @return
+     */
     @Override
     public Object getItem(int position) {
         return results.get(position);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Filter getFilter() {
         Filter filter = new Filter() {
+            /**
+             *
+             * @param constraint
+             * @return
+             */
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults filterResults = new FilterResults();
@@ -51,6 +69,11 @@ public class PlaceAutoSuggestAdapter extends ArrayAdapter implements Filterable 
                 return filterResults;
             }
 
+            /**
+             *
+             * @param constraint
+             * @param results
+             */
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 if(results!=null && results.count>0) {
@@ -63,7 +86,4 @@ public class PlaceAutoSuggestAdapter extends ArrayAdapter implements Filterable 
         return filter;
     }
 
-    public void something(){
-
-    }
 }

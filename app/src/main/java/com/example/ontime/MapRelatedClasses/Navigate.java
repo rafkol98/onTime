@@ -24,7 +24,6 @@ import android.widget.TextView;
 
 import com.example.ontime.MainClasses.MPage;
 import com.example.ontime.R;
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -66,7 +65,9 @@ import androidx.fragment.app.FragmentActivity;
 /**
  * Navigate class. This class is used to navigate a current user
  */
-public class Navigate extends FragmentActivity implements OnMapReadyCallback, LocationListener, GeoTask.Geo {
+public class Navigate extends FragmentActivity implements OnMapReadyCallback,
+                                                          LocationListener,
+                                                          GeoTask.Geo {
 
 
     //Initialise variables.
@@ -86,7 +87,9 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
     LatLng desLatLgn;
     TextView arrivalTxt;
 
-
+    /**
+     *
+     */
     public Navigate() {
     }
 
@@ -99,14 +102,27 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
     private String averageSpeed;
 
     //Getters and setters.
+
+    /**
+     * Getter method for average speed.
+     * @return the average speed in String format
+     */
     public String getAverageSpeed() {
         return averageSpeed;
     }
 
+    /**
+     * Setter method for average speed
+     * @param averageSpeed average speed to set
+     */
     public void setAverageSpeed(String averageSpeed) {
         this.averageSpeed = averageSpeed;
     }
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -193,19 +209,27 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
 
     }
 
-    //When the user clicks the home icon, go back to MPage
+    /**
+     * When the user clicks the home icon, go back to MPage
+     * @param v
+     */
     public void onHomeIcon(View v) {
         Intent intent = new Intent(Navigate.this, MPage.class);
         startActivity(intent);
         finish();
     }
 
-    //Override onBackPressed.
+    /**
+     * Override onBackPressed.
+     */
     public void onBackPressed() {
 
     }
 
-    //When the map is ready, do this.
+    /**
+     * When the map is ready, do this.
+     * @param googleMap
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -235,8 +259,10 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
         geoTask.execute(url);
     }
 
-
-    //When the user moves update his location.
+    /**
+     * When the user moves update his location.
+     * @param location
+     */
     @Override
     public void onLocationChanged(Location location) {
         currentLat = location.getLatitude();
@@ -249,23 +275,40 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
         geoTask.execute(url);
     }
 
+    /**
+     *
+     * @param provider
+     * @param status
+     * @param extras
+     */
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
 
     }
 
+    /**
+     *
+     * @param provider
+     */
     @Override
     public void onProviderEnabled(String provider) {
 
     }
 
+    /**
+     *
+     * @param provider
+     */
     @Override
     public void onProviderDisabled(String provider) {
 
     }
 
-    //Get arrival time based on user's unique speed. This is an abstract method's implementation from Geo interface in Geotask.
-    //The result passed in is returned from the doInBackground method in GeoTask.
+    /**
+     * Get arrival time based on user's unique speed. This is an abstract method's implementation
+     * from Geo interface in GeoTask.
+     * @param result passed in is returned from the doInBackground method in GeoTask.
+     */
     @Override
     public void calculateTimeAndDist(String result) {
         //Create a calendar instance.
@@ -300,7 +343,12 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
 
     }
 
-
+    /**
+     *
+     * @param origin
+     * @param dest
+     * @return
+     */
     private String getDirectionsUrl(LatLng origin, LatLng dest) {
 
         // Origin of route
@@ -325,7 +373,12 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
         return url;
     }
 
-    //A method to download json data from url.
+    /**
+     * A method to download json data from url.
+     * @param strUrl
+     * @return
+     * @throws IOException
+     */
     private String downloadUrl(String strUrl) throws IOException {
         String data = "";
         InputStream iStream = null;
@@ -362,7 +415,11 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
         return data;
     }
 
-    //Get Latitude and Longitude from Address.
+    /**
+     * Get Latitude and Longitude from Address.
+     * @param address
+     * @return
+     */
     public LatLng getLatLngFromAddress(String address) {
         Geocoder geocoder = new Geocoder(Navigate.this);
         List<Address> addressList;
@@ -384,7 +441,10 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
         }
     }
 
-    //Get Current Location. This can later be changed from read from the database. Once we finalise the get of the location of the user constantly in the background.
+    /**
+     * Get Current Location. This can later be changed from read from the database. Once we
+     * finalise the get of the location of the user constantly in the background.
+     */
     protected void getLocation() {
         if (isLocationEnabled(Navigate.this)) {
             locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -430,8 +490,12 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
         }
     }
 
-
-    //Get Address from Latitude and Longitude.
+    /**
+     * Get Address from Latitude and Longitude.
+     * @param latitude
+     * @param longitude
+     * @return
+     */
     public String getAddressFromLatLng(double latitude, double longitude) {
 
         String strAdd = "";
@@ -458,8 +522,11 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
         return strAdd;
     }
 
-
-    //Check if location is enabled.
+    /**
+     * Check if location is enabled.
+     * @param context
+     * @return
+     */
     public static boolean isLocationEnabled(Context context) {
         int locationMode = 0;
         String locationProviders;
@@ -477,7 +544,9 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
         }
     }
 
-
+    /**
+     *
+     */
     @Override
     public void tripFromLocation() {
 
@@ -486,9 +555,13 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
     /**
      * Private class to get the data from the instructions.
      */
-
     private class DownloadTask extends AsyncTask<String, Void, String> {
 
+        /**
+         *
+         * @param url
+         * @return
+         */
         @Override
         protected String doInBackground(String... url) {
 
@@ -503,6 +576,10 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
             return data;
         }
 
+        /**
+         *
+         * @param result
+         */
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
@@ -521,7 +598,11 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
      */
     private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
 
-        // Parsing the data in non-ui thread
+        /**
+         *  Parsing the data in non-ui thread
+         * @param jsonData
+         * @return
+         */
         @Override
         protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
 
@@ -540,6 +621,10 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback, Lo
             return routes;
         }
 
+        /**
+         *
+         * @param result
+         */
         @Override
         protected void onPostExecute(List<List<HashMap<String, String>>> result) {
             ArrayList points = new ArrayList();

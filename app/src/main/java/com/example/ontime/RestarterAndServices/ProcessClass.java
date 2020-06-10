@@ -13,17 +13,26 @@ public class ProcessClass {
     public static final String TAG = ProcessClass.class.getSimpleName();
     private static Intent serviceIntent = null;
 
+    /**
+     *
+     */
     public ProcessClass() {
     }
 
-
+    /**
+     *
+     * @param context
+     */
     private void setServiceIntent(Context context) {
         if (serviceIntent == null) {
             serviceIntent = new Intent(context, Service.class);
         }
     }
 
-    //launching the service
+    /**
+     * Launching the service
+     * @param context
+     */
     public void launchService(Context context) {
         if (context == null) {
             return;

@@ -12,39 +12,75 @@ public class Trip implements Comparable<Trip>{
     Long timestamp;
     Object object;
 
-
+    /**
+     *
+     * @param destination
+     * @param date
+     * @param time
+     */
     public Trip(String destination, String date, String time) {
         this.destination = destination;
         this.date = date;
         this.time = time;
     }
 
+    /**
+     *
+     * @param destination
+     * @param timestamp
+     */
     public Trip(String destination, Long timestamp) {
         this.destination = destination;
         this.timestamp = timestamp;
     }
 
+    /**
+     *
+     * @param object
+     */
     public Trip(Object object) {
         this.object = object;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getDestination() {
         return destination;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getDate() {
         return date;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getTime() {
         return time;
     }
 
+    /**
+     *
+     * @return
+     */
     public Long getTimestamp() {
         return timestamp;
     }
 
-    //Get unique hash key of the trip. Used to generate a unique tripId for each trip.
+    /**
+     * Get unique hash key of the trip. Used to generate a unique tripId for each trip.
+     * @param destination
+     * @param date
+     * @param time
+     * @return
+     */
     public int getTripId(String destination, String date, String time){
         String date_time = (destination+date+time);
 
@@ -55,7 +91,11 @@ public class Trip implements Comparable<Trip>{
         return hash;
     }
 
-
+    /**
+     *
+     * @param o
+     * @return
+     */
     @Override
     public int compareTo(Trip o) {
         if ((Long) this.getTimestamp() < (Long) o.getTimestamp())
@@ -66,6 +106,11 @@ public class Trip implements Comparable<Trip>{
         return 1;
     }
 
+    /**
+     *
+     * @param l
+     * @return
+     */
     public static int safeLongToInt(long l) {
         if (l < Integer.MIN_VALUE || l > Integer.MAX_VALUE) {
             throw new IllegalArgumentException

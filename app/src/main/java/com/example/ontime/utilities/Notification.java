@@ -87,6 +87,15 @@ public class Notification {
         return notification;
     }
 */
+
+    /**
+     *
+     * @param context
+     * @param title
+     * @param text
+     * @param icon
+     * @return
+     */
     public static android.app.Notification setNotification(Context context, String title, String text, int icon) {
 
         if (notificationPendingIntent == null) {

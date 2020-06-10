@@ -9,22 +9,25 @@ import android.os.Handler;
 import com.example.ontime.R;
 
 /**
- * Screen showed when the trip has been succesfully planned.
+ * Screen showed when the trip has been successfully planned.
  */
 public class SuperScreen extends AppCompatActivity {
 
 
     private Handler mHandler = new Handler();
 
-
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_super_screen);
 
 
-        //postDelayed method, Causes the Runnable r (in this case Class Superscreen) to be added to the message queue, to be run
-        // after the specified amount of time elapses.
+        //postDelayed method, Causes the Runnable r (in this case Class Superscreen) to be added to
+        // the message queue, to be run after the specified amount of time elapses.
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -39,6 +42,9 @@ public class SuperScreen extends AppCompatActivity {
         }, 6000);
     }
 
+    /**
+     *
+     */
     public void onBackPressed() {
 
     }

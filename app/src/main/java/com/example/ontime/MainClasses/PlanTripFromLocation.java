@@ -10,13 +10,18 @@ import com.example.ontime.AutoSuggestClasses.PlaceAutoSuggestAdapter;
 import com.example.ontime.R;
 
 /**
- * Plan trip from another location. This is used when the location of the target's destination is too far away from the current location of the user.
+ * Plan trip from another location. This is used when the location of the target's destination is
+ * too far away from the current location of the user.
  */
 public class PlanTripFromLocation extends AppCompatActivity {
 
     private AutoCompleteTextView destination;
     String destinationPassed;
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +40,10 @@ public class PlanTripFromLocation extends AppCompatActivity {
         toAutoCompleteTextView.setAdapter(new PlaceAutoSuggestAdapter(PlanTripFromLocation.this, android.R.layout.simple_list_item_1));
     }
 
-    //Override onBackPressed. If the user clicks the back button he is transfered to MPage(=> Fragment 1).
+    /**
+     * Override onBackPressed. If the user clicks the back button he is transferred to
+     * MPage(=> Fragment 1).
+     */
     public void onBackPressed(){
         Intent myIntent = new Intent(PlanTripFromLocation.this, MPage.class);
         startActivity(myIntent);

@@ -52,7 +52,10 @@ public class Countdown extends AppCompatActivity implements LocationListener {
 
     private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/profiles");
 
-
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +79,11 @@ public class Countdown extends AppCompatActivity implements LocationListener {
         this.updateSpeed(null);
 
         sw_metric.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            /**
+             *
+             * @param buttonView
+             * @param isChecked
+             */
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Countdown.this.updateSpeed(null);
@@ -145,7 +153,9 @@ public class Countdown extends AppCompatActivity implements LocationListener {
 
     }
 
-
+    /**
+     *
+     */
     @SuppressLint("MissingPermission")
     private void doStuff() {
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -155,7 +165,10 @@ public class Countdown extends AppCompatActivity implements LocationListener {
         Toast.makeText(this, "Waiting for GPS connection!", Toast.LENGTH_SHORT).show();
     }
 
-    //Update speed of the user.
+    /**
+     * Update speed of the user.
+     * @param location
+     */
     private void updateSpeed(CLocation location) {
         double nCurrentSpeed = 0;
         if (location != null) {
@@ -178,7 +191,12 @@ public class Countdown extends AppCompatActivity implements LocationListener {
         }
     }
 
-    //Grant permission.
+    /**
+     * Grant permission.
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == 1000) {
@@ -190,7 +208,10 @@ public class Countdown extends AppCompatActivity implements LocationListener {
         }
     }
 
-
+    /**
+     *
+     * @param location
+     */
     @Override
     public void onLocationChanged(Location location) {
         if (location != null) {
@@ -199,29 +220,39 @@ public class Countdown extends AppCompatActivity implements LocationListener {
         }
     }
 
+    /**
+     *
+     * @param provider
+     * @param status
+     * @param extras
+     */
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
+    public void onStatusChanged(String provider, int status, Bundle extras) { }
 
-    }
-
+    /**
+     *
+     * @param provider
+     */
     @Override
-    public void onProviderEnabled(String provider) {
+    public void onProviderEnabled(String provider) { }
 
-    }
-
+    /**
+     *
+     * @param provider
+     */
     @Override
-    public void onProviderDisabled(String provider) {
+    public void onProviderDisabled(String provider) { }
 
-    }
+    /**
+     *
+     * @return
+     */
+    private boolean useMetricUnits() { return sw_metric.isChecked(); }
 
-    private boolean useMetricUnits() {
-        return sw_metric.isChecked();
-    }
-
-
-    public void onBackPressed() {
-
-    }
+    /**
+     *
+     */
+    public void onBackPressed() { }
 
 }
 

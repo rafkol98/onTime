@@ -24,7 +24,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-//MainPage. Used to hold all the fragments.
+/**
+ * MainPage. Used to hold all the fragments.
+ */
 public class MPage extends AppCompatActivity {
 
     private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
@@ -34,8 +36,10 @@ public class MPage extends AppCompatActivity {
     private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/profiles");
 
 
-
-
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +76,10 @@ public class MPage extends AppCompatActivity {
 
     }
 
-    //Used for getting the user's location on the background all the time, with the help of some other classes (from the restarter_services package).
+    /**
+     * Used for getting the user's location on the background all the time, with the help of some
+     * other classes (from the restarter_services package).
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -84,32 +91,35 @@ public class MPage extends AppCompatActivity {
         }
     }
 
-
-
-    //Bottom Navigation. Switch tabs.
+    /**
+     * Bottom Navigation. Switch tabs.
+     */
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Fragment selectedFragment = null;
 
-                switch(item.getItemId()){
-                    case R.id.nav_map:
-                        selectedFragment = new Tab0();
-                        break;
-                    case R.id.nav_home:
-                        selectedFragment = new Tab1();
-                        break;
+                /**
+                 *
+                 * @param item
+                 * @return
+                 */
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    Fragment selectedFragment = null;
 
-                        case R.id.nav_trips:
-                        selectedFragment = new Tab2();
-                        break;
+                    switch(item.getItemId()){
+                        case R.id.nav_map:
+                            selectedFragment = new Tab0();
+                            break;
+                        case R.id.nav_home:
+                            selectedFragment = new Tab1();
+                            break;
+
+                            case R.id.nav_trips:
+                            selectedFragment = new Tab2();
+                            break;
+                    }
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,selectedFragment).commit();
+                    return true;
                 }
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,selectedFragment).commit();
-                return true;
-            }
-        };
-
-
-
+            };
 }

@@ -31,6 +31,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.File;
 
+/**
+ *
+ */
 public class MainActivity extends AppCompatActivity {
 
 
@@ -59,6 +62,10 @@ public class MainActivity extends AppCompatActivity {
 
     static final int PERMISSION_ALL = 134;
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,6 +131,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     *
+     */
     private void setPersistence() {
         // Get instance of the Firebase database
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
@@ -136,7 +146,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //Sign in to you account using firbase database authentication.
+    /**
+     * Sign in to you account using firbase database authentication.
+     */
     public void signInAccount() {
 
         loadingAnimation();
@@ -170,8 +182,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    //Generate a Loading Animation.
+    /**
+     * Generate a Loading Animation.
+     */
     public void loadingAnimation() {
         LayoutInflater inflater = getLayoutInflater();
         builder.setView(inflater.inflate(R.layout.loading, null));
@@ -181,7 +194,10 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    //There was a googleMap bug that affected every device using the google maps. This fixes that bug.
+    /**
+     * There was a googleMap bug that affected every device using the google maps. This fixes that
+     * bug.
+     */
     private void fixGoogleMapBug() {
         SharedPreferences googleBug = getSharedPreferences("google_bug", Context.MODE_PRIVATE);
         if (!googleBug.contains("fixed")) {
@@ -191,6 +207,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     *
+     * @param context
+     * @param permissions
+     * @return
+     */
     private static boolean hasPermissions(Context context, String... permissions) {
         if (context != null && permissions != null) {
             for (String permission : permissions) {

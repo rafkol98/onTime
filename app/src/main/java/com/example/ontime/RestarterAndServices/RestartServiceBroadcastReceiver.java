@@ -26,7 +26,11 @@ public class RestartServiceBroadcastReceiver extends BroadcastReceiver {
     private static JobScheduler jobScheduler;
     private RestartServiceBroadcastReceiver restartSensorServiceReceiver;
 
-
+    /**
+     *
+     * @param context
+     * @param intent
+     */
     @Override
     public void onReceive(final Context context, Intent intent) {
         Log.d(TAG, "about to start timer " + context.toString());
@@ -39,6 +43,10 @@ public class RestartServiceBroadcastReceiver extends BroadcastReceiver {
         }
     }
 
+    /**
+     *
+     * @param context
+     */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public static void scheduleJob(Context context) {
         if (jobScheduler == null) {
@@ -55,7 +63,10 @@ public class RestartServiceBroadcastReceiver extends BroadcastReceiver {
         jobScheduler.schedule(jobInfo);
     }
 
-
+    /**
+     *
+     * @param context
+     */
     public static void reStartTracker(Context context) {
         // restart the never ending service
         Log.i(TAG, "Restarting tracker");
@@ -63,7 +74,10 @@ public class RestartServiceBroadcastReceiver extends BroadcastReceiver {
         context.sendBroadcast(broadcastIntent);
     }
 
-
+    /**
+     *
+     * @param context
+     */
     private void registerRestarterReceiver(final Context context) {
 
         // the context can be null if app just installed and this is called from restartsensorservice

@@ -10,6 +10,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ontime.R;
 
+/**
+ *
+ */
 public class Suggestion extends AppCompatActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {

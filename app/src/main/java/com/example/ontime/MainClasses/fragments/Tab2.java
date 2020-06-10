@@ -45,11 +45,18 @@ public class Tab2 extends Fragment {
     Long timestamp;
     Trip trip;
 
-    public Tab2() {
-        // Required empty public constructor
-    }
+    /**
+     * Required empty public constructor
+     */
+    public Tab2() { }
 
-
+    /**
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -57,6 +64,10 @@ public class Tab2 extends Fragment {
         return inflater.inflate(R.layout.fragment_tab2, container, false);
     }
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);

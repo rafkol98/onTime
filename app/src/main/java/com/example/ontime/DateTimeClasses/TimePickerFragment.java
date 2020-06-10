@@ -19,12 +19,19 @@ import java.util.Calendar;
  */
 public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener{
 
+    /**
+     *
+     */
     public interface TimePickerListener{
         void onTimeSet(TimePicker timePicker,int hour,int minute);
     }
 
     TimePickerListener mListener;
 
+    /**
+     *
+     * @param context
+     */
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -36,7 +43,11 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         }
     }
 
-    //Created dialog
+    /**
+     * Created dialog
+     * @param savedInstanceState
+     * @return
+     */
     @NonNull
     @Override
    public Dialog onCreateDialog(Bundle savedInstanceState){
@@ -46,6 +57,12 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         return new TimePickerDialog(getActivity(),this,hour,minute, DateFormat.is24HourFormat(getContext()));
    }
 
+    /**
+     *
+     * @param view
+     * @param hourOfDay
+     * @param minute
+     */
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         mListener.onTimeSet(view,hourOfDay,minute);
