@@ -19,6 +19,7 @@ import com.example.ontime.MainClasses.Trip;
 import com.example.ontime.MainClasses.TripListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,6 +41,7 @@ public class Tab2 extends Fragment {
 
     ArrayList<Trip> tripList = new ArrayList<>();
 
+    private ListView mListView;
 
     String destination;
     Long timestamp;
@@ -61,7 +63,9 @@ public class Tab2 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tab2, container, false);
+        View v = inflater.inflate(R.layout.fragment_tab2, container, false);
+        mListView = (ListView) v.findViewById(R.id.listView);
+        return v;
     }
 
     /**
@@ -71,9 +75,6 @@ public class Tab2 extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        View v = getView();
-
-        final ListView mListView = (ListView) v.findViewById(R.id.listView);
 
         //Get uId of the user from the database.
         final String uId = currentFirebaseUser.getUid();
@@ -85,7 +86,11 @@ public class Tab2 extends Fragment {
 
 
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    destination = child.child("destination").getValue().toString();
+                    try{
+                        destination = child.child("destination").getValue().toString();
+                    } catch (NullPointerException e) {
+                        FirebaseCrashlytics.getInstance().recordException(e);
+                    }
                     timestamp = child.child("timestamp").getValue(Long.class);
 
 
