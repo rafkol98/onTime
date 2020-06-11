@@ -34,7 +34,8 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 /**
  * Tab0 is the fragment that shows the map.
  */
-public class Tab0 extends Fragment implements OnMapReadyCallback, LocationListener {
+public class Tab0 extends Fragment implements OnMapReadyCallback,
+                                              LocationListener {
 
     //initialise variables.
     GoogleMap map;
@@ -116,7 +117,7 @@ public class Tab0 extends Fragment implements OnMapReadyCallback, LocationListen
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
+        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         if (location != null) {
             currentLong = location.getLongitude();
             currentLat = location.getLatitude();
@@ -159,7 +160,7 @@ public class Tab0 extends Fragment implements OnMapReadyCallback, LocationListen
             boolean success = googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.b_w_places));
 
             if (!success) {
-                Log.d("MapActivity", "Style parsing failes");
+                Log.d("MapActivity", "Style parsing failed");
             }
         } catch (Resources.NotFoundException e) {
             FirebaseCrashlytics.getInstance().recordException(e);

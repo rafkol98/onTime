@@ -26,6 +26,8 @@ public class Tab1 extends Fragment {
 
     //Initialise variables.
     private AutoCompleteTextView destination;
+    private AutoCompleteTextView autoCompleteTextView;
+
     Button goBtn;
 
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -48,7 +50,16 @@ public class Tab1 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tab1, container, false);
+        View v = inflater.inflate(R.layout.fragment_tab1, container, false);
+
+        //initialise buttons and variables used.
+        goBtn = v.findViewById(R.id.go_btn);
+        destination = v.findViewById(R.id.autoComplete1);
+
+        //Autocomplete when the user searches for a location.
+        autoCompleteTextView = v.findViewById(R.id.autoComplete1);
+
+        return v;
 
     }
 
@@ -59,20 +70,8 @@ public class Tab1 extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        View v = getView();
 
-
-
-        //initialise buttons and variables used.
-
-        goBtn = v.findViewById(R.id.go_btn);
-        destination = v.findViewById(R.id.autoComplete1);
-
-        //Autocomplete when the user searches for a location.
-        AutoCompleteTextView autoCompleteTextView = v.findViewById(R.id.autoComplete1);
         autoCompleteTextView.setAdapter(new PlaceAutoSuggestAdapter(getContext(), android.R.layout.simple_list_item_1));
-
-
 
         //Go to map page. When the user clicks on the search button.
         goBtn.setOnClickListener(new View.OnClickListener() {
