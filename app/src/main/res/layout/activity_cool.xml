@@ -17,14 +17,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/world" />
+        app:srcCompat="@drawable/world"
+        android:contentDescription="@string/world_pic_desc" />
 
     <TextView
         android:id="@+id/youAreSet_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
-        android:text="You are All Set"
+        android:text="@string/all_set"
         android:textColor="@color/blgrey"
         android:textSize="28sp"
         android:textStyle="italic"
@@ -37,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="Cool"
+        android:text="@string/cool"
         android:textColor="@color/blgrey"
         android:textSize="28sp"
         android:textStyle="italic"
@@ -50,7 +51,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="The World is Yours!"
+        android:text="@string/the_world_is_yours"
         android:textColor="@color/blgrey"
         android:textSize="30sp"
         android:textStyle="bold|italic"
