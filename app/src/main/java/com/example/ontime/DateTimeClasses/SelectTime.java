@@ -131,10 +131,10 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
     }
 
     /**
-     * onTimeSet set it sets the textview to the time selected.
+     * onTimeSet set it sets the TextView to the time selected.
      * @param timePicker - time picker widget for selecting time
      * @param hour - hour
-     * @param minute
+     * @param minute - minute
      */
     @Override
     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
@@ -144,7 +144,7 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
 
     /**
      * When the user clicks the done button, this method is called.
-     * @param v
+     * @param 
      * @throws ParseException
      */
     public void onDone(View v) throws ParseException {
