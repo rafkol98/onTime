@@ -101,9 +101,10 @@ public class Tab2 extends Fragment {
                 }
 
                 Collections.sort(tripList);
-                TripListAdapter adapter = new TripListAdapter(getContext(), R.layout.adapter_view, tripList);
-                mListView.setAdapter(adapter);
-
+                if(getContext() != null) {
+                    TripListAdapter adapter = new TripListAdapter(getContext(), R.layout.adapter_view, tripList);
+                    mListView.setAdapter(adapter);
+                }
             }
 
             @Override
