@@ -132,8 +132,8 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
 
     /**
      * onTimeSet set it sets the textview to the time selected.
-     * @param timePicker
-     * @param hour
+     * @param timePicker - time picker widget for selecting time
+     * @param hour - hour
      * @param minute
      */
     @Override

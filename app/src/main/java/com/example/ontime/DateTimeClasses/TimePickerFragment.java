@@ -30,7 +30,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 
     /**
      *
-     * @param context
+     * @param context of interest
      */
     @Override
     public void onAttach(@NonNull Context context) {
@@ -39,7 +39,11 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
             mListener = (TimePickerListener) context;
         }catch (Exception e){
             FirebaseCrashlytics.getInstance().recordException(e);
-            throw new ClassCastException(getActivity().toString()+" must implement TimePickerListner");
+            try{
+                throw new ClassCastException(getActivity().toString()+" must implement TimePickerListner");
+            } catch (NullPointerException ex) {
+                FirebaseCrashlytics.getInstance().recordException(ex);
+            }
         }
     }
 
@@ -54,7 +58,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         Calendar cal = Calendar.getInstance();
         int hour = cal.get(Calendar.HOUR);
         int minute = cal.get(Calendar.MINUTE);
-        return new TimePickerDialog(getActivity(),this,hour,minute, DateFormat.is24HourFormat(getContext()));
+        return new TimePickerDialog(getActivity(),this, hour, minute, DateFormat.is24HourFormat(getContext()));
    }
 
     /**
@@ -65,7 +69,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
      */
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        mListener.onTimeSet(view,hourOfDay,minute);
+        mListener.onTimeSet(view, hourOfDay, minute);
     }
 
 }
