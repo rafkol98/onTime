@@ -14,6 +14,7 @@ import com.example.ontime.MainClasses.fragments.Tab1;
 import com.example.ontime.MainClasses.fragments.Tab2;
 import com.example.ontime.RestarterAndServices.ProcessClass;
 import com.example.ontime.RestarterAndServices.RestartServiceBroadcastReceiver;
+import com.example.ontime.social;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -116,6 +117,10 @@ public class MPage extends AppCompatActivity {
 
                             case R.id.nav_trips:
                             selectedFragment = new Tab2();
+                            break;
+
+                        case R.id.nav_meetings:
+                            selectedFragment = new social();
                             break;
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,selectedFragment).commit();
