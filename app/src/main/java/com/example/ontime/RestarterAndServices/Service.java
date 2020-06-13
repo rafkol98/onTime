@@ -1,6 +1,8 @@
 package com.example.ontime.RestarterAndServices;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Looper;
@@ -8,6 +10,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 
 import com.example.ontime.R;
 import com.example.ontime.utilities.Notification;
@@ -230,6 +233,7 @@ public class Service extends android.app.Service {
 
         LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
     }
+
 
     /**
      * Stop the Location service.
