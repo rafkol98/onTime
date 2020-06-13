@@ -138,9 +138,19 @@ public class Countdown extends AppCompatActivity implements LocationListener {
                 //Make double into string
                 String avg = String.valueOf(avgTSpeed);
 
+                //Get average speed reference.
                 DatabaseReference childReff = dbRef.child(uId).child("Average Speed");
+                //Get email reference.
+                DatabaseReference emailReff = dbRef.child(uId).child("Email");
 
+                //get email of user.
+                String email = currentFirebaseUser.getEmail();
+
+                //Set average speed to the database.
                 childReff.setValue(avgTSpeed);
+
+                //Set email of user to the database.
+                emailReff.setValue(email);
 
                 Intent i = new Intent(Countdown.this, Cool.class);
                 startActivity(i);

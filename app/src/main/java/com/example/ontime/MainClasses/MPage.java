@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.ontime.R;
@@ -55,11 +56,22 @@ public class MPage extends AppCompatActivity {
         //Get uId of the user from the firebase database.
         final String uId = currentFirebaseUser.getUid();
 
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String email = user.getEmail();
+
+       DatabaseReference userRef = dbRef.child(uId);
+
+       //set email of the user.
+       userRef.child("Email").setValue(email);
+
+
+        Log.d("EMAIL of user",email);
+
         //Get the no.of trips put it as a badge to the walks part in the bottom navigation.
-        dbRef.addValueEventListener(new ValueEventListener() {
+        userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Long childrenL = dataSnapshot.child(uId).child("trips").getChildrenCount();
+                Long childrenL = dataSnapshot.child("trips").getChildrenCount();
                 String counter = Long.toString(childrenL);
                 if (childrenL != 0){
                     BadgeDrawable badgeDrawable = bottomNav.getBadge(R.id.nav_trips);
