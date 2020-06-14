@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/add_friend_bg"
-    tools:context=".AddFriend">
+    android:background="@drawable/add_friend_alt_bg"
+    tools:context=".MeetingsClasses.AddFriend">
 
 
     <androidx.constraintlayout.widget.Guideline
@@ -61,13 +61,14 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
-        android:background="@drawable/custom_button"
+        android:background="@drawable/delete_button"
         android:paddingLeft="30dp"
         android:paddingTop="14dp"
         android:paddingRight="30dp"
         android:paddingBottom="14dp"
-        android:text="Send"
-        android:textSize="22sp"
+        android:text="Send Request"
+        android:textColor="@color/white"
+        android:textSize="14sp"
         android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline13" />

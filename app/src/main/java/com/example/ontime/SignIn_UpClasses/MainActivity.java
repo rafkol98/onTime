@@ -86,6 +86,8 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseUser user = mAuth.getCurrentUser();
 
+        //TODO: if user's average speed does not exist( if the user created his account online), take him to do the test as soon as he logs in.
+
         //check if user is already logged in.
         if(user != null) {
         //put intent to go to mainActivity

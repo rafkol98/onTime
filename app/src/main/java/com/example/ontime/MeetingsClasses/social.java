@@ -1,8 +1,7 @@
-package com.example.ontime;
+package com.example.ontime.MeetingsClasses;
 
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -10,6 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import com.example.ontime.MeetingsClasses.AddFriend;
+import com.example.ontime.R;
 
 
 public class social extends Fragment {
@@ -37,12 +39,12 @@ public class social extends Fragment {
                 Fragment newFragment = new AddFriend();
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
 
-// Replace whatever is in the fragment_container view with this fragment,
-// and add the transaction to the back stack if needed
+        // Replace whatever is in the fragment_container view with this fragment,
+        // and add the transaction to the back stack if needed
                 transaction.replace(R.id.fragment_container, newFragment);
                 transaction.addToBackStack(null);
 
-// Commit the transaction
+        // Commit the transaction
                 transaction.commit();
             }
         });

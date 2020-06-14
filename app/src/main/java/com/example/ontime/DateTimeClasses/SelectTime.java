@@ -278,7 +278,7 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
             FirebaseCrashlytics.getInstance().recordException(e);
         }
 
-        return output * 100;
+        return output * 1000;
     }
 
 
