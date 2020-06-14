@@ -19,7 +19,7 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.ontime.HashEmail;
+import com.example.ontime.MainClasses.HashEmail;
 import com.example.ontime.R;
 
 import com.google.firebase.auth.FirebaseAuth;

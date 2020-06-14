@@ -9,19 +9,17 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.example.ontime.HashEmail;
 import com.example.ontime.R;
 import com.example.ontime.MainClasses.fragments.Tab0;
 import com.example.ontime.MainClasses.fragments.Tab1;
 import com.example.ontime.MainClasses.fragments.Tab2;
 import com.example.ontime.RestarterAndServices.ProcessClass;
 import com.example.ontime.RestarterAndServices.RestartServiceBroadcastReceiver;
-import com.example.ontime.MeetingsClasses.social;
+import com.example.ontime.MeetingsClasses.Social;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.crashlytics.internal.common.Utils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -140,7 +138,7 @@ public class MPage extends AppCompatActivity {
                             break;
 
                         case R.id.nav_meetings:
-                            selectedFragment = new social();
+                            selectedFragment = new Social();
                             break;
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,selectedFragment).commit();

@@ -1,4 +1,4 @@
-package com.example.ontime;
+package com.example.ontime.MainClasses;
 
 /**
  * This class is used to generate a hash key for the email of the user.

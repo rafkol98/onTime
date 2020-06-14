@@ -14,12 +14,12 @@ import com.example.ontime.MeetingsClasses.AddFriend;
 import com.example.ontime.R;
 
 
-public class social extends Fragment {
+public class Social extends Fragment {
 
     //Initialise variables.
     ImageView addFriend_img;
 
-    public social() {
+    public Social() {
         // Required empty public constructor
     }
 
@@ -28,7 +28,7 @@ public class social extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//        super.onCreate(savedInstanceState);
+
         //Initialise view.
         View v = getView();
         //When user clicks on addFriend_img take him to the appropriate fragment.
