@@ -79,6 +79,20 @@ public class AddFriend extends Fragment {
                         }
                     if(friendUid==null){
                         Toast.makeText(getContext(),"We couldn't find your friend's email in our database, make sure you typed it correctly",Toast.LENGTH_LONG);
+                    } else {
+                        //We need to do 2 writes, one for the current user. and one for the friend. Write to each other the uid of the other
+                        //and the request status.
+
+                        //write to the current user. We will write under the node "friends" the uId of the friend along with the status as sent, as the user is
+                        // the one who sent the request.
+                        DatabaseReference userRef = dbRefFriend.child(uId);
+                        userRef.child("friends").child(friendUid).child("status").setValue("Sent");
+
+                        //write to the friend. We will write under the node "friends" the uId of the current user along with the status as received, as the
+                        //friend has received this request.
+                        DatabaseReference friendsRef = dbRefFriend.child(friendUid);
+                        friendsRef.child("friends").child(uId).child("status").setValue("Received");
+
                     }
 
                     }
@@ -88,24 +102,6 @@ public class AddFriend extends Fragment {
 
                     }
                 });
-
-
-
-                if(friendUid!=null){
-                    //We need to do 2 writes, one for the current user. and one for the friend. Write to each other the uid of the other
-                    //and the request status.
-
-                    //write to the current user. We will write under the node "friends" the uId of the friend along with the status as sent, as the user is
-                    // the one who sent the request.
-                    DatabaseReference userRef = dbRefFriend.child(uId);
-                    userRef.child("friends").child(friendUid).child("status").setValue("Sent");
-
-                    //write to the friend. We will write under the node "friends" the uId of the current user along with the status as received, as the
-                    //friend has received this request.
-                    DatabaseReference friendsRef = dbRefFriend.child(friendUid);
-                    friendsRef.child("friends").child(uId).child("status").setValue("Received");
-                    
-                }
 
 
             }
