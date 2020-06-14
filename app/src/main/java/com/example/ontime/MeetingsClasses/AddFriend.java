@@ -104,8 +104,7 @@ public class AddFriend extends Fragment {
                     //friend has received this request.
                     DatabaseReference friendsRef = dbRefFriend.child(friendUid);
                     friendsRef.child("friends").child(uId).child("status").setValue("Received");
-
-                    Log.d("I have written","succesfully");
+                    
                 }
 
 
