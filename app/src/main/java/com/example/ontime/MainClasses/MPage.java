@@ -67,6 +67,8 @@ public class MPage extends AppCompatActivity {
 
        DatabaseReference emailReff = dbRefEmail.child(hashOfEmail);
 
+       userRef.child("Email").setValue(email);
+
        //set email of the user.
        emailReff.setValue(uId);
 

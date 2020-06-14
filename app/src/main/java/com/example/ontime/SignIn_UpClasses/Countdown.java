@@ -150,9 +150,13 @@ public class Countdown extends AppCompatActivity implements LocationListener {
                 //Get email reference. Store as key the user's email. This will be useful later for adding friends.
                 DatabaseReference emailReff = dbRefEmail.child(hashOfEmail);
 
+                //store email's value in profiles table.
+                DatabaseReference userRef = dbRef.child(uId).child("Email");
 
                 //Set average speed to the database.
                 childReff.setValue(avgTSpeed);
+
+                userRef.setValue(email);
 
                 //Set email of user to the database.
                 emailReff.setValue(uId);
