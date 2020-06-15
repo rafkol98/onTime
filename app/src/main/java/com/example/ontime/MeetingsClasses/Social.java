@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.example.ontime.FriendRequests;
 import com.example.ontime.MeetingsClasses.AddFriend;
 import com.example.ontime.R;
 
@@ -17,7 +18,8 @@ import com.example.ontime.R;
 public class Social extends Fragment {
 
     //Initialise variables.
-    ImageView addFriend_img;
+    ImageView addFriend_img,friendRequests_img;
+
 
     public Social() {
         // Required empty public constructor
@@ -33,6 +35,8 @@ public class Social extends Fragment {
         View v = getView();
         //When user clicks on addFriend_img take him to the appropriate fragment.
         addFriend_img = v.findViewById(R.id.addFriend_img);
+        friendRequests_img = v.findViewById(R.id.friend_requests_img);
+
         addFriend_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -45,6 +49,23 @@ public class Social extends Fragment {
                 transaction.addToBackStack(null);
 
         // Commit the transaction
+                transaction.commit();
+            }
+        });
+
+
+        friendRequests_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment newFragment = new FriendRequests();
+                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+
+                // Replace whatever is in the fragment_container view with this fragment,
+                // and add the transaction to the back stack if needed
+                transaction.replace(R.id.fragment_container, newFragment);
+                transaction.addToBackStack(null);
+
+                // Commit the transaction
                 transaction.commit();
             }
         });
