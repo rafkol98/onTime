@@ -1,19 +1,15 @@
-package com.example.ontime;
+package com.example.ontime.MeetingsClasses;
 
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.ontime.MainClasses.Trip;
-import com.example.ontime.MainClasses.TripListAdapter;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.Collections;
 
 public class Friend {
 

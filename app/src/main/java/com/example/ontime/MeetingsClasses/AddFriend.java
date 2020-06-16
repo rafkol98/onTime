@@ -39,6 +39,10 @@ public class AddFriend extends Fragment {
 
     Button sendButton;
 
+    //temporary String flag. I set this flag to the value of friendUid once I send an invite to a friend. This solved a complex problem
+    //that because the data was changed the values were reading again and again on the onDataChanged so both toasts were printed.
+    String flag;
+
     public AddFriend() {
         // Required empty public constructor
     }
@@ -52,6 +56,8 @@ public class AddFriend extends Fragment {
         View v = getView();
         //Get email passed in.
         emailIn = (EditText) v.findViewById(R.id.emailPassedIn);
+
+
 
         sendButton = v.findViewById(R.id.buttonSend);
         sendButton.setOnClickListener(new View.OnClickListener() {
@@ -74,28 +80,58 @@ public class AddFriend extends Fragment {
                             String childKey = child.getKey();
                             if (childKey.equals(hashValue)) {
                                 friendUid = (String) child.getValue();
-                                Log.d("I went here friend", friendUid + "");
                             }
                         }
-                        if (friendUid == null) {
+                        if(friendUid!=null && friendUid.equals(uId) ){
+                            Toast.makeText(getContext(), "You cannot add yourself as a friend", Toast.LENGTH_LONG).show();
+                        } else if (friendUid == null) {
                             Toast.makeText(getContext(), "We couldn't find your friend's email in our database, make sure you typed it correctly", Toast.LENGTH_LONG).show();
                         } else {
                             //We need to do 2 writes, one for the current user. and one for the friend. Write to each other the uid of the other
                             //and the request status.
 
-                            //write to the current user. We will write under the node "friends" the uId of the friend along with the status as sent, as the user is
-                            // the one who sent the request.
-                            DatabaseReference userRef = dbRefFriend.child(uId);
-                            userRef.child("friends").child(friendUid).child("status").setValue("Sent");
+                            dbRefFriend.addValueEventListener(new ValueEventListener() {
 
-                            //write to the friend. We will write under the node "friends" the uId of the current user along with the status as received, as the
-                            //friend has received this request.
-                            DatabaseReference friendsRef = dbRefFriend.child(friendUid);
-                            friendsRef.child("friends").child(uId).child("status").setValue("Received");
 
-                            Toast.makeText(getContext(), "Friend request sent succesfully", Toast.LENGTH_LONG).show();
-                            emailIn.setText("");
+                             @Override
+                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                 String statusOfUser = (String) dataSnapshot.child(uId).child("friends").child(friendUid).child("status").getValue();
+                                 String statusOfFriend = (String) dataSnapshot.child(friendUid).child("friends").child(uId).child("status").getValue();
 
+                                 Log.d("statuses 2", statusOfFriend + "  " + statusOfUser);
+
+
+                                 if(statusOfFriend!=null && statusOfUser!=null && flag==friendUid){
+                                     Toast.makeText(getContext(), "You already made a connection with that email.", Toast.LENGTH_LONG).show();
+                                 }else {
+                                     Log.d("I went inside", "alo dame");
+                                     //write to the current user. We will write under the node "friends" the uId of the friend along with the status as sent, as the user is
+                                     // the one who sent the request.
+                                     DatabaseReference userRef = dbRefFriend.child(uId);
+                                     userRef.child("friends").child(friendUid).child("status").setValue("Sent");
+
+                                     //write to the friend. We will write under the node "friends" the uId of the current user along with the status as received, as the
+                                     //friend has received this request.
+                                     DatabaseReference friendsRef = dbRefFriend.child(friendUid);
+                                     friendsRef.child("friends").child(uId).child("status").setValue("Received");
+
+                                     Toast.makeText(getContext(), "Friend request sent succesfully", Toast.LENGTH_LONG).show();
+                                     emailIn.setText("");
+
+                                     //set the flag to friendUid.
+                                     flag=friendUid;
+
+                                 }
+
+
+                             }
+
+                             @Override
+                             public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                             }
+                            }
+                            );
 
                         }
 

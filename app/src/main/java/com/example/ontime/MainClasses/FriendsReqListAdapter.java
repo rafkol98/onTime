@@ -6,13 +6,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
-import com.example.ontime.Friend;
+import com.example.ontime.MeetingsClasses.Friend;
+import com.example.ontime.MeetingsClasses.FriendRequests;
 import com.example.ontime.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,19 +27,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.Format;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
-public class FriendsListAdapter extends ArrayAdapter<Friend> {
+public class FriendsReqListAdapter extends ArrayAdapter<Friend> {
 
     private Context mContext;
     int mResource;
 
+    FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/profiles");
+    private DatabaseReference dbRefFriend = FirebaseDatabase.getInstance().getReference("/friendRequests");
+    String uId = currentFirebaseUser.getUid();
 
-    public FriendsListAdapter(@NonNull Context context, int resource, List<Friend> objects) {
+    public FriendsReqListAdapter(@NonNull Context context, int resource, List<Friend> objects) {
         super(context, resource, objects);
         this.mContext = context;
         this.mResource = resource;
@@ -41,6 +48,7 @@ public class FriendsListAdapter extends ArrayAdapter<Friend> {
     // Default values in case getItem().get... produces a NPE
     String friendUid = "";
     String friendEmail = "";
+
 
     /**
      * Inflate the View and return it
@@ -52,6 +60,7 @@ public class FriendsListAdapter extends ArrayAdapter<Friend> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+
 
         // Attempt to get the destination
         try{
@@ -72,13 +81,16 @@ public class FriendsListAdapter extends ArrayAdapter<Friend> {
         final TextView tvFriend = (TextView) convertView.findViewById(R.id.textFriend);
 
 
+        Button acceptReq = convertView.findViewById(R.id.btnAccept);
+        Button rejectReq = convertView.findViewById(R.id.btnReject);
+
+
         dbRef.child(friendUid).child("Email").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 try{
                     friendEmail = (String) dataSnapshot.getValue();
-                    Log.d("mesa dame koumpare", friendEmail+"");
                     // Set friendEmail to the text view.
                     tvFriend.setText(friendEmail);
 
@@ -96,9 +108,24 @@ public class FriendsListAdapter extends ArrayAdapter<Friend> {
 
             }
 
-
-
         });
+
+        //When a user clicks the accept button, make both status as friends.
+        acceptReq.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatabaseReference userRef = dbRefFriend.child(uId);
+                userRef.child("friends").child(friendUid).child("status").setValue("Friends");
+
+                //write to the friend. We will write under the node "friends" the uId of the current user along with the status as received, as the
+                //friend has received this request.
+                DatabaseReference friendsRef = dbRefFriend.child(friendUid);
+                friendsRef.child("friends").child(uId).child("status").setValue("Friends");
+
+
+            }
+        });
+
 
 
 
@@ -107,6 +134,7 @@ public class FriendsListAdapter extends ArrayAdapter<Friend> {
         // Return the inflated view
         return convertView;
     }
+
 
 
 }

@@ -1,20 +1,21 @@
-package com.example.ontime;
+package com.example.ontime.MeetingsClasses;
 
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
-import com.example.ontime.MainClasses.FriendsListAdapter;
-import com.example.ontime.MainClasses.Trip;
-import com.example.ontime.MainClasses.TripListAdapter;
+import com.example.ontime.MainClasses.FriendsReqListAdapter;
+import com.example.ontime.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
@@ -25,7 +26,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 
 public class FriendRequests extends Fragment {
@@ -42,6 +42,8 @@ public class FriendRequests extends Fragment {
     String friendUId;
     ArrayList<Friend> friendsList = new ArrayList<>();
     private ListView reqListView;
+
+    Button acceptReq;
 
     Friend friend;
 
@@ -60,11 +62,25 @@ public class FriendRequests extends Fragment {
 
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     try {
-                        Log.d("alo ela dame", (child.child("status").getValue())+" ");
                         if (child.child("status").getValue().equals("Received")) {
                             friendUId = child.getKey();
                             friend = new Friend(friendUId);
                             friendsList.add(friend);
+                        }
+
+                        // && friendsList.contains(child.getKey()
+                        else if (child.child("status").getValue().equals("Friends")) {
+                            Fragment newFragment = new FriendRequests();
+                            FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+
+                            // Replace whatever is in the fragment_container view with this fragment,
+                            // and add the transaction to the back stack if needed
+                            transaction.replace(R.id.fragment_container, newFragment);
+                            transaction.addToBackStack(null);
+
+                            // Commit the transaction
+                            transaction.commit();
+//                            friendsList.remove(child.getKey());
                         }
 
                     } catch (NullPointerException e) {
@@ -76,7 +92,7 @@ public class FriendRequests extends Fragment {
 
 
                 if (getContext() != null) {
-                    FriendsListAdapter adapter = new FriendsListAdapter(getContext(), R.layout.adapter_view_req, friendsList);
+                    FriendsReqListAdapter adapter = new FriendsReqListAdapter(getContext(), R.layout.adapter_view_req, friendsList);
                     reqListView.setAdapter(adapter);
                 }
             }
@@ -99,4 +115,7 @@ public class FriendRequests extends Fragment {
         return v;
 
     }
+
+
+
 }

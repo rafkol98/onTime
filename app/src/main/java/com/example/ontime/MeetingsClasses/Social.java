@@ -10,8 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.example.ontime.FriendRequests;
-import com.example.ontime.MeetingsClasses.AddFriend;
 import com.example.ontime.R;
 
 
@@ -43,12 +41,12 @@ public class Social extends Fragment {
                 Fragment newFragment = new AddFriend();
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
 
-        // Replace whatever is in the fragment_container view with this fragment,
-        // and add the transaction to the back stack if needed
+                // Replace whatever is in the fragment_container view with this fragment,
+                // and add the transaction to the back stack if needed
                 transaction.replace(R.id.fragment_container, newFragment);
                 transaction.addToBackStack(null);
 
-        // Commit the transaction
+                // Commit the transaction
                 transaction.commit();
             }
         });

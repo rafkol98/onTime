@@ -136,7 +136,7 @@ public class Tab2 extends Fragment {
             public boolean onItemLongClick(AdapterView<?> parent, View view,
                                            int position, long id) {
 
-                //need to remove it from the database.
+                //TODO: need to remove it from the database.
 
                 return false;
             }

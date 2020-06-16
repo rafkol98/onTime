@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/your_friends_bg"
-    tools:context=".FriendRequests">
+    tools:context=".MeetingsClasses.FriendRequests">
 
 
     <androidx.constraintlayout.widget.Guideline
