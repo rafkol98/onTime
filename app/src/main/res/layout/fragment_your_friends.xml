@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/your_friends_bg_alt"
-    tools:context=".Your_Friends">
+    tools:context=".MeetingsClasses.Your_Friends">
 
 
     <androidx.constraintlayout.widget.Guideline
@@ -36,7 +36,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <ListView
         android:id="@+id/listView_your_friends"

@@ -1,4 +1,4 @@
-package com.example.ontime;
+package com.example.ontime.MeetingsClasses;
 
 import android.content.Context;
 import android.util.Log;
@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.ontime.MeetingsClasses.Friend;
 import com.example.ontime.MeetingsClasses.FriendRequests;
+import com.example.ontime.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;

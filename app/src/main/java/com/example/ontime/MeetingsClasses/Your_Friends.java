@@ -1,4 +1,4 @@
-package com.example.ontime;
+package com.example.ontime.MeetingsClasses;
 
 import android.os.Bundle;
 
@@ -9,12 +9,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-import com.example.ontime.MainClasses.FriendsReqListAdapter;
-import com.example.ontime.MeetingsClasses.Friend;
+import com.example.ontime.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
@@ -53,10 +51,12 @@ public class Your_Friends extends Fragment {
 
         //Get uId of the user from the database.
         final String uId = currentFirebaseUser.getUid();
-        //Get trips of the user. Order them so that the closest one to the current date is first.
+
+        //Find the friends of the current user and add them in a list.
         dbRef.child(uId).child("friends").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
 
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     try {

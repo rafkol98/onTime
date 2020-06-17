@@ -56,7 +56,7 @@ public class FriendRequests extends Fragment {
 
         //Get uId of the user from the database.
         final String uId = currentFirebaseUser.getUid();
-        //Get trips of the user. Order them so that the closest one to the current date is first.
+        //Find users, from who the current user "Received" a friend request and add them in the list.
         dbRef.child(uId).child("friends").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

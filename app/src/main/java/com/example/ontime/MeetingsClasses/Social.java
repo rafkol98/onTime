@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.ontime.R;
-import com.example.ontime.Your_Friends;
 
 
 public class Social extends Fragment {

@@ -55,9 +55,10 @@ public class FriendsReqListAdapter extends ArrayAdapter<Friend> {
 
     /**
      * Inflate the View and return it
-     * @param position - Destination to get
+     *
+     * @param position    - Destination to get
      * @param convertView -
-     * @param parent ViewGroup of parent
+     * @param parent      ViewGroup of parent
      * @return view
      */
     @NonNull
@@ -66,10 +67,10 @@ public class FriendsReqListAdapter extends ArrayAdapter<Friend> {
 
 
         // Attempt to get the destination
-        try{
+        try {
             friendUid = getItem(position).getuId();
-            Log.d("I progressed here a",friendUid+"");
-        } catch (NullPointerException e){
+            Log.d("I progressed here a", friendUid + "");
+        } catch (NullPointerException e) {
             FirebaseCrashlytics.getInstance().recordException(e);
         }
 
@@ -78,7 +79,7 @@ public class FriendsReqListAdapter extends ArrayAdapter<Friend> {
         LayoutInflater inflater = LayoutInflater.from(mContext);
 
         // Inflate the layout with the given resource and parent viewGroup
-        convertView = inflater.inflate(mResource, parent,false);
+        convertView = inflater.inflate(mResource, parent, false);
 
         // Obtain view by ID
         final TextView tvFriend = (TextView) convertView.findViewById(R.id.textFriend);
@@ -92,7 +93,7 @@ public class FriendsReqListAdapter extends ArrayAdapter<Friend> {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                try{
+                try {
                     friendEmail = (String) dataSnapshot.getValue();
                     // Set friendEmail to the text view.
                     tvFriend.setText(friendEmail);
@@ -142,16 +143,39 @@ public class FriendsReqListAdapter extends ArrayAdapter<Friend> {
             }
         });
 
+        rejectReq.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //remove friendUid from friendRequests of user.
+                DatabaseReference userRef = dbRefFriend.child(uId);
+                userRef.child("friends").child(friendUid).removeValue();
+
+                //remove userUid from friendRequests of the friend.
+                DatabaseReference friendsRef = dbRefFriend.child(friendUid);
+                friendsRef.child("friends").child(uId).removeValue();
+
+                //Refresh the fragment.
+                Fragment newFragment = new FriendRequests();
+                FragmentTransaction transaction = ((AppCompatActivity) mContext).getSupportFragmentManager().beginTransaction();
+
+                // Replace whatever is in the fragment_container view with this fragment,
+                // and add the transaction to the back stack if needed
+                transaction.replace(R.id.fragment_container, newFragment);
+                transaction.addToBackStack(null);
+
+                // Commit the transaction
+                transaction.commit();
+
+            }
+        });
 
 
         //TODO button delete.
 
 
-
         // Return the inflated view
         return convertView;
     }
-
 
 
 }
