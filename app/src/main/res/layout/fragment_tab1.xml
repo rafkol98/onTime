@@ -17,21 +17,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
-        android:layout_marginTop="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/settings" />
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/autoComplete1"
-        app:srcCompat="@drawable/transport" />
-
 
 
     <AutoCompleteTextView
@@ -41,7 +29,7 @@
 
         android:layout_marginTop="8dp"
         android:background="@drawable/search_button"
-        android:hint="Search Location"
+        android:hint="Search location..."
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,7 +39,7 @@
         android:id="@+id/where"
         android:layout_width="278dp"
         android:layout_height="35dp"
-        android:layout_marginTop="55dp"
+        android:layout_marginTop="40dp"
         android:text="WHERE DO YOU WANT TO GO?"
         android:textColor="@color/blgrey"
         android:textSize="20sp"
@@ -60,30 +48,48 @@
         app:layout_constraintTop_toTopOf="@+id/guideline4" />
 
 
+    <Button
+        android:id="@+id/go_btn"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        android:background="@drawable/go_alt_red"
+        android:text="Go"
+
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/autoComplete1" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="20dp" />
+        app:layout_constraintGuide_percent="0.06" />
 
-    <Button
-        android:id="@+id/go_btn"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+<!--    <Button-->
+<!--        android:id="@+id/go_btn"-->
+<!--        android:layout_width="20dp"-->
+<!--        android:layout_height="20dp"-->
 
-        android:layout_marginTop="16dp"
-        android:background="@drawable/go_btn"
+<!--        android:layout_marginEnd="16dp"-->
 
-        app:layout_constraintStart_toEndOf="@+id/autoComplete1"
-        app:layout_constraintTop_toTopOf="@+id/guideline7" />
+<!--        android:layout_marginRight="16dp"-->
+<!--        android:background="@drawable/go_btn"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/autoComplete1"-->
+<!--        tools:layout_editor_absoluteY="151dp" />-->
 
     <androidx.constraintlayout.widget.Guideline
-    android:id="@+id/guideline7"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    app:layout_constraintGuide_begin="124dp" />
+        android:id="@+id/guideline7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.2" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline10"
@@ -99,7 +105,7 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline10"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        app:layout_constraintTop_toBottomOf="@+id/autoComplete1"
         app:srcCompat="@drawable/person" />
 
 
