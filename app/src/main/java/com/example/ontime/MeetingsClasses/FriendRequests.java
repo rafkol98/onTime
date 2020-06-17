@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -43,9 +44,14 @@ public class FriendRequests extends Fragment {
     ArrayList<Friend> friendsList = new ArrayList<>();
     private ListView reqListView;
 
+    ImageView imgNoReq;
+
     Button acceptReq;
 
     Friend friend;
+
+
+
 
 
     @Override
@@ -59,42 +65,46 @@ public class FriendRequests extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+//                if (dataSnapshot.getChildrenCount() != 0) {
+//                    imgNoReq.setVisibility(View.INVISIBLE);
 
-                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    try {
-                        if (child.child("status").getValue().equals("Received")) {
-                            friendUId = child.getKey();
-                            friend = new Friend(friendUId);
-                            friendsList.add(friend);
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        try {
+                            if (child.child("status").getValue().equals("Received")) {
+                                imgNoReq.setVisibility(View.INVISIBLE);
+                                friendUId = child.getKey();
+                                friend = new Friend(friendUId);
+                                friendsList.add(friend);
+                            }
+
+                            // && friendsList.contains(child.getKey()
+//                            else if (child.child("status").getValue().equals("Friends")) {
+//                                Fragment newFragment = new FriendRequests();
+//                                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+//
+//                                // Replace whatever is in the fragment_container view with this fragment,
+//                                // and add the transaction to the back stack if needed
+//                                transaction.replace(R.id.fragment_container, newFragment);
+//                                transaction.addToBackStack(null);
+//
+//                                // Commit the transaction
+//                                transaction.commit();
+////                            friendsList.remove(child.getKey());
+//                            }
+
+                        } catch (NullPointerException e) {
+                            FirebaseCrashlytics.getInstance().recordException(e);
                         }
 
-                        // && friendsList.contains(child.getKey()
-                        else if (child.child("status").getValue().equals("Friends")) {
-                            Fragment newFragment = new FriendRequests();
-                            FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
 
-                            // Replace whatever is in the fragment_container view with this fragment,
-                            // and add the transaction to the back stack if needed
-                            transaction.replace(R.id.fragment_container, newFragment);
-                            transaction.addToBackStack(null);
-
-                            // Commit the transaction
-                            transaction.commit();
-//                            friendsList.remove(child.getKey());
-                        }
-
-                    } catch (NullPointerException e) {
-                        FirebaseCrashlytics.getInstance().recordException(e);
                     }
 
 
-                }
+                    if (getContext() != null) {
+                        FriendsReqListAdapter adapter = new FriendsReqListAdapter(getContext(), R.layout.adapter_view_req, friendsList);
+                        reqListView.setAdapter(adapter);
+                    }
 
-
-                if (getContext() != null) {
-                    FriendsReqListAdapter adapter = new FriendsReqListAdapter(getContext(), R.layout.adapter_view_req, friendsList);
-                    reqListView.setAdapter(adapter);
-                }
             }
 
             @Override
@@ -112,10 +122,10 @@ public class FriendRequests extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_friend_requests, container, false);
         reqListView = (ListView) v.findViewById(R.id.listView_req);
+        imgNoReq = v.findViewById(R.id.noRequests);
         return v;
 
     }
-
 
 
 }

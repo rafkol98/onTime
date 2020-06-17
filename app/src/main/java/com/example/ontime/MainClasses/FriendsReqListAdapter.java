@@ -12,9 +12,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.ontime.MeetingsClasses.AddFriend;
 import com.example.ontime.MeetingsClasses.Friend;
 import com.example.ontime.MeetingsClasses.FriendRequests;
 import com.example.ontime.R;
@@ -121,6 +124,19 @@ public class FriendsReqListAdapter extends ArrayAdapter<Friend> {
                 //friend has received this request.
                 DatabaseReference friendsRef = dbRefFriend.child(friendUid);
                 friendsRef.child("friends").child(uId).child("status").setValue("Friends");
+
+
+                //After they successfully become friends, refresh the fragment.
+                Fragment newFragment = new FriendRequests();
+                FragmentTransaction transaction = ((AppCompatActivity) mContext).getSupportFragmentManager().beginTransaction();
+
+                // Replace whatever is in the fragment_container view with this fragment,
+                // and add the transaction to the back stack if needed
+                transaction.replace(R.id.fragment_container, newFragment);
+                transaction.addToBackStack(null);
+
+                // Commit the transaction
+                transaction.commit();
 
 
             }
