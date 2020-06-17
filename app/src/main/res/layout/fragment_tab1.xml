@@ -28,6 +28,8 @@
         android:layout_height="39dp"
 
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
         android:background="@drawable/search_button"
         android:hint="Search location..."
         android:padding="10dp"
@@ -50,19 +52,19 @@
 
     <Button
         android:id="@+id/go_btn"
-        android:layout_width="38dp"
-        android:layout_height="38dp"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
 
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/go_alt_red"
         android:text="Go"
-
         android:textColor="@color/white"
-        android:textSize="15sp"
+        android:textSize="14sp"
         android:textStyle="italic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/autoComplete1" />
+        app:layout_constraintStart_toEndOf="@+id/autoComplete1"
+        app:layout_constraintTop_toBottomOf="@+id/where" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"
@@ -71,25 +73,18 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.06" />
 
-<!--    <Button-->
-<!--        android:id="@+id/go_btn"-->
-<!--        android:layout_width="20dp"-->
-<!--        android:layout_height="20dp"-->
+    <!--    <Button-->
+    <!--        android:id="@+id/go_btn"-->
+    <!--        android:layout_width="20dp"-->
+    <!--        android:layout_height="20dp"-->
 
-<!--        android:layout_marginEnd="16dp"-->
+    <!--        android:layout_marginEnd="16dp"-->
 
-<!--        android:layout_marginRight="16dp"-->
-<!--        android:background="@drawable/go_btn"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toEndOf="@+id/autoComplete1"-->
-<!--        tools:layout_editor_absoluteY="151dp" />-->
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.2" />
+    <!--        android:layout_marginRight="16dp"-->
+    <!--        android:background="@drawable/go_btn"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toEndOf="@+id/autoComplete1"-->
+    <!--        tools:layout_editor_absoluteY="151dp" />-->
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline10"
@@ -107,6 +102,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/autoComplete1"
         app:srcCompat="@drawable/person" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline23"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.24" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
