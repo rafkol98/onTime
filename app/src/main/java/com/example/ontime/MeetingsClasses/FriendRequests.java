@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.ontime.MainClasses.FriendsReqListAdapter;
 import com.example.ontime.R;
@@ -41,12 +39,10 @@ public class FriendRequests extends Fragment {
 
 
     String friendUId;
-    ArrayList<Friend> friendsList = new ArrayList<>();
+    ArrayList<Friend> requestsList = new ArrayList<>();
     private ListView reqListView;
 
     ImageView imgNoReq;
-
-    Button acceptReq;
 
     Friend friend;
 
@@ -65,8 +61,6 @@ public class FriendRequests extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-//                if (dataSnapshot.getChildrenCount() != 0) {
-//                    imgNoReq.setVisibility(View.INVISIBLE);
 
                     for (DataSnapshot child : dataSnapshot.getChildren()) {
                         try {
@@ -74,7 +68,7 @@ public class FriendRequests extends Fragment {
                                 imgNoReq.setVisibility(View.INVISIBLE);
                                 friendUId = child.getKey();
                                 friend = new Friend(friendUId);
-                                friendsList.add(friend);
+                                requestsList.add(friend);
                             }
 
                             // && friendsList.contains(child.getKey()
@@ -101,7 +95,7 @@ public class FriendRequests extends Fragment {
 
 
                     if (getContext() != null) {
-                        FriendsReqListAdapter adapter = new FriendsReqListAdapter(getContext(), R.layout.adapter_view_req, friendsList);
+                        FriendsReqListAdapter adapter = new FriendsReqListAdapter(getContext(), R.layout.adapter_view_req, requestsList);
                         reqListView.setAdapter(adapter);
                     }
 
@@ -121,7 +115,7 @@ public class FriendRequests extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_friend_requests, container, false);
-        reqListView = (ListView) v.findViewById(R.id.listView_req);
+        reqListView = (ListView) v.findViewById(R.id.listView_req_friends);
         imgNoReq = v.findViewById(R.id.noRequests);
         return v;
 

@@ -10,12 +10,12 @@
         android:id="@+id/textFriend"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_weight="33.3"
+        android:layout_weight="40"
         android:gravity="start"
         android:paddingTop="15dp"
-        android:paddingLeft="10dp"
+        android:paddingLeft="20dp"
         android:text="TextView1"
-        android:textColor="@color/black"
+        android:textColor="@color/blgrey"
         android:textSize="18sp"
         android:textAlignment="textStart" />
 
@@ -23,23 +23,23 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="66.6">
+        android:layout_weight="60">
 
         <Button
             android:gravity="center"
-            android:text="Accept"
-            android:layout_marginRight="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:backgroundTint="@color/green"
-            android:id="@+id/btnAccept"/>
-
-        <Button
-            android:gravity="center"
-            android:text="Reject"
+            android:text="EDIT"
             android:layout_marginRight="20dp"
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:backgroundTint="@color/white"
+            android:id="@+id/btnEdit"/>
+
+        <Button
+            android:gravity="center"
+            android:text="Plan meeting"
+            android:layout_marginRight="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
             android:backgroundTint="@color/red"
             android:textColor="@color/white"
             android:id="@+id/btnReject"
