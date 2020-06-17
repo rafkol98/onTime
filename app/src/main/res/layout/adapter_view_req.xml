@@ -13,7 +13,7 @@
         android:layout_weight="33.3"
         android:gravity="start"
         android:paddingTop="15dp"
-        android:paddingLeft="10dp"
+        android:paddingLeft="20dp"
         android:text="TextView1"
         android:textColor="@color/black"
         android:textSize="18sp"
