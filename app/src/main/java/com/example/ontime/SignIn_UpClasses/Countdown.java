@@ -19,6 +19,7 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ontime.MainClasses.HashEmail;
 import com.example.ontime.R;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -51,6 +52,8 @@ public class Countdown extends AppCompatActivity implements LocationListener {
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
     private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/profiles");
+    private DatabaseReference dbRefEmail = FirebaseDatabase.getInstance().getReference("/emailToUid");
+    HashEmail hashEmail = new HashEmail();
 
     /**
      *
@@ -138,9 +141,25 @@ public class Countdown extends AppCompatActivity implements LocationListener {
                 //Make double into string
                 String avg = String.valueOf(avgTSpeed);
 
+                //Get average speed reference.
                 DatabaseReference childReff = dbRef.child(uId).child("Average Speed");
 
+                //get email of user.
+                String email = currentFirebaseUser.getEmail();
+                String hashOfEmail = hashEmail.getHashEmail(email);
+                //Get email reference. Store as key the user's email. This will be useful later for adding friends.
+                DatabaseReference emailReff = dbRefEmail.child(hashOfEmail);
+
+                //store email's value in profiles table.
+                DatabaseReference userRef = dbRef.child(uId).child("Email");
+
+                //Set average speed to the database.
                 childReff.setValue(avgTSpeed);
+
+                userRef.setValue(email);
+
+                //Set email of user to the database.
+                emailReff.setValue(uId);
 
                 Intent i = new Intent(Countdown.this, Cool.class);
                 startActivity(i);

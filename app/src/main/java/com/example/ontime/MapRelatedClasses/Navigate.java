@@ -236,7 +236,7 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback,
 
         //Load style.
         try {
-            boolean success = googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.b_w_style1));
+            boolean success = googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.b_w_places));
 
             if (!success) {
                 Log.d("MapActivity", "Style parsing failes");

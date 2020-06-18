@@ -2,19 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.ontime">
 
-    <uses-permission android:name="android.permission.RECEIVE_LAUNCH_BROADCASTS"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-
-    <!-- Allows an app to access precise location. -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
-    <!-- Allows an app to access approximate location. -->
+    <uses-permission android:name="android.permission.RECEIVE_LAUNCH_BROADCASTS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" /> <!-- Allows an app to access precise location. -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- Allows an app to access approximate location. -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
-
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <uses-feature android:name="android.hardware.location.gps" />
 
@@ -55,19 +49,16 @@
             </intent-filter>
         </activity>
 
-
-        <service android:name=".RestarterAndServices.JobService"
+        <service
+            android:name=".RestarterAndServices.JobService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
-
         <service
             android:name=".RestarterAndServices.Service"
             android:clearTaskOnLaunch="true"
             android:enabled="true"
             android:foregroundServiceType="location"
             android:excludeFromRecents="true"
-            android:launchMode="singleInstance"
-            />
-
+            android:launchMode="singleInstance" />
 
         <receiver
             android:name=".RestarterAndServices.RestartServiceBroadcastReceiver"
@@ -75,24 +66,14 @@
             android:exported="true"
             android:label="StartMyServiceAtBootReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
-                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
-                <action android:name="uk.ac.shef.oak.activity_recognition.sensor_service.RestartSensor"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="uk.ac.shef.oak.activity_recognition.sensor_service.RestartSensor" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
-<!--        <service android:name=".LocationService"-->
-<!--            android:enabled="true"-->
-<!--            android:exported="false"></service>-->
-
-<!--        <receiver-->
-<!--            android:name=".Restarter"-->
-<!--            android:enabled="true"-->
-<!--            android:exported="true"-->
-<!--            android:label="RestartServiceWhenStopped">-->
-<!--        </receiver>-->
-
     </application>
 
 </manifest>

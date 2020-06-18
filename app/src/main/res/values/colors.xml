@@ -14,6 +14,7 @@
 
     <color name="red_nav">#9C0F33</color>
 
+    <color name="grey_lightest">#F0F0F0</color>
     <color name="grey_lighter">#E0E0E0</color>
     <color name="grey_light">#9E9E9E</color>
     <color name="grey_dark">#424242</color>
@@ -22,6 +23,8 @@
     <color name="blue_light">#03A9F4</color>
     <color name="blue">#1E88E5</color>
     <color name="blue_dark">#01579B</color>
+
+
 
 
 </resources>
