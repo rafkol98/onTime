@@ -207,7 +207,6 @@ public class Map extends FragmentActivity implements OnMapReadyCallback,
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(destinationLatLng, zoom));
                 googleMap.addMarker(new MarkerOptions().position(destinationLatLng)
                         .title(destinationPassed));
-
             }
             //if it cannot find the location, it puts a market to current location and it notifies the user.
             else {

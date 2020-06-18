@@ -16,12 +16,7 @@ public class Friend {
     //Initialise variables.
     private String uId;
     private String email;
-    private String emailFromUiD;
 
-
-    private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/profiles");
-
-    Friend xF;
 
     public Friend(String uId, String email) {
         this.uId = uId;
@@ -42,43 +37,6 @@ public class Friend {
     public String getEmail() {
         return email;
     }
-
-
-
-    public String getEmailFromUId() {
-        dbRef.child(uId).child("Email").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-
-//                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    try{
-                       email = (String) dataSnapshot.getValue();
-                        Log.d("mesa dame koumpare", email+"");
-                        xF = new Friend(uId,email);
-
-
-                    } catch (NullPointerException e) {
-                        FirebaseCrashlytics.getInstance().recordException(e);
-                    }
-
-                }
-//                }
-
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-        Log.d("alo email", xF.getEmail()+"");
-        return xF.getEmail();
-
-    }
-
-
-
 
 
 }
