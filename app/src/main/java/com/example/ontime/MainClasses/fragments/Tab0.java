@@ -1,10 +1,7 @@
 package com.example.ontime.MainClasses.fragments;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Criteria;
@@ -37,7 +34,8 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 /**
  * Tab0 is the fragment that shows the map.
  */
-public class Tab0 extends Fragment implements OnMapReadyCallback, LocationListener {
+public class Tab0 extends Fragment implements OnMapReadyCallback,
+                                              LocationListener {
 
     //initialise variables.
     GoogleMap map;
@@ -51,11 +49,20 @@ public class Tab0 extends Fragment implements OnMapReadyCallback, LocationListen
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
-    public Tab0() {
-        // Required empty public constructor
-    }
+    /**
+     * Required empty public constructor
+     */
+    public Tab0() { }
 
 
+    /**
+     *
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -73,6 +80,10 @@ public class Tab0 extends Fragment implements OnMapReadyCallback, LocationListen
 
     }
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -91,8 +102,9 @@ public class Tab0 extends Fragment implements OnMapReadyCallback, LocationListen
 
     }
 
-    //This method gets the user's current location.
-
+    /**
+     * This method gets the user's current location.
+     */
     public void getCurrentLocation() {
 
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -105,7 +117,7 @@ public class Tab0 extends Fragment implements OnMapReadyCallback, LocationListen
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
+        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         if (location != null) {
             currentLong = location.getLongitude();
             currentLat = location.getLatitude();
@@ -115,6 +127,9 @@ public class Tab0 extends Fragment implements OnMapReadyCallback, LocationListen
         }
     }
 
+    /**
+     *
+     */
     public void permissionEnabled(){
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -131,7 +146,11 @@ public class Tab0 extends Fragment implements OnMapReadyCallback, LocationListen
 
     }
     }
-    //once the map fragment has loaded do this
+
+    /**
+     * Once the map fragment has loaded do this
+     * @param googleMap
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
@@ -141,7 +160,7 @@ public class Tab0 extends Fragment implements OnMapReadyCallback, LocationListen
             boolean success = googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.b_w_places));
 
             if (!success) {
-                Log.d("MapActivity", "Style parsing failes");
+                Log.d("MapActivity", "Style parsing failed");
             }
         } catch (Resources.NotFoundException e) {
             FirebaseCrashlytics.getInstance().recordException(e);
@@ -161,7 +180,7 @@ public class Tab0 extends Fragment implements OnMapReadyCallback, LocationListen
             map.getUiSettings().setZoomControlsEnabled(true);
             //set the camera to user's current location.
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(current, zoom));
-    }
+        }
         //if not, ask for permission.
         else {
         ActivityCompat.requestPermissions(getActivity(), new String[] {
@@ -169,31 +188,41 @@ public class Tab0 extends Fragment implements OnMapReadyCallback, LocationListen
                         Manifest.permission.ACCESS_COARSE_LOCATION },
                 MY_PERMISSIONS_REQUEST_LOCATION);
 
+        }
     }
 
-    }
-
-    //Get user's location if he moves/walks.
+    /**
+     * Get user's location if he moves/walks.
+     * @param location
+     */
     @Override
     public void onLocationChanged(Location location) {
         currentLat = location.getLatitude();
         currentLong = location.getLongitude();
     }
 
+    /**
+     *
+     * @param provider
+     * @param status
+     * @param extras
+     */
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
+    public void onStatusChanged(String provider, int status, Bundle extras) { }
 
-    }
-
+    /**
+     *
+     * @param provider
+     */
     @Override
-    public void onProviderEnabled(String provider) {
+    public void onProviderEnabled(String provider) { }
 
-    }
-
+    /**
+     *
+     * @param provider
+     */
     @Override
-    public void onProviderDisabled(String provider) {
-
-    }
+    public void onProviderDisabled(String provider) { }
 
 
 

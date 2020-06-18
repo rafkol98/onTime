@@ -19,12 +19,19 @@ import java.util.Calendar;
  */
 public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener{
 
+    /**
+     *
+     */
     public interface TimePickerListener{
         void onTimeSet(TimePicker timePicker,int hour,int minute);
     }
 
     TimePickerListener mListener;
 
+    /**
+     *
+     * @param context of interest
+     */
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -32,23 +39,37 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
             mListener = (TimePickerListener) context;
         }catch (Exception e){
             FirebaseCrashlytics.getInstance().recordException(e);
-            throw new ClassCastException(getActivity().toString()+" must implement TimePickerListner");
+            try{
+                throw new ClassCastException(getActivity().toString()+" must implement TimePickerListner");
+            } catch (NullPointerException ex) {
+                FirebaseCrashlytics.getInstance().recordException(ex);
+            }
         }
     }
 
-    //Created dialog
+    /**
+     * Created dialog
+     * @param savedInstanceState
+     * @return
+     */
     @NonNull
     @Override
    public Dialog onCreateDialog(Bundle savedInstanceState){
         Calendar cal = Calendar.getInstance();
         int hour = cal.get(Calendar.HOUR);
         int minute = cal.get(Calendar.MINUTE);
-        return new TimePickerDialog(getActivity(),this,hour,minute, DateFormat.is24HourFormat(getContext()));
+        return new TimePickerDialog(getActivity(),this, hour, minute, DateFormat.is24HourFormat(getContext()));
    }
 
+    /**
+     *
+     * @param view
+     * @param hourOfDay
+     * @param minute
+     */
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        mListener.onTimeSet(view,hourOfDay,minute);
+        mListener.onTimeSet(view, hourOfDay, minute);
     }
 
 }

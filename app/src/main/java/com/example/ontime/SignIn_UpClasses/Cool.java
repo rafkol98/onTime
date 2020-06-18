@@ -16,6 +16,10 @@ public class Cool extends AppCompatActivity {
 
     private Handler mHandler = new Handler();
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,7 +33,8 @@ public class Cool extends AppCompatActivity {
         }, 4000);
     }
 
-    public void onBackPressed() {
-
-    }
+    /**
+     *
+     */
+    public void onBackPressed() { }
 }

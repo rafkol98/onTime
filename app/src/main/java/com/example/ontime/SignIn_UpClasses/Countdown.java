@@ -19,6 +19,7 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ontime.MainClasses.HashEmail;
 import com.example.ontime.R;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -51,8 +52,13 @@ public class Countdown extends AppCompatActivity implements LocationListener {
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
     private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/profiles");
+    private DatabaseReference dbRefEmail = FirebaseDatabase.getInstance().getReference("/emailToUid");
+    HashEmail hashEmail = new HashEmail();
 
-
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +82,11 @@ public class Countdown extends AppCompatActivity implements LocationListener {
         this.updateSpeed(null);
 
         sw_metric.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            /**
+             *
+             * @param buttonView
+             * @param isChecked
+             */
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Countdown.this.updateSpeed(null);
@@ -130,9 +141,25 @@ public class Countdown extends AppCompatActivity implements LocationListener {
                 //Make double into string
                 String avg = String.valueOf(avgTSpeed);
 
+                //Get average speed reference.
                 DatabaseReference childReff = dbRef.child(uId).child("Average Speed");
 
+                //get email of user.
+                String email = currentFirebaseUser.getEmail();
+                String hashOfEmail = hashEmail.getHashEmail(email);
+                //Get email reference. Store as key the user's email. This will be useful later for adding friends.
+                DatabaseReference emailReff = dbRefEmail.child(hashOfEmail);
+
+                //store email's value in profiles table.
+                DatabaseReference userRef = dbRef.child(uId).child("Email");
+
+                //Set average speed to the database.
                 childReff.setValue(avgTSpeed);
+
+                userRef.setValue(email);
+
+                //Set email of user to the database.
+                emailReff.setValue(uId);
 
                 Intent i = new Intent(Countdown.this, Cool.class);
                 startActivity(i);
@@ -145,7 +172,9 @@ public class Countdown extends AppCompatActivity implements LocationListener {
 
     }
 
-
+    /**
+     *
+     */
     @SuppressLint("MissingPermission")
     private void doStuff() {
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -155,7 +184,10 @@ public class Countdown extends AppCompatActivity implements LocationListener {
         Toast.makeText(this, "Waiting for GPS connection!", Toast.LENGTH_SHORT).show();
     }
 
-    //Update speed of the user.
+    /**
+     * Update speed of the user.
+     * @param location
+     */
     private void updateSpeed(CLocation location) {
         double nCurrentSpeed = 0;
         if (location != null) {
@@ -178,7 +210,12 @@ public class Countdown extends AppCompatActivity implements LocationListener {
         }
     }
 
-    //Grant permission.
+    /**
+     * Grant permission.
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == 1000) {
@@ -190,7 +227,10 @@ public class Countdown extends AppCompatActivity implements LocationListener {
         }
     }
 
-
+    /**
+     *
+     * @param location
+     */
     @Override
     public void onLocationChanged(Location location) {
         if (location != null) {
@@ -199,29 +239,39 @@ public class Countdown extends AppCompatActivity implements LocationListener {
         }
     }
 
+    /**
+     *
+     * @param provider
+     * @param status
+     * @param extras
+     */
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
+    public void onStatusChanged(String provider, int status, Bundle extras) { }
 
-    }
-
+    /**
+     *
+     * @param provider
+     */
     @Override
-    public void onProviderEnabled(String provider) {
+    public void onProviderEnabled(String provider) { }
 
-    }
-
+    /**
+     *
+     * @param provider
+     */
     @Override
-    public void onProviderDisabled(String provider) {
+    public void onProviderDisabled(String provider) { }
 
-    }
+    /**
+     *
+     * @return
+     */
+    private boolean useMetricUnits() { return sw_metric.isChecked(); }
 
-    private boolean useMetricUnits() {
-        return sw_metric.isChecked();
-    }
-
-
-    public void onBackPressed() {
-
-    }
+    /**
+     *
+     */
+    public void onBackPressed() { }
 
 }
 

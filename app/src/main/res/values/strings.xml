@@ -41,5 +41,25 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="success">MALAKA IT WORKED</string>
+    <string name="world_pic_desc">Person Holding World</string>
+    <string name="all_set">You Are All Set</string>
+    <string name="cool">Cool</string>
+    <string name="the_world_is_yours">The World is Yours!</string>
+    <string name="two">02:00</string>
+    <string name="keep_walking">Keep Walking...</string>
+    <string name="countimage_desc">Person walking</string>
+    <string name="zero_speed">0.0 m/s</string>
+    <string name="metric_units">Metric Units</string>
+    <string name="welcome">Welcome to onTime</string>
+    <string name="email">Email Address</string>
+    <string name="password">Password</string>
+    <string name="never_late">Never be late again!</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Not a member? Sign Up!</string>
+    <string name="promo_desc">Use our revolutionary app that will get you there on time, using your own pace!</string>
+    <string name="plan">Plan Trip</string>
+    <string name="home_icon">Home Icon</string>
+    <string name="arrival_time">Arrival Time:</string>
 
 </resources>

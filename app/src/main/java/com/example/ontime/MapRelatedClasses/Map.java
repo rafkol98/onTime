@@ -27,7 +27,6 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.example.ontime.MainClasses.MPage;
 import com.example.ontime.MainClasses.PlanTripFromLocation;
-import com.example.ontime.MainClasses.fragments.Tab0;
 import com.example.ontime.R;
 import com.example.ontime.DateTimeClasses.SelectTime;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -52,10 +51,13 @@ import java.util.concurrent.ExecutionException;
 
 
 /**
- * This is the Map class. It is the map that shows the user the location of the place that they selected to
- * go in the Tab1 fragment (the main page of the app-where the user selects where he wants to go).
+ * This is the Map class. It is the map that shows the user the location of the place that they
+ * selected to go in the Tab1 fragment (the main page of the app-where the user selects where he
+ * wants to go).
  */
-public class Map extends FragmentActivity implements OnMapReadyCallback, LocationListener, GeoTask.Geo {
+public class Map extends FragmentActivity implements OnMapReadyCallback,
+                                                     LocationListener,
+                                                     GeoTask.Geo {
 
     //Initialise variables.
     GoogleMap map;
@@ -100,7 +102,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
         //Find the best provider for location.
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         criteria = new Criteria();
-        bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
+        bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true));
 
         checkLocationPermission();
 
@@ -122,8 +124,12 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
         dbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                tempAverageSpeed = dataSnapshot.child(uId).child("Average Speed").getValue().toString();
-                setAverageSpeed(tempAverageSpeed);
+                try{
+                    tempAverageSpeed = dataSnapshot.child(uId).child("Average Speed").getValue().toString();
+                    setAverageSpeed(tempAverageSpeed);
+                } catch (NullPointerException e) {
+                    FirebaseCrashlytics.getInstance().recordException(e);
+                }
             }
 
             @Override
@@ -358,7 +364,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback, Locatio
     //Calculates how many minutes the user needs based on his own unique average walking speed to go there.
     @Override
     public void calculateTimeAndDist(String result) {
-        String res[] = result.split(",");
+        String[] res = result.split(",");
         Double min = Double.parseDouble(res[0]) / 60;
         Double dist = Double.parseDouble(res[1]) / 1000;
 

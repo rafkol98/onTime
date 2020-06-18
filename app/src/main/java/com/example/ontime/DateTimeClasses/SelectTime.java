@@ -105,8 +105,9 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
 
     }
 
-
-    //Shows the date picker dialog.
+    /**
+     * Shows the date picker dialog.
+     */
     private void showDatePickerDialog() {
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, R.style.MyDatePickerDialogTheme, this, Calendar.getInstance().get(Calendar.YEAR),
                 Calendar.getInstance().get(Calendar.MONTH),
@@ -116,20 +117,36 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
 
     }
 
-    //onDateSet set it sets the textview to the date selected.
+    /**
+     * onDateSet set it sets the textview to the date selected.
+     * @param view
+     * @param year
+     * @param month
+     * @param dayOfMonth
+     */
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         String date = dayOfMonth + "/" + (month + 1) + "/" + year;
         dateText.setText(date);
     }
 
-    //onTimeSet set it sets the textview to the time selected.
+    /**
+     * onTimeSet set it sets the TextView to the time selected.
+     * @param timePicker - time picker widget for selecting time
+     * @param hour - hour
+     * @param minute - minute
+     */
     @Override
     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
         timeText.setText(hour + ":" + minute);
     }
 
-    //When the user clicks the done button, this method is called.
+
+    /**
+     * When the user clicks the done button, this method is called.
+     * @param 
+     * @throws ParseException
+     */
     public void onDone(View v) throws ParseException {
         String dateSelected = dateText.getText().toString() + " " + timeText.getText().toString() + ":00";
 
@@ -203,7 +220,10 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
 
     }
 
-    //uploads trip to firebase for the user.
+    /**
+     * Uploads trip to firebase for the user.
+     * @throws ParseException
+     */
     public void doTrip() throws ParseException {
 
         //Store date,time and destination on a new Trip.
@@ -241,14 +261,24 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
 
     }
 
-    //Converts date to milliseconds.
+    /**
+     * Converts date to milliseconds.
+     * @param dateIn - Date to convert to milliseconds (ms)
+     * @return date in milliseconds (ms)
+     * @throws ParseException - Signals that an error has been reached unexpectedly while parsing.
+     */
     public Long toMilli(String dateIn) throws ParseException {
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         Date date = (Date) formatter.parse(dateIn);
-        long output = date.getTime() / 1000L;
-        String str = Long.toString(output);
-        long timestamp = Long.parseLong(str) * 1000;
-        return timestamp;
+        long output = 0;
+
+        try{
+            output = date.getTime() / 1000L;
+        } catch (NullPointerException e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
+        }
+
+        return output * 1000;
     }
 
 

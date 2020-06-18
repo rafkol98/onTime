@@ -11,9 +11,6 @@ import android.widget.Button;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-//import com.example.ontime.AutoSuggestClasses.PlaceAutoSuggestAdapter;
-//import com.example.ontime.MapRelatedClasses.Map;
-
 import com.example.ontime.AutoSuggestClasses.*;
 import com.example.ontime.MapRelatedClasses.*;
 import com.example.ontime.R;
@@ -29,42 +26,52 @@ public class Tab1 extends Fragment {
 
     //Initialise variables.
     private AutoCompleteTextView destination;
+    private AutoCompleteTextView autoCompleteTextView;
+
     Button goBtn;
 
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/profiles");
 
 
-    public Tab1() {
-        // Required empty public constructor
-    }
+    /**
+     * Required empty public constructor
+     */
+    public Tab1() { }
 
-
+    /**
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tab1, container, false);
-
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        View v = getView();
-
-
+        View v = inflater.inflate(R.layout.fragment_tab1, container, false);
 
         //initialise buttons and variables used.
-
         goBtn = v.findViewById(R.id.go_btn);
         destination = v.findViewById(R.id.autoComplete1);
 
         //Autocomplete when the user searches for a location.
-        AutoCompleteTextView autoCompleteTextView = v.findViewById(R.id.autoComplete1);
+        autoCompleteTextView = v.findViewById(R.id.autoComplete1);
+
+        return v;
+
+    }
+
+    /**
+     *
+     * @param savedInstanceState
+     */
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
         autoCompleteTextView.setAdapter(new PlaceAutoSuggestAdapter(getContext(), android.R.layout.simple_list_item_1));
-
-
 
         //Go to map page. When the user clicks on the search button.
         goBtn.setOnClickListener(new View.OnClickListener() {

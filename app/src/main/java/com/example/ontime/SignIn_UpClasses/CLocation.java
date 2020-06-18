@@ -9,23 +9,45 @@ public class CLocation extends Location {
 
     private boolean bUserMetricUnits = false;
 
+    /**
+     *
+     * @param location
+     */
     public CLocation(Location location){
         this(location,true);
     }
 
+    /**
+     *
+     * @param l
+     * @param bUserMetricUnits
+     */
     public CLocation(Location l, boolean bUserMetricUnits) {
         super(l);
         this.bUserMetricUnits = bUserMetricUnits;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean getUseMetricUnits() {
         return bUserMetricUnits;
     }
 
+    /**
+     *
+     * @param bUserMetricUnits
+     */
     public void setbUserMetricUnits(boolean bUserMetricUnits) {
         this.bUserMetricUnits = bUserMetricUnits;
     }
 
+    /**
+     *
+     * @param dest
+     * @return
+     */
     @Override
     public float distanceTo(Location dest) {
         float nDistance = super.distanceTo(dest);
@@ -37,6 +59,10 @@ public class CLocation extends Location {
         return nDistance;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public double getAltitude() {
         double nAltitude = super.getAltitude();
@@ -49,6 +75,10 @@ public class CLocation extends Location {
 
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public float getSpeed() {
         float nSpeed = super.getSpeed() * 3.6f;
@@ -60,6 +90,10 @@ public class CLocation extends Location {
         return nSpeed;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public float getAccuracy() {
         float nAccuracy = super.getAccuracy();

@@ -22,15 +22,18 @@ import android.widget.Toast;
 
 import com.example.ontime.MainClasses.MPage;
 import com.example.ontime.R;
-import com.example.ontime.AutoSuggestClasses.Suggestion;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.*;
-import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.File;
 
+/**
+ *
+ */
 public class MainActivity extends AppCompatActivity {
 
 
@@ -59,11 +62,16 @@ public class MainActivity extends AppCompatActivity {
 
     static final int PERMISSION_ALL = 134;
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setPersistence();
         fixGoogleMapBug();
 
         create_account_txt = findViewById(R.id.sign_up_text);
@@ -77,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         FirebaseUser user = mAuth.getCurrentUser();
+
+        //TODO: if user's average speed does not exist( if the user created his account online), take him to do the test as soon as he logs in.
 
         //check if user is already logged in.
         if(user != null) {
@@ -123,7 +133,24 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //Sign in to you account using firbase database authentication.
+    /**
+     *
+     */
+    private void setPersistence() {
+        // Get instance of the Firebase database
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+
+        // Try to set persistence enabled on the database
+        try {
+            firebaseDatabase.setPersistenceEnabled(true);
+        } catch (RuntimeException e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
+        }
+    }
+
+    /**
+     * Sign in to you account using firbase database authentication.
+     */
     public void signInAccount() {
 
         loadingAnimation();
@@ -157,8 +184,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    //Generate a Loading Animation.
+    /**
+     * Generate a Loading Animation.
+     */
     public void loadingAnimation() {
         LayoutInflater inflater = getLayoutInflater();
         builder.setView(inflater.inflate(R.layout.loading, null));
@@ -168,7 +196,10 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    //There was a googleMap bug that affected every device using the google maps. This fixes that bug.
+    /**
+     * There was a googleMap bug that affected every device using the google maps. This fixes that
+     * bug.
+     */
     private void fixGoogleMapBug() {
         SharedPreferences googleBug = getSharedPreferences("google_bug", Context.MODE_PRIVATE);
         if (!googleBug.contains("fixed")) {
@@ -178,6 +209,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     *
+     * @param context
+     * @param permissions
+     * @return
+     */
     private static boolean hasPermissions(Context context, String... permissions) {
         if (context != null && permissions != null) {
             for (String permission : permissions) {

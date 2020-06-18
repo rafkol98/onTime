@@ -14,7 +14,11 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class PlaceAPI {
-
+    /**
+     *
+     * @param input
+     * @return
+     */
     public ArrayList<String> autoComplete(String input){
         ArrayList<String> arrayList = new ArrayList();
         HttpURLConnection connection = null;

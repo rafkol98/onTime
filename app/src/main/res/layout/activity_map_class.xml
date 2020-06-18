@@ -26,7 +26,7 @@
         android:paddingRight="20dp"
         android:paddingTop="25dp"
         android:paddingBottom="25dp"
-        android:text="Plan Trip"
+        android:text="@string/plan"
         android:onClick="onPlan"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"

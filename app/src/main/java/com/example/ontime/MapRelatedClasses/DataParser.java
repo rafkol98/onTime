@@ -15,7 +15,11 @@ import java.util.List;
 
 public class DataParser {
 
-    //Receives a JSONObject and returns a list of lists containing latitude and longitude.
+    /**
+     * Receives a JSONObject and returns a list of lists containing latitude and longitude.
+     * @param jObject
+     * @return
+     */
     public List<List<HashMap<String, String>>> parse(JSONObject jObject) {
 
         List<List<HashMap<String, String>>> routes = new ArrayList<List<HashMap<String, String>>>();
@@ -64,8 +68,11 @@ public class DataParser {
         return routes;
     }
 
-
-     //Method to decode polyline points.
+    /**
+     * Method to decode polyline points.
+     * @param encoded
+     * @return
+     */
     private List decodePoly(String encoded) {
 
         List poly = new ArrayList();

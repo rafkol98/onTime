@@ -10,7 +10,11 @@
         android:icon="@drawable/ic_home_black_24dp"
         android:title="Home" />
     <item
-        android:id="@+id/nav_trips"
-        android:icon="@drawable/ic_access_time_black_24dp"
-        android:title="Trips" />
+    android:id="@+id/nav_trips"
+    android:icon="@drawable/ic_access_time_black_24dp"
+    android:title="Trips" />
+    <item
+        android:id="@+id/nav_meetings"
+        android:icon="@drawable/ic_meetings"
+        android:title="Meetings" />
 </menu>

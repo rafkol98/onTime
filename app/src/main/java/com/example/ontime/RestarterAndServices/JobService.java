@@ -24,6 +24,11 @@ public class JobService extends android.app.job.JobService {
     private static JobService instance;
     private static JobParameters jobParameters;
 
+    /**
+     *
+     * @param jobParameters
+     * @return
+     */
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
         ProcessClass bck = new ProcessClass();
@@ -35,6 +40,9 @@ public class JobService extends android.app.job.JobService {
         return false;
     }
 
+    /**
+     *
+     */
     private void registerRestarterReceiver() {
 
         // the context can be null if app just installed and this is called from restartsensorservice
@@ -72,7 +80,11 @@ public class JobService extends android.app.job.JobService {
 
     }
 
-    //called if Android kills the job service
+    /**
+     * Called if Android kills the job service
+     * @param jobParameters
+     * @return
+     */
     @Override
     public boolean onStopJob(JobParameters jobParameters) {
         Log.i(TAG, "Stopping job");
@@ -89,8 +101,10 @@ public class JobService extends android.app.job.JobService {
         return false;
     }
 
-
-    //called when the tracker is stopped for whatever reason
+    /**
+     * Called when the tracker is stopped for whatever reason
+     * @param context
+     */
     public static void stopJob(Context context) {
         if (instance!=null && jobParameters!=null) {
             try{
