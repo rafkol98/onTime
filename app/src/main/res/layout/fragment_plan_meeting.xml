@@ -35,4 +35,50 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.14" />
+
+
+
+    <AutoCompleteTextView
+        android:id="@+id/meetingAutoComplete"
+        android:layout_width="283dp"
+        android:layout_height="39dp"
+
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:background="@drawable/search_button"
+        android:hint="Search location..."
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/where" />
+
+
+    <TextView
+        android:id="@+id/where"
+        android:layout_width="278dp"
+        android:layout_height="35dp"
+        android:text="WHERE DO YOU WANT TO MEET?"
+        android:textColor="@color/blgrey"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.458"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline21" />
+
+    <Button
+        android:id="@+id/meet_btn"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/go_alt_red"
+        android:text="Meet"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        android:textStyle="italic"
+        app:layout_constraintStart_toEndOf="@+id/meetingAutoComplete"
+        app:layout_constraintTop_toBottomOf="@+id/where" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

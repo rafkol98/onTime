@@ -21,6 +21,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".Map_Meet"></activity>
         <activity android:name=".MapRelatedClasses.CatchUp" />
         <activity
             android:name=".MainClasses.MPage"

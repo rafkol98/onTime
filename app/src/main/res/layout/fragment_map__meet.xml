@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainClasses.fragments.Tab0">
+
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/mapMeet"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        />
+
+    <Button
+        android:id="@+id/confirmButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="60dp"
+        android:layout_marginRight="60dp"
+        android:layout_marginBottom="16dp"
+        android:alpha="0.90"
+        android:background="@drawable/custom_button2"
+        android:paddingLeft="20dp"
+        android:paddingTop="25dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="25dp"
+        android:text="Confirm"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/mapMeet"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

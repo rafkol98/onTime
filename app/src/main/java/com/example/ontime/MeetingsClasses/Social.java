@@ -10,13 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.example.ontime.Plan_Meeting;
 import com.example.ontime.R;
 
 
 public class Social extends Fragment {
 
     //Initialise variables.
-    ImageView addFriend_img,friendRequests_img,yourFriends_img;
+    ImageView addFriend_img,friendRequests_img,yourFriends_img,planMeeting_img;
 
 
     public Social() {
@@ -31,11 +32,13 @@ public class Social extends Fragment {
 
         //Initialise view.
         View v = getView();
-        //When user clicks on addFriend_img take him to the appropriate fragment.
+        //Assign imgs from view to variables.
         addFriend_img = v.findViewById(R.id.addFriend_img);
         friendRequests_img = v.findViewById(R.id.friend_requests_img);
         yourFriends_img = v.findViewById(R.id.yourFriends_img);
+        planMeeting_img = v.findViewById(R.id.planMeeting_img);
 
+        //onclick listeners
         addFriend_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,6 +87,23 @@ public class Social extends Fragment {
                 transaction.commit();
             }
         });
+
+        planMeeting_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment newFragment = new Plan_Meeting();
+                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+
+                // Replace whatever is in the fragment_container view with this fragment,
+                // and add the transaction to the back stack if needed
+                transaction.replace(R.id.fragment_container, newFragment);
+                transaction.addToBackStack(null);
+
+                // Commit the transaction
+                transaction.commit();
+            }
+        });
+
     }
 
 
