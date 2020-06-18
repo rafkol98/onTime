@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_weight="66.6"
+        android:textColor="@color/blgrey"
         android:gravity="center"
         android:text="TextView1"
         android:textAlignment="center" />
@@ -24,6 +25,7 @@
         <TextView
             android:gravity="center"
             android:text="TextView2"
+            android:textColor="@color/blgrey"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:id="@+id/textDate"/>
@@ -31,6 +33,7 @@
         <TextView
             android:gravity="center"
             android:text="TextView3"
+            android:textColor="@color/blgrey"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:id="@+id/textTime"
