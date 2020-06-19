@@ -226,8 +226,6 @@ public class Service extends android.app.Service {
 
                 determineTimeFromTripDestination();
 
-                shouldAlert();
-
                 Log.d("LOCATION_UPDATE", latitude + "," + longitude);
             }
         }
@@ -258,6 +256,9 @@ public class Service extends android.app.Service {
         latitude = Math.toRadians(latitude);
         longitude = Math.toRadians(longitude);
 
+        String uId = currentFirebaseUser.getUid();
+        double speed = dbRef.child(uId).child("Average Speed");
+
         for (Trip trip : trips) {
             if (trip.getLatitude() != 0.0 || trip.getLongitude() != 0.0){
                 double destLat = Math.toRadians(trip.getLatitude());
@@ -276,6 +277,7 @@ public class Service extends android.app.Service {
                 // Radius in miles
                // double r = 3956;
                 trip.setDistanceFrom(r * c);
+
             }
         }
     }
