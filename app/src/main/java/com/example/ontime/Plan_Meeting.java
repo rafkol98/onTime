@@ -79,29 +79,26 @@ public class Plan_Meeting extends Fragment {
                         if (child.child("status").getValue().equals("Friends")) {
                             friendUId = child.getKey();
                             uIdList.add(friendUId);
+                            booleansList.add(false);
                         }
-
-
                     } catch (NullPointerException e) {
                         FirebaseCrashlytics.getInstance().recordException(e);
                     }
-
-
                 }
 
 
-                Log.d("uidList size", uIdList.size() + " jjj " + uIdList.get(0));
+
 
 
 //                    final String[] arrayFriends = (String[]) friendsList.toArray();
 
-
+              final ArrayList<String> x = (ArrayList) getEmailsOfAllFriends(uIdList);
 
 
                 selectBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String[] finalArrayFriends = toPrimitiveArrayString(uIdList);
+                        String[] finalArrayFriends = toPrimitiveArrayString(x);
 
 
                         final boolean[] arrayBoolean = toPrimitiveArray(booleansList);
@@ -235,6 +232,39 @@ public class Plan_Meeting extends Fragment {
     }
 
 
+
+    public List<String> getEmailsOfAllFriends(List<String> listIn){
+
+        final List<String> listWithEmails = new ArrayList<>();
+
+        for(int i=0; i<listIn.size();i++){
+
+            profRef.child(listIn.get(i)).child("Email").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                try {
+                    String friendEmail = (String) dataSnapshot.getValue();
+                    listWithEmails.add(friendEmail);
+                } catch (NullPointerException e) {
+                    FirebaseCrashlytics.getInstance().recordException(e);
+                }
+
+            }
+
+                @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+        }
+
+
+        return listWithEmails;
+    }
+
 //    //adds the email of the friend to the tempList that is gonna be used to show all the user's friends.
 //    public void addEmailOfFriendToList(String friendUID){
 //
@@ -259,4 +289,6 @@ public class Plan_Meeting extends Fragment {
 //            }
 //        });
 //    }
+
+
 }
