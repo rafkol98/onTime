@@ -37,7 +37,8 @@ import java.util.Date;
 /**
  * This class is used to enable the user to select the date and time of the trip.
  */
-public class SelectTime extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerFragment.TimePickerListener {
+public class SelectTime extends AppCompatActivity implements DatePickerDialog.OnDateSetListener,
+                                                            TimePickerFragment.TimePickerListener {
 
     /*
     Declare variables.
@@ -54,7 +55,10 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
     double time, tt;
     DateTimeCheck dateTimeCheck;
 
-    //Gets
+    /**
+     *
+     * @return time
+     */
     public double getTime() {
         return time;
     }
@@ -161,7 +165,7 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
         int temp = (int) timeToWalk;
 
         //Get time in difference between current date and trip's desired date.
-        int minutesDate = dateTimeCheck.getDateDiff(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"), strDate, dateSelected);
+        int minutesDate = DateTimeCheck.getDateDiff(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"), strDate, dateSelected);
 
 
         if ((dateText.getText().toString()).equalsIgnoreCase("date") && (timeText.getText().toString()).equalsIgnoreCase("time")) {
@@ -235,6 +239,8 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
 
 
         trip = new Trip(destinationPassed, timestamp);
+        trip.setShouldAlert(false);
+
         //Get uId of the Firebase User.
         String uId = currentFirebaseUser.getUid();
         //Create a unique Hash Key for the Trip.
