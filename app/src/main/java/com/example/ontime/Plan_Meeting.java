@@ -27,7 +27,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 
@@ -45,11 +47,14 @@ public class Plan_Meeting extends Fragment {
 
     String destinationConfirmed;
 
+//    SetUniqueList
+
 
     String friendUId;
 
 
     ArrayList<String> friendsList = new ArrayList<>();
+    ArrayList<String> friendsCopy;
     List<Boolean> booleansList = new ArrayList<>();
 
     ArrayList<String> uIdList = new ArrayList<>();
@@ -67,8 +72,7 @@ public class Plan_Meeting extends Fragment {
         //Get uId of the user from the database.
         final String uId = currentFirebaseUser.getUid();
 
-//        Find the friends of the current user and add them in a list.
-
+        //Find the friends of the current user and add them in a list.
         dbRef.child(uId).child("friends").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -86,19 +90,14 @@ public class Plan_Meeting extends Fragment {
                     }
                 }
 
+                //Use the getEmailsOfAllFriends method to get the email of all the friends using their uId.
+                final ArrayList<String> emailsOfAllFriends = (ArrayList) getEmailsOfAllFriends(uIdList);
 
-
-
-
-//                    final String[] arrayFriends = (String[]) friendsList.toArray();
-
-              final ArrayList<String> x = (ArrayList) getEmailsOfAllFriends(uIdList);
-
-
+                //When the user clicks "select" open the alert dialog to enable the user to select the friends he want to share the trip with.
                 selectBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String[] finalArrayFriends = toPrimitiveArrayString(x);
+                        String[] finalArrayFriends = toPrimitiveArrayString(emailsOfAllFriends);
 
 
                         final boolean[] arrayBoolean = toPrimitiveArray(booleansList);
@@ -107,19 +106,35 @@ public class Plan_Meeting extends Fragment {
                         alertDialogBuilder.setCancelable(true);
                         alertDialogBuilder.setTitle("Select friends to share the meeting");
                         alertDialogBuilder.setMultiChoiceItems(finalArrayFriends, arrayBoolean, new DialogInterface.OnMultiChoiceClickListener() {
-
+                            //When the user ticks on an email, add them on the list.
                             @Override
                             public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                                arrayBoolean[which] = isChecked;
+                                if (isChecked) {
+                                    //add the item if it doesn't exist in the list.
+                                    if (!friendsList.contains(emailsOfAllFriends.get(which))) {
+                                        friendsList.add(emailsOfAllFriends.get(which));
+                                    }
+                                }
                             }
                         });
 
+                        //When the user clicks confirm, add all the selected items in the friendsCopy.
                         alertDialogBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                System.out.println("Friends list elements" + friendsList);
+
+                                //Create a new copied array from the elements selected.
+                                friendsCopy = new ArrayList<>(friendsList);
+
+                                for (int i = 0; i < friendsList.size(); i++) {
+                                    friendsList.remove(i);
+                                }
 
                             }
                         });
+
+                        Log.d("friends copy list",friendsCopy+"");
 
                         AlertDialog alertDialog = alertDialogBuilder.create();
                         alertDialog.setCanceledOnTouchOutside(true);
@@ -201,7 +216,6 @@ public class Plan_Meeting extends Fragment {
     }
 
 
-
     public static String[] GetStringArray(ArrayList<String> arr) {
         // declaration and initialise String Array
         String str[] = new String[arr.size()];
@@ -232,31 +246,30 @@ public class Plan_Meeting extends Fragment {
     }
 
 
-
-    public List<String> getEmailsOfAllFriends(List<String> listIn){
+    public List<String> getEmailsOfAllFriends(List<String> listIn) {
 
         final List<String> listWithEmails = new ArrayList<>();
 
-        for(int i=0; i<listIn.size();i++){
+        for (int i = 0; i < listIn.size(); i++) {
 
             profRef.child(listIn.get(i)).child("Email").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                try {
-                    String friendEmail = (String) dataSnapshot.getValue();
-                    listWithEmails.add(friendEmail);
-                } catch (NullPointerException e) {
-                    FirebaseCrashlytics.getInstance().recordException(e);
+                    try {
+                        String friendEmail = (String) dataSnapshot.getValue();
+                        listWithEmails.add(friendEmail);
+                    } catch (NullPointerException e) {
+                        FirebaseCrashlytics.getInstance().recordException(e);
+                    }
+
                 }
 
-            }
-
                 @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
 
 
         }
@@ -264,31 +277,6 @@ public class Plan_Meeting extends Fragment {
 
         return listWithEmails;
     }
-
-//    //adds the email of the friend to the tempList that is gonna be used to show all the user's friends.
-//    public void addEmailOfFriendToList(String friendUID){
-//
-//        profRef.child(friendUID).child("Email").addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//
-//                try {
-//                    String friendEmail = (String) dataSnapshot.getValue();
-//                    friendsList.add(friendEmail);
-//                    booleansList.add(false);
-//                } catch (NullPointerException e) {
-//                    FirebaseCrashlytics.getInstance().recordException(e);
-//                }
-//
-//            }
-//
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
 
 
 }

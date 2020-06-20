@@ -7,6 +7,7 @@ import androidx.fragment.app.DialogFragment;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -98,6 +99,7 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
             @Override
             public void onClick(View v) {
                 DialogFragment timePickerFragment = new TimePickerFragment();
+                timePickerFragment.setStyle(DialogFragment.STYLE_NORMAL,R.style.MyTimePickerDialogTheme);
                 timePickerFragment.setCancelable(false);
                 timePickerFragment.show(getSupportFragmentManager(), "timePicker");
             }
