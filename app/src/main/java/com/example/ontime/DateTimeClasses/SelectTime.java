@@ -50,6 +50,9 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
     private TextView dateText;
     private TextView timeText;
 
+
+    double desLat, desLng;
+
     Trip trip;
     Map map;
     double time, tt;
@@ -88,6 +91,9 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
             destinationPassed = extras.getString("keyMap");
             tt = extras.getDouble("keyTimeToDest");
             stringIn = extras.getString("keyTime");
+            desLat = extras.getDouble("keyLatitude");
+            desLng = extras.getDouble("keyLongitude");
+
         }
 
 
@@ -238,7 +244,8 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
         Long timestamp = toMilli(dateSelected);
 
 
-        trip = new Trip(destinationPassed, timestamp);
+        trip = new Trip(destinationPassed, timestamp,desLat,desLng);
+
         trip.setShouldAlert(false);
 
         //Get uId of the Firebase User.

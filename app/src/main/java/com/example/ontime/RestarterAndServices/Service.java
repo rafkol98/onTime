@@ -1,6 +1,7 @@
 package com.example.ontime.RestarterAndServices;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -275,14 +276,20 @@ public class Service extends android.app.Service {
             // Get distance between two points in meters
             Location.distanceBetween(latitude, longitude, trip.getLatitude(), trip.getLongitude(), results);
 
+
+            Log.d("lat lng of trip", trip.getLatitude() +" "+ trip.getLongitude());
             // Convert the distance to kilometers
             float distanceInKMs = results[0]/1000;
+
+            Log.d("dame distance in Kms",distanceInKMs+"");
 
             // Set the distance from the trip
             trip.setDistanceFrom(results[0]);
 
             // Get the time to reach in milliseconds based on the users average speed
             double timeToReachMs = (distanceInKMs/avgSpeed)*3600000;
+
+            Log.d("time to reach in milli", timeToReachMs+"");
 
             // Instantiate a new calendar object
             Calendar calendar = Calendar.getInstance();
@@ -292,6 +299,10 @@ public class Service extends android.app.Service {
 
             // Get the time of the of when they would arrive in milliseconds
             long time = calendar.getTimeInMillis();
+
+            Log.d("time arrival start now", time+"");
+
+            Log.d("trip timestamp", trip.getTimestamp()+"");
 
             // Determine if they should leave within 10 minutes
             boolean shouldAlert = (trip.getTimestamp()-time) < 600000;
@@ -311,6 +322,7 @@ public class Service extends android.app.Service {
     /**
      * Start the service, get location of the user every 4 seconds.
      */
+    @SuppressLint("MissingPermission")
     private void startLocationService() {
 
         Log.d(TAG, "Trying to start location......");
