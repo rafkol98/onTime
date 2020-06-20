@@ -3,6 +3,7 @@ package com.example.ontime.RestarterAndServices;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Looper;
@@ -30,7 +31,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -44,6 +47,8 @@ public class Service extends android.app.Service {
     private static Service mCurrentService;
     private int counter = 0;
     private ArrayList<Trip> trips;
+
+    private static double avgSpeed;
 
     //get firebase user.
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -224,27 +229,15 @@ public class Service extends android.app.Service {
 
                 calculateDistanceFromTripDestination(latitude, longitude);
 
-                determineTimeFromTripDestination();
+                updateTrips();
 
                 Log.d("LOCATION_UPDATE", latitude + "," + longitude);
             }
         }
     };
 
-    private void shouldAlert() {
-        for (Trip trip : trips) {
-            if (trip.getShouldAlert()){
-                // ALERT THE USER ABOUT THE TRIP
-            }
-        }
-    }
+    private void updateTrips() {
 
-    private void determineTimeFromTripDestination() {
-        String uId = currentFirebaseUser.getUid();
-        double speed = dbRef.child(uId).child("Average Speed")
-        for (Trip trip : trips) {
-
-        }
     }
 
     /**
@@ -253,34 +246,67 @@ public class Service extends android.app.Service {
      * @param longitude of the users current location
      */
     private void calculateDistanceFromTripDestination(double latitude, double longitude) {
-        latitude = Math.toRadians(latitude);
-        longitude = Math.toRadians(longitude);
+        float[] results = new float[1];
 
-        String uId = currentFirebaseUser.getUid();
-        double speed = dbRef.child(uId).child("Average Speed");
+        if (avgSpeed == 0){
+            String uId = currentFirebaseUser.getUid();
+            dbRef.child(uId).child("Average Speed").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    try {
+                        avgSpeed = Double.valueOf(dataSnapshot.getValue().toString());
+                    } catch (NullPointerException e) {
+                        FirebaseCrashlytics.getInstance().recordException(e);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    System.out.println("The read failed: " + databaseError.getCode());
+                    FirebaseCrashlytics.getInstance().log(databaseError.getMessage());
+                }
+            });
+        }
+
+        // Skip if failed to obtain the users speed
+        if (avgSpeed == 0) return;
 
         for (Trip trip : trips) {
-            if (trip.getLatitude() != 0.0 || trip.getLongitude() != 0.0){
-                double destLat = Math.toRadians(trip.getLatitude());
-                double destLng = Math.toRadians(trip.getLongitude());
+            // Get distance between two points in meters
+            Location.distanceBetween(latitude, longitude, trip.getLatitude(), trip.getLongitude(), results);
 
-                double delta_lng = destLng - longitude;
-                double delta_lat = destLat - latitude;
-                double a = Math.pow(Math.sin(delta_lat / 2), 2)
-                        + Math.cos(latitude) * Math.cos(destLat)
-                        * Math.pow(Math.sin(delta_lng / 2), 2);
+            // Convert the distance to kilometers
+            float distanceInKMs = results[0]/1000;
 
-                double c = 2 * Math.asin(Math.sqrt(a));
+            // Set the distance from the trip
+            trip.setDistanceFrom(results[0]);
 
-                // Radius in kilometers
-                double r = 6371;
-                // Radius in miles
-               // double r = 3956;
-                trip.setDistanceFrom(r * c);
+            // Get the time to reach in milliseconds based on the users average speed
+            double timeToReachMs = (distanceInKMs/avgSpeed)*3600000;
 
+            // Instantiate a new calendar object
+            Calendar calendar = Calendar.getInstance();
+
+            // Add the time it would take to reach in milliseconds to the users current time
+            calendar.add(Calendar.MILLISECOND, (int) timeToReachMs);
+
+            // Get the time of the of when they would arrive in milliseconds
+            long time = calendar.getTimeInMillis();
+
+            // Determine if they should leave within 10 minutes
+            boolean shouldAlert = (trip.getTimestamp()-time) < 600000;
+
+            trip.setShouldAlert(shouldAlert);
+
+            if (shouldAlert) {
+                Notification.showNotification(getApplicationContext(),
+                        "Should start walking",
+                        "Start walking to " + trip.getDestination() +" in order to arrive on time.",
+                        R.drawable.ic_notification);
             }
         }
     }
+
 
     /**
      * Start the service, get location of the user every 4 seconds.
