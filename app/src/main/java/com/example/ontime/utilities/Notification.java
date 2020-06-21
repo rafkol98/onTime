@@ -157,6 +157,49 @@ public class Notification {
      * @param title - Title of the notification to be displayed
      * @param text - Body of the notification to be displayed
      * @param icon - Icon to be displayed on the notification
+     */
+    public static void showNotification(Context context, String title, String text, int icon, int id) {
+        NotificationManager notificationManager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        android.app.Notification notification = getNotificationBuilder(context)
+                .setSmallIcon(icon)
+                .setContentTitle(title)
+                .setContentText(text)
+                .build();
+
+        if (notificationManager != null) {
+            notificationManager.notify(id, notification);
+        }
+    }
+
+    /**
+     * Display a notification to the user.
+     * @param context - Given application context
+     * @param title - Title of the notification to be displayed
+     * @param text - Body of the notification to be displayed
+     * @param icon - Icon to be displayed on the notification
+     */
+    public static void showNotification(Context context, String title, String text, int icon,
+                                        int id, int importance) {
+        NotificationManager notificationManager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        android.app.Notification notification = getNotificationBuilder(context, importance)
+                .setSmallIcon(icon)
+                .setContentTitle(title)
+                .setContentText(text)
+                .build();
+
+        if (notificationManager != null) {
+            notificationManager.notify(id, notification);
+        }
+    }
+
+    /**
+     * Display a notification to the user.
+     * @param context - Given application context
+     * @param title - Title of the notification to be displayed
+     * @param text - Body of the notification to be displayed
+     * @param icon - Icon to be displayed on the notification
      * @param intent - Intent to be activated when user interacts with notification
      */
     public static void showNotification(Context context, String title, String text, int icon, PendingIntent intent) {
@@ -180,9 +223,23 @@ public class Notification {
      * @param context - Given application context
      * @return the notification builder modified for the appropriate API
      */
+    public static NotificationCompat.Builder getNotificationBuilder(Context context, int importance) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createDefaultNotificationChannel(context, importance);
+        }
+        NotificationCompat.Builder builder
+                = new NotificationCompat.Builder(context, context.getString(R.string.CHANNEL_ID));
+        return builder;
+    }
+
+    /**
+     * Obtain the appropriate Notification Builder for the API of the users' device.
+     * @param context - Given application context
+     * @return the notification builder modified for the appropriate API
+     */
     public static NotificationCompat.Builder getNotificationBuilder(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            createDefaultNotificationChannel(context);
+            createDefaultNotificationChannel(context, NotificationManager.IMPORTANCE_LOW);
         }
         NotificationCompat.Builder builder
                 = new NotificationCompat.Builder(context, context.getString(R.string.CHANNEL_ID));
@@ -195,18 +252,18 @@ public class Notification {
      * @param context - Given application context
      */
     @RequiresApi(Build.VERSION_CODES.O)
-    private static void createDefaultNotificationChannel(Context context) {
+    private static void createDefaultNotificationChannel(Context context, int importance) {
         NotificationManager notificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         String appName = context.getString(R.string.app_name);
         NotificationChannel channel = new NotificationChannel(context.getString(R.string.CHANNEL_ID),
                 appName, NotificationManager.IMPORTANCE_DEFAULT);
-        channel.setImportance(NotificationManager.IMPORTANCE_LOW);
+        channel.setImportance(importance);
         String description = "I would like to receive travel alerts and notifications for:";
         channel.setDescription(description);
-
         if (notificationManager != null) {
             notificationManager.createNotificationChannel(channel);
         }
+
     }
 }

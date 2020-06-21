@@ -2,6 +2,7 @@ package com.example.ontime.RestarterAndServices;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -13,6 +14,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.ontime.MainClasses.Trip;
 import com.example.ontime.MainClasses.TripListAdapter;
@@ -48,6 +50,11 @@ public class Service extends android.app.Service {
     private static Service mCurrentService;
     private int counter = 0;
     private ArrayList<Trip> trips;
+
+    private final String[] PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION};
+
+    static final int PERMISSION_ALL = 134;
 
     private static double avgSpeed;
 
@@ -307,13 +314,23 @@ public class Service extends android.app.Service {
             // Determine if they should leave within 10 minutes
             boolean shouldAlert = (trip.getTimestamp()-time) < 600000;
 
-            trip.setShouldAlert(shouldAlert);
-
             if (shouldAlert) {
-                Notification.showNotification(getApplicationContext(),
-                        "Should start walking",
-                        "Start walking to " + trip.getDestination() +" in order to arrive on time.",
-                        R.drawable.ic_notification);
+                if (trip.getShouldAlert()) {
+                    int id = trip.getTripId(trip.getDestination(), trip.getDate(), trip.getTime());
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        Notification.showNotification(getApplicationContext(),
+                                "Should start walking",
+                                "Start walking to " + trip.getDestination() + " in order to arrive on time.",
+                                R.drawable.ic_notification, id, NotificationManager.IMPORTANCE_HIGH);
+                    } else {
+                        Notification.showNotification(getApplicationContext(),
+                                "Should start walking",
+                                "Start walking to " + trip.getDestination() + " in order to arrive on time.",
+                                R.drawable.ic_notification, id);
+                    }
+                    trip.setShouldAlert(false);
+                }
             }
         }
     }
@@ -332,8 +349,13 @@ public class Service extends android.app.Service {
         locationRequest.setFastestInterval(2000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-        LocationServices.getFusedLocationProviderClient(this).
-                requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            LocationServices.getFusedLocationProviderClient(this).
+                    requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
+        } else {
+            //ActivityCompat.requestPermissions(, PERMISSIONS, PERMISSION_ALL);
+        }
     }
 
 

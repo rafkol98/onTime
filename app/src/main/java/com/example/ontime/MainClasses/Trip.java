@@ -15,7 +15,7 @@ public class Trip implements Comparable<Trip>{
     Long timestamp;
     Object object;
     double distanceFrom;
-    boolean shouldAlert;
+    boolean shouldAlert = true;
 
     /**
      * Constructor
