@@ -14,7 +14,7 @@ public class Trip implements Comparable<Trip>{
     String time;
     Long timestamp;
     Object object;
-    double distanceFrom;
+    double flagValue;
     boolean shouldAlert = true;
 
     /**
@@ -42,6 +42,9 @@ public class Trip implements Comparable<Trip>{
         this.latitude = latitude;
         this.longitude = longitude;
     }
+
+
+
 
     /**
      * Constructor
@@ -107,15 +110,15 @@ public class Trip implements Comparable<Trip>{
 
     /**
      * Setter for Distance from
-     * @param distanceFrom the distance of the users current location from trip destination
+     * @param flagValue the distance of the users current location from trip destination
      */
-    public void setDistanceFrom(double distanceFrom) { this.distanceFrom = distanceFrom; }
+    public void setFlagValue(double flagValue) { this.flagValue = flagValue; }
 
     /**
      * Getter for Distance From
      * @return the distance of the users current location from trip destination
      */
-    public double getDistanceFrom () { return distanceFrom; }
+    public double getFlagValue() { return flagValue; }
 
     public boolean getShouldAlert() { return shouldAlert; }
 

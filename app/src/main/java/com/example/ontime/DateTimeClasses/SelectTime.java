@@ -251,7 +251,7 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
         //Get uId of the Firebase User.
         String uId = currentFirebaseUser.getUid();
         //Create a unique Hash Key for the Trip.
-        String tripId = Integer.toString(trip.getTripId(destinationPassed, datePassed, timePassed));
+        String tripId = Long.toString(trip.getTimestamp());
 
         //Store the trip on Firebase RealTime Database.
         DatabaseReference childReff = dbRef.child(uId).child("trips").child(tripId);

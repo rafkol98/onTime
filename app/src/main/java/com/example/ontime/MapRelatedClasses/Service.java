@@ -21,6 +21,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import com.example.ontime.MainClasses.Trip;
+import com.example.ontime.MainClasses.TripListAdapter;
 import com.example.ontime.R;
 import com.example.ontime.RestarterAndServices.Constants;
 import com.example.ontime.RestarterAndServices.ProcessClass;
@@ -76,9 +77,14 @@ public class Service extends android.app.Service {
     private static double avgSpeed;
     private double timeToDest;
 
+    int valueFlag;
+
     //get firebase user.
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/profiles");
+
+    //write current location on the database.
+    final String uId = currentFirebaseUser.getUid();
 
 
     /**
@@ -109,6 +115,7 @@ public class Service extends android.app.Service {
                 "Location Services Running",
                 "To ensure accuracy please do not cancel.",
                 R.drawable.ic_notification));
+
 
         trips = new ArrayList<>();
         getTrips();
@@ -231,8 +238,7 @@ public class Service extends android.app.Service {
                 double latitude = locationResult.getLastLocation().getLatitude();
                 double longitude = locationResult.getLastLocation().getLongitude();
 
-                //write current location on the database.
-                final String uId = currentFirebaseUser.getUid();
+
 
                 DatabaseReference childReff = dbRef.child(uId).child("Current Location");
 
@@ -300,11 +306,13 @@ public class Service extends android.app.Service {
         if (avgSpeed == 0) return;
 
         for (Trip trip : trips) {
-            //call the GeoService for every trip. The GeoService calculates in its calculateTimeAndDist method how much time the user needs to walk there from his current location.
-            GeoService geoService = new GeoService(trip);
-            String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + latitude + "," + longitude + "&destinations=" + trip.getLatitude() + "," + trip.getLongitude() + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
-            Log.d("url string", url);
-            geoService.execute(url);
+
+                //call the GeoService for every trip. The GeoService calculates in its calculateTimeAndDist method how much time the user needs to walk there from his current location.
+                GeoService geoService = new GeoService(trip);
+                String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + latitude + "," + longitude + "&destinations=" + trip.getLatitude() + "," + trip.getLongitude() + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
+                Log.d("url string", url);
+                geoService.execute(url);
+
         }
     }
 
@@ -371,7 +379,6 @@ public class Service extends android.app.Service {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     String destination = "";
                     Long timestamp;
@@ -382,6 +389,7 @@ public class Service extends android.app.Service {
                         destination = child.child("destination").getValue().toString();
                         latitude = child.child("latitude").getValue(Double.class);
                         longitude = child.child("longitude").getValue(Double.class);
+
                     } catch (NullPointerException e) {
                         FirebaseCrashlytics.getInstance().recordException(e);
                     }
@@ -394,8 +402,11 @@ public class Service extends android.app.Service {
                     }
                     trips.add(trip);
                 }
-
-                Collections.sort(trips);
+                try {
+                    Collections.sort(trips);
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
 
             }
 
@@ -442,6 +453,26 @@ public class Service extends android.app.Service {
             if (result != null) {
                 double timeToDest = calculateTimeAndDist(result);
 
+                //Read flag's value
+                dbRef.child(uId).child("trips").child((trip.getTimestamp()).toString()).child("flagValue").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        try {
+                            valueFlag = Integer.valueOf(dataSnapshot.getValue().toString());
+                            Log.d("valueFlag value: ", valueFlag + "");
+                        } catch (NullPointerException e) {
+                            FirebaseCrashlytics.getInstance().recordException(e);
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        System.out.println("The read failed: " + databaseError.getCode());
+                        FirebaseCrashlytics.getInstance().log(databaseError.getMessage());
+                    }
+                });
+
 //                 Instantiate a new calendar object
                     Calendar calendar = Calendar.getInstance();
 
@@ -458,7 +489,7 @@ public class Service extends android.app.Service {
                 //if the difference is less than 10 minutes notify user.
                 boolean shouldAlert = (trip.getTimestamp() - time) < 600000;
 
-                if (shouldAlert) {
+                if (shouldAlert && valueFlag==0) {
                     if (trip.getShouldAlert()) {
                         int id = trip.getTripId(trip.getDestination(), trip.getDate(), trip.getTime());
 
@@ -485,6 +516,31 @@ public class Service extends android.app.Service {
                             v.vibrate(2000);
                         }
                         trip.setShouldAlert(false);
+
+                        //write current location on the database.
+                        final String uId = currentFirebaseUser.getUid();
+
+                        DatabaseReference flagReff = dbRef.child(uId).child("trips").child((trip.getTimestamp()).toString()).child("flagValue");
+
+                        int newValueFlag = 1;
+
+                        flagReff.setValue(newValueFlag, new DatabaseReference.CompletionListener() {
+                            /**
+                             * Upon completion of setValue, log the completion results in FirebaseCrashlytics
+                             * @param databaseError containing details of error if one occurred
+                             * @param databaseReference reference of database
+                             */
+                            @Override
+                            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                                if (databaseError != null) {
+                                    FirebaseCrashlytics.getInstance().log(databaseError.getMessage());
+                                    FirebaseCrashlytics.getInstance().log(databaseError.getDetails());
+                                } else {
+                                    FirebaseCrashlytics.getInstance().log("Successful write of Location");
+                                }
+                            }
+                        });
+
                     }
                 }
 
