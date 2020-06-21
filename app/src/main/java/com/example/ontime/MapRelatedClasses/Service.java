@@ -12,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Looper;
+import android.os.Vibrator;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -299,6 +300,7 @@ public class Service extends android.app.Service {
         if (avgSpeed == 0) return;
 
         for (Trip trip : trips) {
+            //call the GeoService for every trip. The GeoService calculates in its calculateTimeAndDist method how much time the user needs to walk there from his current location.
             GeoService geoService = new GeoService(trip);
             String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + latitude + "," + longitude + "&destinations=" + trip.getLatitude() + "," + trip.getLongitude() + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
             Log.d("url string", url);
@@ -405,6 +407,9 @@ public class Service extends android.app.Service {
     }
 
 
+    /**
+     * Inner class to calculate with distance matrix api the time needed to walk to each location.
+     */
     class GeoService extends AsyncTask<String, Void, String> {
         ProgressDialog pd;
         Context mContext;
@@ -427,8 +432,7 @@ public class Service extends android.app.Service {
         //
 
         /**
-         * This function is executed after the execution of "doInBackground(String...params)" to dismiss
-         * the displayed progress dialog and call "setDouble(Double)" defined in "MainActivity.java"
+         * This function is executed after the execution of "doInBackground(String...params)" it calculates whetet to notify the user to start walking or not.
          *
          * @param result
          */
@@ -451,7 +455,7 @@ public class Service extends android.app.Service {
 
                 System.out.println(" ");
 
-
+                //if the difference is less than 10 minutes notify user.
                 boolean shouldAlert = (trip.getTimestamp() - time) < 600000;
 
                 if (shouldAlert) {
@@ -461,13 +465,24 @@ public class Service extends android.app.Service {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                             Notification.showNotification(getApplicationContext(),
                                     "Should start walking",
-                                    "Start walking to " + trip.getDestination() + " in order to arrive on time.",
+                                    "In 10 minutes start walking to " + trip.getDestination() + " in order to arrive on time.",
                                     R.drawable.ic_notification, id, NotificationManager.IMPORTANCE_MAX);
+
+
+                            Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+                            // Vibrate for 2000 milliseconds
+                            v.vibrate(2000);
+
+
                         } else {
                             Notification.showNotification(getApplicationContext(),
                                     "Should start walking",
-                                    "Start walking to " + trip.getDestination() + " in order to arrive on time.",
+                                    "In 10 minutes start walking to " + trip.getDestination() + " in order to arrive on time.",
                                     R.drawable.ic_notification, id);
+
+                            Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+                            // Vibrate for 2000 milliseconds
+                            v.vibrate(2000);
                         }
                         trip.setShouldAlert(false);
                     }

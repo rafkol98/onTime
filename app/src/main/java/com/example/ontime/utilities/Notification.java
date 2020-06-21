@@ -273,6 +273,8 @@ public class Notification {
         NotificationChannel channel = new NotificationChannel(context.getString(R.string.CHANNEL_ID),
                 appName, NotificationManager.IMPORTANCE_DEFAULT);
         channel.setImportance(importance);
+
+        //I ADDED THESE.
         channel.setLightColor(Color.RED);
         channel.setVibrationPattern(new long[] {0,2000});
         AudioAttributes audioAttributes = new AudioAttributes.Builder()
@@ -280,6 +282,8 @@ public class Notification {
                 .setUsage(AudioAttributes.USAGE_NOTIFICATION)
                 .build();
         channel.setSound(Settings.System.DEFAULT_NOTIFICATION_URI,audioAttributes);
+
+
         String description = "I would like to receive travel alerts and notifications for:";
         channel.setDescription(description);
         if (notificationManager != null) {
