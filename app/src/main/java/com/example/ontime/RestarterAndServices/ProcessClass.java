@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 
+import com.example.ontime.MapRelatedClasses.Service;
+
 /**
  * This class is used to launch the service for Build SDK Versions BELOW Lollipop.
  * The service is launched in the MPage class (in the MainClasses Package).

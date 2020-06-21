@@ -4,9 +4,15 @@ package com.example.ontime.utilities;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.media.AudioAttributes;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
+import android.provider.Settings;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
@@ -229,6 +235,14 @@ public class Notification {
         }
         NotificationCompat.Builder builder
                 = new NotificationCompat.Builder(context, context.getString(R.string.CHANNEL_ID));
+        //Vibrate in notifications.
+       builder.setVibrate(new long[]{0, 500, 1000});
+
+        //Set the LED to red.
+        builder.setLights(Color.RED, 3000, 3000);
+
+        //Set the tone for the notification.
+        builder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
         return builder;
     }
 
@@ -259,6 +273,13 @@ public class Notification {
         NotificationChannel channel = new NotificationChannel(context.getString(R.string.CHANNEL_ID),
                 appName, NotificationManager.IMPORTANCE_DEFAULT);
         channel.setImportance(importance);
+        channel.setLightColor(Color.RED);
+        channel.setVibrationPattern(new long[] {0,2000});
+        AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                .build();
+        channel.setSound(Settings.System.DEFAULT_NOTIFICATION_URI,audioAttributes);
         String description = "I would like to receive travel alerts and notifications for:";
         channel.setDescription(description);
         if (notificationManager != null) {

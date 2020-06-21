@@ -1,29 +1,34 @@
-package com.example.ontime.RestarterAndServices;
+package com.example.ontime.MapRelatedClasses;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.NotificationManager;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.ontime.MainClasses.Trip;
-import com.example.ontime.MainClasses.TripListAdapter;
 import com.example.ontime.R;
+import com.example.ontime.RestarterAndServices.Constants;
+import com.example.ontime.RestarterAndServices.ProcessClass;
 import com.example.ontime.utilities.Notification;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
@@ -33,10 +38,21 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -57,10 +73,12 @@ public class Service extends android.app.Service {
     static final int PERMISSION_ALL = 134;
 
     private static double avgSpeed;
+    private double timeToDest;
 
     //get firebase user.
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/profiles");
+
 
     /**
      *
@@ -70,7 +88,6 @@ public class Service extends android.app.Service {
     }
 
     /**
-     *
      * @param intent
      * @param flags
      * @param startId
@@ -97,6 +114,7 @@ public class Service extends android.app.Service {
         startTimer();
         startLocationService();
 
+
         // return START_STICKY so if it is killed by android, it will be restarted with Intent null
         return START_STICKY;
     }
@@ -114,7 +132,6 @@ public class Service extends android.app.Service {
     }
 
     /**
-     *
      * @param intent
      * @return null
      */
@@ -161,6 +178,7 @@ public class Service extends android.app.Service {
 
     /**
      * This is called when the process is killed by Android
+     *
      * @param rootIntent
      */
     @Override
@@ -250,13 +268,14 @@ public class Service extends android.app.Service {
 
     /**
      * Calculate the distance from current location to the destination location in kilometers
-     * @param latitude of the users current location
+     *
+     * @param latitude  of the users current location
      * @param longitude of the users current location
      */
     private void calculateDistanceFromTripDestination(double latitude, double longitude) {
         float[] results = new float[1];
 
-        if (avgSpeed == 0){
+        if (avgSpeed == 0) {
             String uId = currentFirebaseUser.getUid();
             dbRef.child(uId).child("Average Speed").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -280,58 +299,10 @@ public class Service extends android.app.Service {
         if (avgSpeed == 0) return;
 
         for (Trip trip : trips) {
-            // Get distance between two points in meters
-            Location.distanceBetween(latitude, longitude, trip.getLatitude(), trip.getLongitude(), results);
-
-
-            Log.d("lat lng of trip", trip.getLatitude() +" "+ trip.getLongitude());
-            // Convert the distance to kilometers
-            float distanceInKMs = results[0]/1000;
-
-            Log.d("dame distance in Kms",distanceInKMs+"");
-
-            // Set the distance from the trip
-            trip.setDistanceFrom(results[0]);
-
-            // Get the time to reach in milliseconds based on the users average speed
-            double timeToReachMs = (distanceInKMs/avgSpeed)*3600000;
-
-            Log.d("time to reach in milli", timeToReachMs+"");
-
-            // Instantiate a new calendar object
-            Calendar calendar = Calendar.getInstance();
-
-            // Add the time it would take to reach in milliseconds to the users current time
-            calendar.add(Calendar.MILLISECOND, (int) timeToReachMs);
-
-            // Get the time of the of when they would arrive in milliseconds
-            long time = calendar.getTimeInMillis();
-
-            Log.d("time arrival start now", time+"");
-
-            Log.d("trip timestamp", trip.getTimestamp()+"");
-
-            // Determine if they should leave within 10 minutes
-            boolean shouldAlert = (trip.getTimestamp()-time) < 600000;
-
-            if (shouldAlert) {
-                if (trip.getShouldAlert()) {
-                    int id = trip.getTripId(trip.getDestination(), trip.getDate(), trip.getTime());
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        Notification.showNotification(getApplicationContext(),
-                                "Should start walking",
-                                "Start walking to " + trip.getDestination() + " in order to arrive on time.",
-                                R.drawable.ic_notification, id, NotificationManager.IMPORTANCE_HIGH);
-                    } else {
-                        Notification.showNotification(getApplicationContext(),
-                                "Should start walking",
-                                "Start walking to " + trip.getDestination() + " in order to arrive on time.",
-                                R.drawable.ic_notification, id);
-                    }
-                    trip.setShouldAlert(false);
-                }
-            }
+            GeoService geoService = new GeoService(trip);
+            String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + latitude + "," + longitude + "&destinations=" + trip.getLatitude() + "," + trip.getLongitude() + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
+            Log.d("url string", url);
+            geoService.execute(url);
         }
     }
 
@@ -391,7 +362,7 @@ public class Service extends android.app.Service {
         }
     }
 
-    private void getTrips(){
+    private void getTrips() {
         String uId = currentFirebaseUser.getUid();
         //Get trips of the user. Order them so that the closest one to the current date is first.
         dbRef.child(uId).child("trips").orderByChild("timestamp").addValueEventListener(new ValueEventListener() {
@@ -405,7 +376,7 @@ public class Service extends android.app.Service {
                     double latitude = 0.0;
                     double longitude = 0.0;
                     Trip trip;
-                    try{
+                    try {
                         destination = child.child("destination").getValue().toString();
                         latitude = child.child("latitude").getValue(Double.class);
                         longitude = child.child("longitude").getValue(Double.class);
@@ -414,7 +385,7 @@ public class Service extends android.app.Service {
                     }
                     timestamp = child.child("timestamp").getValue(Long.class);
 
-                    if (latitude != 0.0 && longitude != 0.0){
+                    if (latitude != 0.0 && longitude != 0.0) {
                         trip = new Trip(destination, timestamp, latitude, longitude);
                     } else {
                         trip = new Trip(destination, timestamp);
@@ -431,5 +402,149 @@ public class Service extends android.app.Service {
 
             }
         });
+    }
+
+
+    class GeoService extends AsyncTask<String, Void, String> {
+        ProgressDialog pd;
+        Context mContext;
+
+        Trip trip;
+
+        /**
+         * Constructor is used to get the context.
+         *
+         * @param mContext
+         */
+        public GeoService(Context mContext) {
+            this.mContext = mContext;
+        }
+
+        public GeoService(Trip trip) {
+            this.trip = trip;
+        }
+
+        //
+
+        /**
+         * This function is executed after the execution of "doInBackground(String...params)" to dismiss
+         * the displayed progress dialog and call "setDouble(Double)" defined in "MainActivity.java"
+         *
+         * @param result
+         */
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            if (result != null) {
+                double timeToDest = calculateTimeAndDist(result);
+
+//                 Instantiate a new calendar object
+                    Calendar calendar = Calendar.getInstance();
+
+                    // Add the time it would take to reach in milliseconds to the users current time
+                    calendar.add(Calendar.MINUTE, (int) timeToDest);
+
+                    // Get the time of the of when they would arrive in milliseconds
+                    long time = calendar.getTimeInMillis();
+
+                    Log.d("time arrival start now", time + "");
+
+                System.out.println(" ");
+
+
+                boolean shouldAlert = (trip.getTimestamp() - time) < 600000;
+
+                if (shouldAlert) {
+                    if (trip.getShouldAlert()) {
+                        int id = trip.getTripId(trip.getDestination(), trip.getDate(), trip.getTime());
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            Notification.showNotification(getApplicationContext(),
+                                    "Should start walking",
+                                    "Start walking to " + trip.getDestination() + " in order to arrive on time.",
+                                    R.drawable.ic_notification, id, NotificationManager.IMPORTANCE_MAX);
+                        } else {
+                            Notification.showNotification(getApplicationContext(),
+                                    "Should start walking",
+                                    "Start walking to " + trip.getDestination() + " in order to arrive on time.",
+                                    R.drawable.ic_notification, id);
+                        }
+                        trip.setShouldAlert(false);
+                    }
+                }
+
+            }
+        }
+
+
+        /**
+         * Gets duration and distance in the background. Remember, this is an AsyncTask so it doesn't
+         * run with the natural flow of the program. It runs in the background.
+         *
+         * @param params
+         * @return
+         */
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                URL url = new URL(params[0]);
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                con.setRequestMethod("GET");
+                con.connect();
+                int statuscode = con.getResponseCode();
+                if (statuscode == HttpURLConnection.HTTP_OK) {
+                    BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                    StringBuilder sb = new StringBuilder();
+                    String line = br.readLine();
+                    while (line != null) {
+                        sb.append(line);
+                        line = br.readLine();
+                    }
+                    String json = sb.toString();
+                    JSONObject root = new JSONObject(json);
+                    JSONArray array_rows = root.getJSONArray("rows");
+                    JSONObject object_rows = array_rows.getJSONObject(0);
+                    JSONArray array_elements = object_rows.getJSONArray("elements");
+                    JSONObject object_elements = array_elements.getJSONObject(0);
+                    JSONObject object_duration = object_elements.getJSONObject("duration");
+                    JSONObject object_distance = object_elements.getJSONObject("distance");
+
+
+                    return object_duration.getString("value") + "," + object_distance.getString("value");
+
+                }
+            } catch (MalformedURLException e) {
+                FirebaseCrashlytics.getInstance().recordException(e);
+                Log.d("error", "error1");
+            } catch (IOException e) {
+                FirebaseCrashlytics.getInstance().recordException(e);
+                Log.d("error", "error2");
+            } catch (JSONException e) {
+                FirebaseCrashlytics.getInstance().recordException(e);
+                Log.d("error", "error3");
+            }
+
+
+            return null;
+        }
+
+
+        //Use distance matrix api to calculate how much time the user actually needs to go there.
+        public double calculateTimeAndDist(String result) {
+            String[] res = result.split(",");
+            Double min = Double.parseDouble(res[0]) / 60;
+            Double dist = Double.parseDouble(res[1]) / 1000;
+
+            Double d = Double.valueOf(dist);
+            Double s = Double.valueOf(avgSpeed);
+
+            timeToDest = ((d / s) * 60);
+
+
+            Log.d("time to dest "+trip.getDestination(), timeToDest + "");
+            return timeToDest;
+
+        }
+
     }
 }

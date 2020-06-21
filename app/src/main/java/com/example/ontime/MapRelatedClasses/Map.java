@@ -365,8 +365,8 @@ public class Map extends FragmentActivity implements OnMapReadyCallback,
         float[] results = new float[1];
         Location.distanceBetween(currentLat, currentLong, destinationLL.latitude, destinationLL.longitude, results);
         float distanceInMeters = results[0];
-        boolean isWithin3km = distanceInMeters < 5000;
-        return isWithin3km;
+        boolean isWithin5km = distanceInMeters < 5000;
+        return isWithin5km;
     }
 
     //Calculates how many minutes the user needs based on his own unique average walking speed to go there.
