@@ -52,13 +52,6 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
 
-    private final String[] PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION,
-                                        Manifest.permission.ACCESS_COARSE_LOCATION};
-
-    @SuppressLint("InlinedApi")
-    private final String[] PERMISSIONS_Q = {Manifest.permission.ACCESS_FINE_LOCATION,
-                                            Manifest.permission.ACCESS_COARSE_LOCATION,
-                                            Manifest.permission.ACCESS_BACKGROUND_LOCATION};
 
     static final int PERMISSION_ALL = 134;
 
@@ -119,17 +112,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Determine if permissions should be requested at Runtime
-        if (Build.VERSION.SDK_INT >= 23) {
-            // If prior to Android Q request normal permissions else request background location
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q){
-                if(!hasPermissions(this, PERMISSIONS)){
-                    ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
-                }
-            } else {
-                if(!hasPermissions(this, PERMISSIONS_Q)){
-                    ActivityCompat.requestPermissions(this, PERMISSIONS_Q, PERMISSION_ALL);
-                }
-            }
+        if(!hasPermissions(this, PERMISSIONS)) {
+            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
         }
     }
 
