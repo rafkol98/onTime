@@ -2,35 +2,31 @@ package com.example.ontime.MapRelatedClasses;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Vibrator;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import com.example.ontime.MainClasses.Trip;
-import com.example.ontime.MainClasses.TripListAdapter;
 import com.example.ontime.R;
 import com.example.ontime.RestarterAndServices.Constants;
 import com.example.ontime.RestarterAndServices.ProcessClass;
+import com.example.ontime.utilities.Channels;
 import com.example.ontime.utilities.Notification;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
@@ -50,7 +46,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -114,7 +109,7 @@ public class Service extends android.app.Service {
         startForeground(1, Notification.setNotification(this,
                 "Location Services Running",
                 "To ensure accuracy please do not cancel.",
-                R.drawable.ic_notification));
+                R.drawable.ic_notification, Channels.FOREGROUND_CHANNEL));
 
 
         trips = new ArrayList<>();
@@ -174,7 +169,7 @@ public class Service extends android.app.Service {
                 startForeground(1, Notification.setNotification(this,
                         "Location Services Running",
                         "To ensure accuracy please do not cancel.",
-                        R.drawable.ic_notification));
+                        R.drawable.ic_notification, Channels.FOREGROUND_CHANNEL));
                 startTimer();
                 startLocationService();
             } catch (Exception e) {
@@ -497,7 +492,7 @@ public class Service extends android.app.Service {
                             Notification.showNotification(getApplicationContext(),
                                     "Should start walking",
                                     "In 10 minutes start walking to " + trip.getDestination() + " in order to arrive on time.",
-                                    R.drawable.ic_notification, id, NotificationManager.IMPORTANCE_MAX);
+                                    R.drawable.ic_notification, id, Channels.WALK_ALERT_CHANNEL);
 
 
                             Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
@@ -509,7 +504,7 @@ public class Service extends android.app.Service {
                             Notification.showNotification(getApplicationContext(),
                                     "Should start walking",
                                     "In 10 minutes start walking to " + trip.getDestination() + " in order to arrive on time.",
-                                    R.drawable.ic_notification, id);
+                                    R.drawable.ic_notification, id, Channels.WALK_ALERT_CHANNEL);
 
                             Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
                             // Vibrate for 2000 milliseconds
