@@ -5,8 +5,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -31,10 +29,15 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.File;
 
+import static com.example.ontime.PermissionConstants.BACKGROUND;
+import static com.example.ontime.PermissionConstants.PERMISSIONS;
+import static com.example.ontime.PermissionConstants.PERMISSION_ALL;
+import static com.example.ontime.PermissionConstants.PERMISSION_BACKGROUND;
+
 /**
  *
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
 
     //Initialise variables.
@@ -51,9 +54,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     private FirebaseAuth mAuth;
-
-
-    static final int PERMISSION_ALL = 134;
 
     /**
      *
@@ -167,6 +167,39 @@ public class MainActivity extends AppCompatActivity {
                     });
         }
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_ALL:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 &&
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission is granted. Continue the action or workflow
+                    // in your app.
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        // Determine if permissions should be requested at Runtime
+                        if(!hasPermissions(this, BACKGROUND)) {
+                            ActivityCompat.requestPermissions(this, BACKGROUND, PERMISSION_BACKGROUND);
+                        }
+                    }
+                }  else {
+                    // Explain to the user that the feature is unavailable because
+                    // the features requires a permission that the user has denied.
+                    // At the same time, respect the user's decision. Don't link to
+                    // system settings in an effort to convince the user to change
+                    // their decision.
+                }
+                return;
+
+            case PERMISSION_BACKGROUND:
+
+        }
+        // Other 'case' lines to check for other
+        // permissions this app might request.
+    }
+
 
     /**
      * Generate a Loading Animation.
