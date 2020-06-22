@@ -1,11 +1,14 @@
 package com.example.ontime;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -13,11 +16,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.example.ontime.AutoSuggestClasses.PlaceAutoSuggestAdapter;
+import com.example.ontime.DateTimeClasses.TimePickerFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
@@ -29,14 +35,16 @@ import com.google.firebase.database.ValueEventListener;
 
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Calendar;
 import java.util.List;
 
 
-public class Plan_Meeting extends Fragment {
+public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSetListener {
 
     //Initialise variables.
     Button meetBtn, selectBtn;
+
+    TextView dateText, timeText;
 
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/friendRequests");
@@ -58,6 +66,8 @@ public class Plan_Meeting extends Fragment {
     List<Boolean> booleansList = new ArrayList<>();
 
     ArrayList<String> uIdList = new ArrayList<>();
+
+    String date;
 
 
     /**
@@ -192,6 +202,33 @@ public class Plan_Meeting extends Fragment {
 
         destination.setText(destinationConfirmed);
 
+        dateText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog();
+            }
+        });
+
+
+//        timeText.findViewById(R.id.timer_txt).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                DialogFragment timePickerFragment = new TimePickerFragment();
+//                timePickerFragment.setStyle(DialogFragment.STYLE_NORMAL,R.style.MyTimePickerDialogTheme);
+//                timePickerFragment.setCancelable(false);
+//                timePickerFragment.show(getParentFragmentManager(), "timePicker");
+//            }
+//        });
+
+
+    }
+    //Shows the date picker dialog.
+    private void showDatePickerDialog() {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), R.style.MyDatePickerDialogTheme, this, Calendar.getInstance().get(Calendar.YEAR),
+                Calendar.getInstance().get(Calendar.MONTH),
+                Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+        datePickerDialog.show();
 
     }
 
@@ -240,7 +277,9 @@ public class Plan_Meeting extends Fragment {
         destination = v.findViewById(R.id.meetingAutoComplete);
         autoCompleteTextView = v.findViewById(R.id.meetingAutoComplete);
         selectBtn = v.findViewById(R.id.select_Btn);
-//        spinner = v.findViewById(R.id.spinner);
+        dateText = v.findViewById(R.id.date_sel_text);
+        timeText = v.findViewById(R.id.time_sel_text);
+
 
         return v;
     }
@@ -279,4 +318,16 @@ public class Plan_Meeting extends Fragment {
     }
 
 
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        date = dayOfMonth + "/" + (month + 1) + "/" + year;
+        dateText.setText(date);
+        Log.d("date selected", date);
+
+    }
+
+//    @Override
+//    public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+//        timeText.setText(hour + ":" + minute);
+//    }
 }

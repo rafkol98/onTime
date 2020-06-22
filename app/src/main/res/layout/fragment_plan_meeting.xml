@@ -111,12 +111,39 @@
         android:layout_height="47dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/custom_button2"
-        android:text="CLICK TO SELECT"
+        android:text="CLICK TO INVITE"
         android:textSize="14dp"
         android:textStyle="italic"
         app:layout_constraintEnd_toStartOf="@+id/guideline19"
         app:layout_constraintStart_toStartOf="@+id/guideline22"
         app:layout_constraintTop_toBottomOf="@+id/textView14" />
+
+
+    <TextView
+        android:id="@+id/time_sel_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+
+        android:text="TIME"
+        android:textSize="24dp"
+        android:textColor="@color/red"
+        app:layout_constraintEnd_toStartOf="@+id/guideline19"
+        app:layout_constraintStart_toStartOf="@+id/guideline7"
+        app:layout_constraintTop_toBottomOf="@+id/selectDateTime_txt" />
+
+    <TextView
+        android:id="@+id/date_sel_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="DATE"
+        android:textSize="24dp"
+        android:textColor="@color/red"
+        app:layout_constraintEnd_toStartOf="@+id/guideline7"
+        app:layout_constraintStart_toStartOf="@+id/guideline22"
+        app:layout_constraintTop_toBottomOf="@+id/selectDateTime_txt" />
+
 
     <TextView
         android:id="@+id/selectDateTime_txt"
@@ -130,32 +157,6 @@
         app:layout_constraintHorizontal_bias="0.455"
         app:layout_constraintStart_toStartOf="@+id/guideline22"
         app:layout_constraintTop_toBottomOf="@+id/select_Btn" />
-
-    <TextView
-        android:id="@+id/selectDatePlan_txt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="16dp"
-        android:text="DATE"
-        android:textColor="@color/red"
-        android:textSize="35sp"
-        app:layout_constraintStart_toStartOf="@+id/guideline22"
-        app:layout_constraintTop_toBottomOf="@+id/selectDateTime_txt" />
-
-    <TextView
-        android:id="@+id/selectTimePlan_txt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
-        android:text="TIME"
-        android:textColor="@color/red"
-        android:textSize="35sp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline19"
-        app:layout_constraintTop_toBottomOf="@+id/selectDateTime_txt" />
 
     <Button
         android:id="@+id/buttonPlan"
@@ -182,6 +183,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.72" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
