@@ -7,7 +7,8 @@
     tools:context=".SignIn_UpClasses.Cool"
     android:background="@drawable/cool"
     android:paddingLeft="50dp"
-    android:paddingRight="50dp">
+    android:paddingRight="50dp"
+    android:screenOrientation="nosensor">
 
     <ImageView
         android:id="@+id/world_pic"

@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/social_bg"
-    tools:context=".MeetingsClasses.Social">
+    tools:context=".MeetingsClasses.Social"
+    android:screenOrientation="nosensor">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline9"

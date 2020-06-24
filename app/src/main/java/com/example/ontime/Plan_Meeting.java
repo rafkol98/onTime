@@ -148,7 +148,7 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
                             }
                         });
 
-                        Log.d("friends copy list",friendsCopy+"");
+                        Log.d("friends copy list", friendsCopy + "");
 
                         AlertDialog alertDialog = alertDialogBuilder.create();
                         alertDialog.setCanceledOnTouchOutside(true);
@@ -235,12 +235,8 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
         });
 
 
-
-
-
-
-
     }
+
     //Shows the date picker dialog.
     private void showDatePickerDialog() {
         DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), R.style.MyDatePickerDialogTheme, this, Calendar.getInstance().get(Calendar.YEAR),
@@ -253,7 +249,7 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
 
     //Shows the time picker dialog.
     private void showTimePickerDialog() {
-        TimePickerDialog timePickerDialog =   new TimePickerDialog(getActivity(), R.style.MyTimePickerDialogTheme,this, Calendar.getInstance().get(Calendar.HOUR),Calendar.getInstance().get(Calendar.MINUTE), DateFormat.is24HourFormat(getContext()));
+        TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), R.style.MyTimePickerDialogTheme, this, Calendar.getInstance().get(Calendar.HOUR), Calendar.getInstance().get(Calendar.MINUTE), DateFormat.is24HourFormat(getContext()));
         timePickerDialog.show();
     }
 
@@ -358,7 +354,11 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
     @Override
     public void onTimeSet(TimePicker view, int hour, int minute) {
         timeImg.setVisibility(View.INVISIBLE);
-        timeText.setText(hour + ":" + minute);
+
+        Log.d("time selected",hour+":"+minute);
+        timeText.setText(String.format("%02d:%02d", hour, minute));
+
+//        timeText.setText(hour + ":" + minute);
         timeText.setVisibility(View.VISIBLE);
     }
 

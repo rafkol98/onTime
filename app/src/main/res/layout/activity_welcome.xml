@@ -7,7 +7,8 @@
     tools:context=".SignIn_UpClasses.Welcome"
     android:background="@drawable/welcome"
     android:paddingLeft="0dp"
-    android:paddingRight="0dp">
+    android:paddingRight="0dp"
+    android:screenOrientation="nosensor">
 
     <TextView
         android:id="@+id/textView6"
@@ -60,7 +61,7 @@ case you are running late!
         android:layout_width="354dp"
         android:layout_height="71dp"
         android:layout_marginTop="24dp"
-        android:text="We will do a 1 minute test run, that will
+        android:text="We will do a 2 minutes test run, that will
 help us calculate your average
 walking speed.
 "

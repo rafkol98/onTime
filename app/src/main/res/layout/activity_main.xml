@@ -8,7 +8,7 @@
     tools:context=".SignIn_UpClasses.MainActivity"
     android:paddingLeft="20dp"
     android:paddingRight="20dp"
-    >
+    android:screenOrientation="nosensor">
 
 
     <TextView

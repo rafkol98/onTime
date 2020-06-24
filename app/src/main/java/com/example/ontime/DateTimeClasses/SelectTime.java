@@ -140,7 +140,7 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
      */
     @Override
     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-        timeText.setText(hour + ":" + minute);
+        timeText.setText(String.format("%02d:%02d", hour, minute));
     }
 
 

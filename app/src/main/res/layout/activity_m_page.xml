@@ -7,7 +7,8 @@
     app:layout_constraintBottom_toTopOf="parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainClasses.MPage">
+    tools:context=".MainClasses.MPage"
+    android:screenOrientation="nosensor">
 
 
 
