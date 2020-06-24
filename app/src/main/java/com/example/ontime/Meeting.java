@@ -11,10 +11,13 @@ public class Meeting {
 
     String meetingId;
 
-    public Meeting(String destination, Long timestamp, String uIdSender) {
+    boolean meetingFlag;
+
+    public Meeting(String destination, Long timestamp, String uIdSender, boolean meetingFlag) {
         this.destination = destination;
         this.timestamp = timestamp;
         this.uIdSender = uIdSender;
+        this.meetingFlag = meetingFlag;
     }
 
     public String getMeetingId() {
@@ -32,5 +35,9 @@ public class Meeting {
 
     public Long getTimestamp() {
         return timestamp;
+    }
+
+    public boolean isMeetingFlag() {
+        return meetingFlag;
     }
 }

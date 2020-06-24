@@ -90,10 +90,8 @@ public class Tab2 extends Fragment {
                     try{
                         destination = child.child("destination").getValue().toString();
                         timestamp = child.child("timestamp").getValue(Long.class);
+                        mFlag = (boolean) child.child("meetingFlag").getValue();
 
-                        if(child.child("meetingId").exists()){
-                            mFlag = true;
-                        }
 
                     } catch (NullPointerException e) {
                         FirebaseCrashlytics.getInstance().recordException(e);

@@ -3,7 +3,7 @@ package com.example.ontime.MainClasses;
 /**
  * Store specific information about a walk/trip.
  */
-public class Trip implements Comparable<Trip>{
+public class Trip implements Comparable<Trip> {
 
     //initialise variables. Timestamp is used because time is stored as a long in the firebase database.
     String destination;
@@ -15,7 +15,6 @@ public class Trip implements Comparable<Trip>{
     boolean meetingFlag;
 
     /**
-     *
      * @param destination
      * @param date
      * @param time
@@ -27,7 +26,6 @@ public class Trip implements Comparable<Trip>{
     }
 
     /**
-     *
      * @param destination
      * @param timestamp
      */
@@ -38,7 +36,6 @@ public class Trip implements Comparable<Trip>{
 
 
     /**
-     *
      * @param destination
      * @param timestamp
      */
@@ -50,7 +47,6 @@ public class Trip implements Comparable<Trip>{
 
 
     /**
-     *
      * @param object
      */
     public Trip(Object object) {
@@ -58,7 +54,6 @@ public class Trip implements Comparable<Trip>{
     }
 
     /**
-     *
      * @return
      */
     public String getDestination() {
@@ -66,7 +61,6 @@ public class Trip implements Comparable<Trip>{
     }
 
     /**
-     *
      * @return
      */
     public String getDate() {
@@ -74,7 +68,6 @@ public class Trip implements Comparable<Trip>{
     }
 
     /**
-     *
      * @return
      */
     public String getTime() {
@@ -82,32 +75,32 @@ public class Trip implements Comparable<Trip>{
     }
 
     /**
-     *
      * @return
      */
     public Long getTimestamp() {
         return timestamp;
     }
 
+
     /**
      * Get unique hash key of the trip. Used to generate a unique tripId for each trip.
+     *
      * @param destination
      * @param date
      * @param time
      * @return
      */
-    public int getTripId(String destination, String date, String time){
-        String date_time = (destination+date+time);
+    public int getTripId(String destination, String date, String time) {
+        String date_time = (destination + date + time);
 
         int hash = 17;
         for (int i = 0; i < date_time.length(); i++) {
-            hash = hash*31 + date_time.charAt(i);
+            hash = hash * 31 + date_time.charAt(i);
         }
         return hash;
     }
 
     /**
-     *
      * @param o
      * @return
      */
@@ -122,7 +115,6 @@ public class Trip implements Comparable<Trip>{
     }
 
     /**
-     *
      * @param l
      * @return
      */
@@ -133,6 +125,7 @@ public class Trip implements Comparable<Trip>{
         }
         return (int) l;
     }
+
 
     public boolean isMeetingFlag() {
         return meetingFlag;

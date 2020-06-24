@@ -264,7 +264,6 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-
                             //Get the users that were selected and get their UId from the database.
                             for (int i = 0; i < friendsCopy.size(); i++) {
                                 String hashValue = hashEmail.getHashEmail(friendsCopy.get(i));
@@ -287,7 +286,7 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
                             try {
                                 Long timestamp = dateTimeCheck.toMilli(dateSelected);
                                 // Create a new Meeting.
-                                meeting = new Meeting(destination.getText().toString(), timestamp, uId);
+                                meeting = new Meeting(destination.getText().toString(), timestamp, uId,true);
 
                                 // Store the meeting on Firebase RealTime Database.
                                 DatabaseReference childReff = profRef.child(uId).child("trips").child(meeting.getMeetingId());

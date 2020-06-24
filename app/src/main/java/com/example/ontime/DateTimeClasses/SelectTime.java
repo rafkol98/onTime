@@ -236,7 +236,7 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
         Long timestamp = toMilli(dateSelected);
 
 
-        trip = new Trip(destinationPassed, timestamp);
+        trip = new Trip(destinationPassed, timestamp,false);
         //Get uId of the Firebase User.
         String uId = currentFirebaseUser.getUid();
         //Create a unique Hash Key for the Trip.

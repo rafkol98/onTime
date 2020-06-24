@@ -53,7 +53,7 @@ public class TripListAdapter extends ArrayAdapter<Trip> {
         // Default values in case getItem().get... produces a NPE
         String destination = "";
         Long timeLong = 0L;
-        boolean isMeeting = false;
+        boolean isMeeting=false;
 
         // Attempt to get the destination
         try{
@@ -96,11 +96,10 @@ public class TripListAdapter extends ArrayAdapter<Trip> {
         // Set the converted time to the date TextView
         tvDate.setText(time);
 
-//        if(m)
 
         if(isMeeting){
             tvMeeting.setText("Meeting");
-        }else{
+        } else {
             tvMeeting.setText("");
         }
 
