@@ -46,6 +46,7 @@ public class Tab2 extends Fragment {
     String destination;
     Long timestamp;
     Trip trip;
+    boolean mFlag = false;
 
     /**
      * Required empty public constructor
@@ -88,13 +89,18 @@ public class Tab2 extends Fragment {
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     try{
                         destination = child.child("destination").getValue().toString();
+                        timestamp = child.child("timestamp").getValue(Long.class);
+
+                        if(child.child("meetingId").exists()){
+                            mFlag = true;
+                        }
+
                     } catch (NullPointerException e) {
                         FirebaseCrashlytics.getInstance().recordException(e);
                     }
-                    timestamp = child.child("timestamp").getValue(Long.class);
 
 
-                    trip = new Trip(destination, timestamp);
+                    trip = new Trip(destination, timestamp, mFlag);
                     tripList.add(trip);
                     System.out.println("here"+tripList);
 

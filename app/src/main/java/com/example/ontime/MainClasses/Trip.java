@@ -12,6 +12,8 @@ public class Trip implements Comparable<Trip>{
     Long timestamp;
     Object object;
 
+    boolean meetingFlag;
+
     /**
      *
      * @param destination
@@ -33,6 +35,19 @@ public class Trip implements Comparable<Trip>{
         this.destination = destination;
         this.timestamp = timestamp;
     }
+
+
+    /**
+     *
+     * @param destination
+     * @param timestamp
+     */
+    public Trip(String destination, Long timestamp, boolean meetingFlag) {
+        this.destination = destination;
+        this.timestamp = timestamp;
+        this.meetingFlag = meetingFlag;
+    }
+
 
     /**
      *
@@ -117,5 +132,9 @@ public class Trip implements Comparable<Trip>{
                     (l + " cannot be cast to int without changing its value.");
         }
         return (int) l;
+    }
+
+    public boolean isMeetingFlag() {
+        return meetingFlag;
     }
 }
