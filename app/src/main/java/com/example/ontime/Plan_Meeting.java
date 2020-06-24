@@ -84,7 +84,7 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
 
 
     boolean clicked = false;  //used as a flag for the select button.
-    
+
     Meeting meeting;
 
 
@@ -256,16 +256,7 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
             @Override
             public void onClick(View v) {
 
-
-
-                //TODO
-                //1. GET THE USERS SELECTED. GET UID FROM EMAIL FROM DATABASE.  --xx--
-                //2. CREATE NEW CHILD "MEETINGS" -> CHILD (HASH MEETING): MEETING(TRIP, UID OF SENDER)
-                //3. CREATE NEW CLASS MEETING(TRIP,SENDER UID). STORE NEW MEETING UNDER 'TRIPS' OF CURRENT UID. WRITE 'MEETING' IN BOTTOM COLUMN.
-                //4.
-                System.out.println("dame to destination ela" + destination.getText().toString());
-
-                if(validate()) {
+                if (validate()) {
 
 
                     dbRefEmail.addValueEventListener(new ValueEventListener() {
@@ -296,9 +287,9 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
                             try {
                                 Long timestamp = dateTimeCheck.toMilli(dateSelected);
                                 // Create a new Meeting.
-                                meeting = new Meeting(destination.getText().toString(), timestamp,uId);
+                                meeting = new Meeting(destination.getText().toString(), timestamp, uId);
 
-                                //Store the meeting on Firebase RealTime Database.
+                                // Store the meeting on Firebase RealTime Database.
                                 DatabaseReference childReff = profRef.child(uId).child("trips").child(meeting.getMeetingId());
                                 childReff.setValue(meeting, new DatabaseReference.CompletionListener() {
                                     @Override
@@ -312,7 +303,21 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
                                     }
                                 });
 
-
+                                // Write the meeting request for the receiver.
+                                for (int i = 0; i < selectedUIdList.size(); i++) {
+                                    DatabaseReference childMeetReq = profRef.child(selectedUIdList.get(i)).child("meeting_request");
+                                    childMeetReq.child(meeting.getMeetingId()).setValue(meeting, new DatabaseReference.CompletionListener() {
+                                        @Override
+                                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                                            if (databaseError != null) {
+                                                FirebaseCrashlytics.getInstance().log(databaseError.getMessage());
+                                                FirebaseCrashlytics.getInstance().log(databaseError.getDetails());
+                                            } else {
+                                                FirebaseCrashlytics.getInstance().log("Successful write of Meeting");
+                                            }
+                                        }
+                                    });
+                                }
 
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -462,15 +467,15 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
         boolean x = true;
         if (destination.getText().toString().equals("")) {
             Toast.makeText(getContext(), "Please select a location", Toast.LENGTH_LONG).show();
-            x=false;
+            x = false;
         }
         if (!clicked) {
             Toast.makeText(getContext(), "Select someone to share this meeting with", Toast.LENGTH_LONG).show();
-            x=false;
+            x = false;
         }
         if ((dateText.getText().toString()).equalsIgnoreCase("date") || (timeText.getText().toString()).equalsIgnoreCase("time")) {
             Toast.makeText(getContext(), "Please select both date and time!", Toast.LENGTH_LONG).show();
-            x=false;
+            x = false;
         }
         return x;
     }
