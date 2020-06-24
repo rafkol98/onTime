@@ -12,6 +12,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -39,12 +41,14 @@ import java.util.Calendar;
 import java.util.List;
 
 
-public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSetListener {
+public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     //Initialise variables.
     Button meetBtn, selectBtn;
 
     TextView dateText, timeText;
+
+    ImageView dateImg, timeImg;
 
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/friendRequests");
@@ -202,6 +206,13 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
 
         destination.setText(destinationConfirmed);
 
+        dateImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog();
+            }
+        });
+
         dateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -209,16 +220,24 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
             }
         });
 
+        timeImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showTimePickerDialog();
+            }
+        });
 
-//        timeText.findViewById(R.id.timer_txt).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                DialogFragment timePickerFragment = new TimePickerFragment();
-//                timePickerFragment.setStyle(DialogFragment.STYLE_NORMAL,R.style.MyTimePickerDialogTheme);
-//                timePickerFragment.setCancelable(false);
-//                timePickerFragment.show(getParentFragmentManager(), "timePicker");
-//            }
-//        });
+        timeText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showTimePickerDialog();
+            }
+        });
+
+
+
+
+
 
 
     }
@@ -230,6 +249,12 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
         datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         datePickerDialog.show();
 
+    }
+
+    //Shows the time picker dialog.
+    private void showTimePickerDialog() {
+        TimePickerDialog timePickerDialog =   new TimePickerDialog(getActivity(), R.style.MyTimePickerDialogTheme,this, Calendar.getInstance().get(Calendar.HOUR),Calendar.getInstance().get(Calendar.MINUTE), DateFormat.is24HourFormat(getContext()));
+        timePickerDialog.show();
     }
 
 
@@ -279,6 +304,8 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
         selectBtn = v.findViewById(R.id.select_Btn);
         dateText = v.findViewById(R.id.date_sel_text);
         timeText = v.findViewById(R.id.time_sel_text);
+        dateImg = v.findViewById(R.id.dateImg);
+        timeImg = v.findViewById(R.id.timeImg);
 
 
         return v;
@@ -320,14 +347,20 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        dateImg.setVisibility(View.INVISIBLE);
         date = dayOfMonth + "/" + (month + 1) + "/" + year;
         dateText.setText(date);
         Log.d("date selected", date);
+        dateText.setVisibility(View.VISIBLE);
 
     }
 
-//    @Override
-//    public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-//        timeText.setText(hour + ":" + minute);
-//    }
+    @Override
+    public void onTimeSet(TimePicker view, int hour, int minute) {
+        timeImg.setVisibility(View.INVISIBLE);
+        timeText.setText(hour + ":" + minute);
+        timeText.setVisibility(View.VISIBLE);
+    }
+
+
 }

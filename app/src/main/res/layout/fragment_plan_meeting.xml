@@ -107,7 +107,7 @@
 
     <Button
         android:id="@+id/select_Btn"
-        android:layout_width="333dp"
+        android:layout_width="320dp"
         android:layout_height="47dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/custom_button2"
@@ -124,7 +124,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-
+        android:visibility="invisible"
         android:text="TIME"
         android:textSize="24dp"
         android:textColor="@color/red"
@@ -138,6 +138,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="DATE"
+        android:visibility="invisible"
         android:textSize="24dp"
         android:textColor="@color/red"
         app:layout_constraintEnd_toStartOf="@+id/guideline7"
@@ -190,6 +191,26 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
+
+    <ImageView
+        android:id="@+id/timeImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:src="@drawable/timer_img"
+        app:layout_constraintEnd_toStartOf="@+id/guideline19"
+        app:layout_constraintStart_toStartOf="@+id/guideline7"
+        app:layout_constraintTop_toBottomOf="@+id/selectDateTime_txt" />
+
+    <ImageView
+        android:id="@+id/dateImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:src="@drawable/date_img"
+        app:layout_constraintEnd_toStartOf="@+id/guideline7"
+        app:layout_constraintStart_toStartOf="@+id/guideline22"
+        app:layout_constraintTop_toBottomOf="@+id/selectDateTime_txt" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
