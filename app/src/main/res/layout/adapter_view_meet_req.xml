@@ -14,7 +14,9 @@
         android:layout_weight="40">
 
         <TextView
-            android:gravity="center"
+            android:gravity="left"
+            android:layout_marginLeft="10dp"
+            android:paddingTop="10dp"
             android:text="TextPlaceTime"
             android:textColor="@color/blgrey"
             android:textSize="18dp"
@@ -23,7 +25,8 @@
             android:id="@+id/textPlacedTime"/>
 
         <TextView
-            android:gravity="center"
+            android:gravity="left"
+            android:layout_marginLeft="10dp"
             android:text="TextInvitedBy"
             android:textColor="@color/blgrey"
             android:layout_width="match_parent"
@@ -49,11 +52,13 @@
         <Button
             android:gravity="center"
             android:text="Accept"
+            android:layout_marginTop="5dp"
             android:layout_marginRight="20dp"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:backgroundTint="@color/green"
-            android:id="@+id/btnAccept"/>
+            android:backgroundTint="@color/grey_lighter"
+            android:textColor="@color/blgrey"
+            android:layout_height="65dp"
+            android:id="@+id/btnAcceptMeet"/>
 
         <Button
             android:gravity="center"
@@ -63,7 +68,7 @@
             android:layout_height="50dp"
             android:backgroundTint="@color/red"
             android:textColor="@color/white"
-            android:id="@+id/btnReject" />
+            android:id="@+id/btnRejectMeet" />
     </LinearLayout>
 
 </LinearLayout>

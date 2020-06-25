@@ -16,5 +16,5 @@
     <item
         android:id="@+id/nav_meetings"
         android:icon="@drawable/ic_meetings"
-        android:title="Meetings" />
+        android:title="Socialize" />
 </menu>

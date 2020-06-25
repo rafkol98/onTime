@@ -32,7 +32,7 @@
             android:layout_marginRight="20dp"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:backgroundTint="@color/green"
+            android:backgroundTint="@color/grey_lighter"
             android:id="@+id/btnAccept"/>
 
         <Button

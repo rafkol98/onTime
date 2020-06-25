@@ -53,7 +53,7 @@ public class Meet_Request extends Fragment {
         //Get uId of the user from the database.
         final String uId = currentFirebaseUser.getUid();
 
-        //Find users, from who the current user "Received" a friend request and add them in the list.
+        //Find all the meeting requests the user has.
         profRef.child(uId).child("meeting_request").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -65,44 +65,12 @@ public class Meet_Request extends Fragment {
                         senderUid = child.child("uIdSender").getValue().toString();
                         timestamp = child.child("timestamp").getValue(Long.class);
 
-                        System.out.println("dame to debug tou meeting  dest"+destination+"  sid"+senderUid+"  t"+timestamp);
-
-                        newMeetingReq = new Meeting(destination, timestamp, senderUid);
+                        newMeetingReq = new Meeting(destination, timestamp, senderUid,true);
                         meetingList.add(newMeetingReq);
-
-
-//                        profRef.child(senderUid).addValueEventListener(new ValueEventListener() {
-//                            @Override
-//                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                                try {
-//                                    senderEmail = dataSnapshot.child("Email").getValue().toString();
-//
-//                                    System.out.println("dame to debug tou senderEmail  "+senderEmail);
-//
-//
-//
-//
-//
-//
-//                                } catch (NullPointerException e) {
-//                                    FirebaseCrashlytics.getInstance().recordException(e);
-//                                }
-//
-//                            }
-//
-//                            @Override
-//                            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                            }
-//                        });
-
-
-
 
                     } catch (NullPointerException e) {
                         FirebaseCrashlytics.getInstance().recordException(e);
                     }
-
                 }
 
 
@@ -111,7 +79,6 @@ public class Meet_Request extends Fragment {
 
                 if (getContext() != null) {
                     MeetingRequestsListAdapter adapter = new MeetingRequestsListAdapter(getContext(), R.layout.adapter_view_meet_req, meetingList);
-                    System.out.println("ipotithete ekamato");
                     mListView.setAdapter(adapter);
                 }
 
