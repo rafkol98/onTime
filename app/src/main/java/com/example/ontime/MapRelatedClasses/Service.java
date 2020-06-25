@@ -57,17 +57,13 @@ import java.util.TimerTask;
  *
  */
 public class Service extends android.app.Service {
-    private static final String CHANNEL_ID = "ServiceChannel";
-    protected static final int NOTIFICATION_ID = 1337;
     private static String TAG = "Service";
     private static Service mCurrentService;
+
+    private static boolean isRunning;
+
     private int counter = 0;
     private ArrayList<Trip> trips;
-
-    private final String[] PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION};
-
-    static final int PERMISSION_ALL = 134;
 
     private static double avgSpeed;
     private double timeToDest;
@@ -99,6 +95,8 @@ public class Service extends android.app.Service {
         super.onStartCommand(intent, flags, startId);
         Log.d(TAG, "restarting Service !!");
         counter = 0;
+
+        isRunning = true;
 
         // it has been killed by Android and now it is restarted. We must make sure to have reinitialised everything
         if (intent == null) {
@@ -132,6 +130,7 @@ public class Service extends android.app.Service {
             restartForeground();
         }
         mCurrentService = this;
+        isRunning = false;
     }
 
     /**
@@ -156,7 +155,7 @@ public class Service extends android.app.Service {
         sendBroadcast(broadcastIntent);
         stoptimertask();
         stopLocationService();
-
+        isRunning = false;
     }
 
     /**
@@ -612,5 +611,9 @@ public class Service extends android.app.Service {
 
         }
 
+    }
+
+    public static boolean isRunning() {
+        return isRunning;
     }
 }

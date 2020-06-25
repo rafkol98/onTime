@@ -36,7 +36,7 @@ public class Channels extends Application {
 
             NotificationChannel channel2 = new NotificationChannel(FOREGROUND_CHANNEL,
                     "Location Service",
-                    NotificationManager.IMPORTANCE_DEFAULT);
+                    NotificationManager.IMPORTANCE_LOW);
             channel2.setDescription("Required for efficient location services.");
 
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
