@@ -84,8 +84,8 @@ public class TripListAdapter extends ArrayAdapter<Trip> {
 
         // Obtain views by ID
         TextView tvDestination = (TextView) convertView.findViewById(R.id.textDestination);
-        TextView tvDate = (TextView) convertView.findViewById(R.id.textDate);
-        TextView tvMeeting = (TextView) convertView.findViewById(R.id.textTime);
+        TextView tvDate = (TextView) convertView.findViewById(R.id.textPlacedTime);
+        TextView tvMeeting = (TextView) convertView.findViewById(R.id.textInvitedBy);
 
         // Convert milliseconds to human readable form
         String time=convertTime(timeLong);

@@ -44,7 +44,7 @@
             android:backgroundTint="@color/red"
             android:textColor="@color/white"
             android:id="@+id/btnReject"
-            android:layout_below="@+id/textDate"/>
+            android:layout_below="@+id/textPlacedTime"/>
     </LinearLayout>
 
 </LinearLayout>

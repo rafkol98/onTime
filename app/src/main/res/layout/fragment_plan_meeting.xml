@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/plan_meeting_bg"
-    tools:context=".Plan_Meeting">
+    android:background="@drawable/bg_plan"
+    tools:context=".MeetingsClasses.Plan_Meeting">
 
 
     <androidx.constraintlayout.widget.Guideline
@@ -109,9 +109,9 @@
     <Button
         android:id="@+id/select_Btn"
         android:layout_width="320dp"
-        android:layout_height="47dp"
+        android:layout_height="45dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/custom_button2"
+        android:background="@drawable/search_button"
         android:text="CLICK TO INVITE"
         android:textSize="14dp"
         android:textStyle="italic"

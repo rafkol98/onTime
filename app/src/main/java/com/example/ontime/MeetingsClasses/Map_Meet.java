@@ -1,4 +1,4 @@
-package com.example.ontime;
+package com.example.ontime.MeetingsClasses;
 
 import android.Manifest;
 import android.content.Context;
@@ -7,8 +7,6 @@ import android.content.res.Resources;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
@@ -24,7 +22,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.example.ontime.MapRelatedClasses.Map;
+import com.example.ontime.MeetingsClasses.Plan_Meeting;
+import com.example.ontime.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;

@@ -29,7 +29,7 @@
             android:textColor="@color/blgrey"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:id="@+id/textDate"/>
+            android:id="@+id/textPlacedTime"/>
 
         <TextView
             android:gravity="center"
@@ -37,8 +37,8 @@
             android:textColor="@color/blgrey"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:id="@+id/textTime"
-            android:layout_below="@+id/textDate"/>
+            android:id="@+id/textInvitedBy"
+            android:layout_below="@+id/textPlacedTime"/>
     </LinearLayout>
 
 </LinearLayout>

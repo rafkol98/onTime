@@ -21,7 +21,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Map_Meet" android:screenOrientation="portrait" ></activity>
+        <activity android:name=".MeetingsClasses.Map_Meet" android:screenOrientation="portrait" ></activity>
         <activity android:name=".MapRelatedClasses.CatchUp"  android:screenOrientation="portrait"/>
         <activity
             android:name=".MainClasses.MPage"

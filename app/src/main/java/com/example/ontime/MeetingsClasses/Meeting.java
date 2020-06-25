@@ -1,12 +1,11 @@
-package com.example.ontime;
+package com.example.ontime.MeetingsClasses;
 
 import com.example.ontime.MainClasses.Trip;
 
 public class Meeting {
 
-    String uIdSender;
+    String uIdSender,emailSender , destination;
 
-    String destination;
     Long timestamp;
 
     String meetingId;
@@ -18,6 +17,13 @@ public class Meeting {
         this.timestamp = timestamp;
         this.uIdSender = uIdSender;
         this.meetingFlag = meetingFlag;
+    }
+
+
+    public Meeting(String destination, Long timestamp, String uIdSender) {
+        this.destination = destination;
+        this.timestamp = timestamp;
+        this.uIdSender = uIdSender;
     }
 
     public String getMeetingId() {
@@ -39,5 +45,9 @@ public class Meeting {
 
     public boolean isMeetingFlag() {
         return meetingFlag;
+    }
+
+    public String getEmailSender() {
+        return emailSender;
     }
 }
