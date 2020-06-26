@@ -2,6 +2,7 @@ package com.example.ontime.utilities;
 
 import android.app.Application;
 import android.app.NotificationChannel;
+import android.app.NotificationChannelGroup;
 import android.app.NotificationManager;
 import android.graphics.Color;
 import android.media.AudioAttributes;
@@ -9,8 +10,11 @@ import android.os.Build;
 import android.provider.Settings;
 
 public class Channels extends Application {
-    public static final String WALK_ALERT_CHANNEL = "walkAlert";
+    public static final String WALK_ALERT_CHANNEL = "walk10Alert";
+    public static final String WALK_1_ALERT_CHANNEL = "walk1Alert";
     public static final String FOREGROUND_CHANNEL = "service";
+    private String groupID = "WALK_ALERTS_ID";
+    private CharSequence groupName = "WALK_ALERTS";
 
     @Override
     public void onCreate() {
@@ -21,8 +25,11 @@ public class Channels extends Application {
 
     private void createNotificationChannels() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannelGroup(new NotificationChannelGroup(groupID, groupName));
+
             NotificationChannel channel1 = new NotificationChannel(WALK_ALERT_CHANNEL,
-                    "Receive Walk Alerts",
+                    "Receive Walk Alerts 10 Minutes Prior",
                     NotificationManager.IMPORTANCE_HIGH);
             channel1.setDescription("Allows you to receive alerts of when to begin walking for planned trips.");
 
@@ -39,10 +46,17 @@ public class Channels extends Application {
                     NotificationManager.IMPORTANCE_LOW);
             channel2.setDescription("Required for efficient location services.");
 
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            NotificationChannel channel3 = new NotificationChannel(WALK_1_ALERT_CHANNEL,
+                                                    "Receive Walk Alerts 1 Minute Prior",
+                                                           NotificationManager.IMPORTANCE_HIGH);
+
+
+            channel1.setGroup(groupID);
+            channel3.setGroup(groupID);
 
             notificationManager.createNotificationChannel(channel1);
             notificationManager.createNotificationChannel(channel2);
+            notificationManager.createNotificationChannel(channel3);
         }
     }
 }
