@@ -14,8 +14,10 @@ public class Trip implements Comparable<Trip>{
     String time;
     Long timestamp;
     Object object;
-    double flagValue;
-    boolean shouldAlert = true;
+    double flagValue10;
+    double flagValue1;
+    boolean shouldAlert10 = true;
+    boolean shouldAlert1 = true;
 
     /**
      * Constructor
@@ -110,19 +112,35 @@ public class Trip implements Comparable<Trip>{
 
     /**
      * Setter for Distance from
-     * @param flagValue the distance of the users current location from trip destination
+     * @param flagValue10 the distance of the users current location from trip destination
      */
-    public void setFlagValue(double flagValue) { this.flagValue = flagValue; }
+    public void setFlagValue10(double flagValue10) { this.flagValue10 = flagValue10; }
 
     /**
      * Getter for Distance From
      * @return the distance of the users current location from trip destination
      */
-    public double getFlagValue() { return flagValue; }
+    public double getFlagValue10() { return flagValue10; }
 
-    public boolean getShouldAlert() { return shouldAlert; }
+    /**
+     * Setter for Distance from
+     * @param flagValue1 the distance of the users current location from trip destination
+     */
+    public void setFlagValue1(double flagValue1) { this.flagValue1 = flagValue1; }
 
-    public void setShouldAlert (boolean shouldAlert) { this.shouldAlert = shouldAlert; }
+    /**
+     * Getter for Distance From
+     * @return the distance of the users current location from trip destination
+     */
+    public double getFlagValue1() { return flagValue1; }
+
+    public boolean getShouldAlert10() { return shouldAlert10; }
+
+    public void setShouldAlert10 (boolean shouldAlert10) { this.shouldAlert10 = shouldAlert10; }
+
+    public boolean getShouldAlert1() { return shouldAlert1; }
+
+    public void setShouldAlert1 (boolean shouldAlert1) { this.shouldAlert1 = shouldAlert1; }
 
     /**
      * Get unique hash key of the trip. Used to generate a unique tripId for each trip.

@@ -68,7 +68,7 @@ public class Service extends android.app.Service {
     private static double avgSpeed;
     private double timeToDest;
 
-    int valueFlag;
+    int valueFlag10, valueFlag1;
 
     //get firebase user.
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -448,12 +448,12 @@ public class Service extends android.app.Service {
                 double timeToDest = calculateTimeAndDist(result);
 
                 //Read flag's value
-                dbRef.child(uId).child("trips").child((trip.getTimestamp()).toString()).child("flagValue").addValueEventListener(new ValueEventListener() {
+                dbRef.child(uId).child("trips").child((trip.getTimestamp()).toString()).child("flagValue10").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         try {
-                            valueFlag = Integer.valueOf(dataSnapshot.getValue().toString());
-                            Log.d("valueFlag value: ", valueFlag + "");
+                            valueFlag10 = Integer.valueOf(dataSnapshot.getValue().toString());
+                            Log.d("valueFlag value: ", valueFlag10 + "");
                         } catch (NullPointerException e) {
                             FirebaseCrashlytics.getInstance().recordException(e);
                         }
@@ -467,6 +467,24 @@ public class Service extends android.app.Service {
                     }
                 });
 
+                dbRef.child(uId).child("trips").child((trip.getTimestamp()).toString()).child("flagValue1").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        try {
+                            valueFlag1 = Integer.valueOf(dataSnapshot.getValue().toString());
+                            Log.d("valueFlag value: ", valueFlag1 + "");
+                        } catch (NullPointerException e) {
+                            FirebaseCrashlytics.getInstance().recordException(e);
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        System.out.println("The read failed: " + databaseError.getCode());
+                        FirebaseCrashlytics.getInstance().log(databaseError.getMessage());
+                    }
+                });
 //                 Instantiate a new calendar object
                     Calendar calendar = Calendar.getInstance();
 
@@ -483,8 +501,8 @@ public class Service extends android.app.Service {
                 //if the difference is less than 10 minutes notify user.
                 boolean shouldAlert = (trip.getTimestamp() - time) < 600000;
 
-                if (shouldAlert && valueFlag==0) {
-                    if (trip.getShouldAlert()) {
+                if (shouldAlert && valueFlag10==0) {
+                    if (trip.getShouldAlert10()) {
                         int id = trip.getTripId(trip.getDestination(), trip.getDate(), trip.getTime());
 
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -509,12 +527,12 @@ public class Service extends android.app.Service {
                             // Vibrate for 2000 milliseconds
                             v.vibrate(2000);
                         }
-                        trip.setShouldAlert(false);
+                        trip.setShouldAlert10(false);
 
                         //write current location on the database.
                         final String uId = currentFirebaseUser.getUid();
 
-                        DatabaseReference flagReff = dbRef.child(uId).child("trips").child((trip.getTimestamp()).toString()).child("flagValue");
+                        DatabaseReference flagReff = dbRef.child(uId).child("trips").child((trip.getTimestamp()).toString()).child("flagValue10");
 
                         int newValueFlag = 1;
 
@@ -538,6 +556,63 @@ public class Service extends android.app.Service {
                     }
                 }
 
+                //if the difference is less than 1 minutes notify user.
+                shouldAlert = (trip.getTimestamp() - time) < 60000;
+
+                if (shouldAlert && valueFlag1==0) {
+                    if (trip.getShouldAlert1()) {
+                        int id = trip.getTripId(trip.getDestination(), trip.getDate(), trip.getTime());
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            Notification.showNotification(getApplicationContext(),
+                                    "Should start walking",
+                                    "In 1 minute start walking to " + trip.getDestination() + " in order to arrive on time.",
+                                    R.drawable.ic_notification, id, Channels.WALK_1_ALERT_CHANNEL);
+
+
+                            Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+                            // Vibrate for 2000 milliseconds
+                            v.vibrate(2000);
+
+
+                        } else {
+                            Notification.showNotification(getApplicationContext(),
+                                    "Should start walking",
+                                    "In 1 minute start walking to " + trip.getDestination() + " in order to arrive on time.",
+                                    R.drawable.ic_notification, id, Channels.WALK_1_ALERT_CHANNEL);
+
+                            Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+                            // Vibrate for 2000 milliseconds
+                            v.vibrate(2000);
+                        }
+                        trip.setShouldAlert1(false);
+
+                        //write current location on the database.
+                        final String uId = currentFirebaseUser.getUid();
+
+                        DatabaseReference flagReff = dbRef.child(uId).child("trips").child((trip.getTimestamp()).toString()).child("flagValue1");
+
+                        int newValueFlag = 1;
+
+                        flagReff.setValue(newValueFlag, new DatabaseReference.CompletionListener() {
+                            /**
+                             * Upon completion of setValue, log the completion results in FirebaseCrashlytics
+                             * @param databaseError containing details of error if one occurred
+                             * @param databaseReference reference of database
+                             */
+                            @Override
+                            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                                if (databaseError != null) {
+                                    FirebaseCrashlytics.getInstance().log(databaseError.getMessage());
+                                    FirebaseCrashlytics.getInstance().log(databaseError.getDetails());
+                                } else {
+                                    FirebaseCrashlytics.getInstance().log("Successful write of Location");
+                                }
+                            }
+                        });
+
+                    }
+                }
             }
         }
 

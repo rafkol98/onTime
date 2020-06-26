@@ -243,10 +243,10 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
         String dateSelected = dateText.getText().toString() + " " + timeText.getText().toString();
         Long timestamp = toMilli(dateSelected);
 
+        trip = new Trip(destinationPassed, timestamp, desLat, desLng);
 
-        trip = new Trip(destinationPassed, timestamp,desLat,desLng);
-
-        trip.setShouldAlert(false);
+        trip.setShouldAlert10(false);
+        trip.setShouldAlert1(false);
 
         //Get uId of the Firebase User.
         String uId = currentFirebaseUser.getUid();
