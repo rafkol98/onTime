@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.example.ontime.MainClasses.FriendsReqListAdapter;
@@ -45,6 +46,8 @@ public class Meet_Request extends Fragment {
 
     Meeting newMeetingReq;
 
+    ImageView noMeetings_img;
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -67,6 +70,7 @@ public class Meet_Request extends Fragment {
 
                         newMeetingReq = new Meeting(destination, timestamp, senderUid,true);
                         meetingList.add(newMeetingReq);
+                        noMeetings_img.setVisibility(View.INVISIBLE);
 
                     } catch (NullPointerException e) {
                         FirebaseCrashlytics.getInstance().recordException(e);
@@ -106,6 +110,7 @@ public class Meet_Request extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_meet_request, container, false);
         mListView = (ListView) v.findViewById(R.id.listView_req_meetings);
+        noMeetings_img = v.findViewById(R.id.noMeetings_Img);
         return v;
     }
 }

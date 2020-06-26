@@ -182,7 +182,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback,
 
         //load the custom style of the map.
         try {
-            boolean success = googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.b_w_style1));
+            boolean success = googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.b_w_places));
 
             if (!success) {
                 Log.d("MapActivity", "Style parsing failes");

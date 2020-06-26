@@ -85,7 +85,6 @@ public class Tab2 extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     try{
                         destination = child.child("destination").getValue().toString();

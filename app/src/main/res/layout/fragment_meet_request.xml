@@ -33,6 +33,16 @@
         app:layout_constraintStart_toStartOf="@+id/guideline26"
         app:layout_constraintTop_toTopOf="@+id/guideline25" />
 
+    <ImageView
+        android:id="@+id/noMeetings_Img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/no_meeting_requests_img"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ListView
         android:id="@+id/listView_req_meetings"
         android:layout_width="407dp"
@@ -43,6 +53,7 @@
         app:layout_constraintVertical_bias="0.516"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="2dp">
+
 
 
     </ListView>
