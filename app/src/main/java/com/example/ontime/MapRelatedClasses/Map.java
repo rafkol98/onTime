@@ -231,7 +231,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback,
 
 
             //Use Geocoder class to calculate minutes walking from current location.
-            String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + currentOrigin + "&destinations=" + destinationPassed + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
+            String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + currentLat + "," + currentLong + "&destinations=" + destinationLatLng.latitude + "," + destinationLatLng.longitude + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
             Log.d("url string", url);
             geoTask.execute(url);
         }
