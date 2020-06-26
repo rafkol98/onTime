@@ -171,9 +171,7 @@ public class MeetingRequestsListAdapter extends ArrayAdapter<Meeting> {
 
                 // Commit the transaction
                 transaction.commit();
-
-
-
+                
             }
         });
 
