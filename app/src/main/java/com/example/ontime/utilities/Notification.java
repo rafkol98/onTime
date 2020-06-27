@@ -156,6 +156,30 @@ public class Notification {
     }
 
     /**
+     * Display a notification to the user.
+     * @param context - Given application context
+     * @param title - Title of the notification to be displayed
+     * @param text - Body of the notification to be displayed
+     * @param icon - Icon to be displayed on the notification
+     * @param intent - Intent to be activated when user interacts with notification
+     */
+    public static void showNotification(Context context, String title, String text, int icon,
+                                        int id, PendingIntent intent, String channel_id) {
+        NotificationManager notificationManager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        android.app.Notification notification = getNotificationBuilder(context, channel_id)
+                .setSmallIcon(icon)
+                .setContentTitle(title)
+                .setContentText(text)
+                .setContentIntent(intent)
+                .build();
+
+        if (notificationManager != null) {
+            notificationManager.notify(id, notification);
+        }
+    }
+    /**
      * Obtain the appropriate Notification Builder for the API of the users' device.
      * @param context - Given application context
      * @return the notification builder modified for the appropriate API

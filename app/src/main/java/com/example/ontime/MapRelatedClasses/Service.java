@@ -2,6 +2,7 @@ package com.example.ontime.MapRelatedClasses;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -17,7 +18,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
+import com.example.ontime.MainClasses.MPage;
 import com.example.ontime.MainClasses.Trip;
+import com.example.ontime.MainClasses.fragments.Tab2;
 import com.example.ontime.R;
 import com.example.ontime.RestarterAndServices.Constants;
 import com.example.ontime.RestarterAndServices.ProcessClass;
@@ -505,28 +508,19 @@ public class Service extends android.app.Service {
                     if (trip.getShouldAlert10()) {
                         int id = trip.getTripId(trip.getDestination(), trip.getDate(), trip.getTime());
 
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            Notification.showNotification(getApplicationContext(),
-                                    "Should start walking",
-                                    "In 10 minutes start walking to " + trip.getDestination() + " in order to arrive on time.",
-                                    R.drawable.ic_notification, id, Channels.WALK_ALERT_CHANNEL);
+                        Intent notifyIntent = new Intent(getApplicationContext(), MPage.class);
+                        notifyIntent.putExtra("Tab", "Tab2");
+                        notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                            | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        PendingIntent notifyPendingIntent = PendingIntent.getActivity(
+                                getApplicationContext(), 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-
-                            Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
-                            // Vibrate for 2000 milliseconds
-                            v.vibrate(2000);
-
-
-                        } else {
-                            Notification.showNotification(getApplicationContext(),
-                                    "Should start walking",
-                                    "In 10 minutes start walking to " + trip.getDestination() + " in order to arrive on time.",
-                                    R.drawable.ic_notification, id, Channels.WALK_ALERT_CHANNEL);
-
-                            Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
-                            // Vibrate for 2000 milliseconds
-                            v.vibrate(2000);
-                        }
+                        Notification.showNotification(getApplicationContext(),
+                                "Should start walking",
+                                "In 10 minutes start walking to " + trip.getDestination() + " in order to arrive on time.",
+                                R.drawable.ic_notification, id, notifyPendingIntent, Channels.WALK_ALERT_CHANNEL);
+                        Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+                        v.vibrate(2000);
                         trip.setShouldAlert10(false);
 
                         //write current location on the database.
@@ -563,28 +557,19 @@ public class Service extends android.app.Service {
                     if (trip.getShouldAlert1()) {
                         int id = trip.getTripId(trip.getDestination(), trip.getDate(), trip.getTime());
 
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            Notification.showNotification(getApplicationContext(),
-                                    "Should start walking",
-                                    "In 1 minute start walking to " + trip.getDestination() + " in order to arrive on time.",
-                                    R.drawable.ic_notification, id, Channels.WALK_1_ALERT_CHANNEL);
+                        Intent notifyIntent = new Intent(getApplicationContext(), MPage.class);
+                        notifyIntent.putExtra("Tab", "Tab2");
+                        notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        PendingIntent notifyPendingIntent = PendingIntent.getActivity(
+                                getApplicationContext(), 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-
-                            Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
-                            // Vibrate for 2000 milliseconds
-                            v.vibrate(2000);
-
-
-                        } else {
-                            Notification.showNotification(getApplicationContext(),
-                                    "Should start walking",
-                                    "In 1 minute start walking to " + trip.getDestination() + " in order to arrive on time.",
-                                    R.drawable.ic_notification, id, Channels.WALK_1_ALERT_CHANNEL);
-
-                            Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
-                            // Vibrate for 2000 milliseconds
-                            v.vibrate(2000);
-                        }
+                        Notification.showNotification(getApplicationContext(),
+                                "Should start walking",
+                                "In 1 minute start walking to " + trip.getDestination() + " in order to arrive on time.",
+                                R.drawable.ic_notification, id, notifyPendingIntent, Channels.WALK_1_ALERT_CHANNEL);
+                        Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+                        v.vibrate(2000);
                         trip.setShouldAlert1(false);
 
                         //write current location on the database.
