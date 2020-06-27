@@ -315,11 +315,11 @@ public class Map extends FragmentActivity implements OnMapReadyCallback,
     @SuppressLint("StaticFieldLeak")
     public void onPlan(View v) throws ExecutionException, InterruptedException {
 
-        LatLng destinationLatLng = getLatLngFromAddress(destinationPassed);
+        final LatLng destinationLatLng = getLatLngFromAddress(destinationPassed);
 
 
         //Check if current location is more than 5 km away from destination. Dialog to user.
-        if (inRadius(destinationLatLng) == false) {
+        if (!inRadius(destinationLatLng)) {
             //Alert the user about the distance.
             final AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage("You seem to be more than 5km away from destination, do you still wanna proceed?")
@@ -330,6 +330,8 @@ public class Map extends FragmentActivity implements OnMapReadyCallback,
                             myIntent.putExtra("keyMap", destinationPassed);
                             myIntent.putExtra("keyTimeToDest", timeToDest);
                             myIntent.putExtra("keyTime", textChange.getText().toString());
+                            myIntent.putExtra("keyLatitude", destinationLatLng.latitude);
+                            myIntent.putExtra("keyLongitude", destinationLatLng.longitude);
                             startActivity(myIntent);
                         }
                     })
@@ -346,19 +348,25 @@ public class Map extends FragmentActivity implements OnMapReadyCallback,
             myIntent.putExtra("keyMap", destinationPassed);
             myIntent.putExtra("keyTimeToDest", timeToDest);
             myIntent.putExtra("keyTime", textChange.getText().toString());
+            myIntent.putExtra("keyLatitude", destinationLatLng.latitude);
+            myIntent.putExtra("keyLongitude", destinationLatLng.longitude);
             Log.d("here before intent", " " + timeToDest);
 
             startActivity(myIntent);
         }
     }
 
-    //Method checks if current location is more than 5 km away from destination.
+    /**
+     * Method checks if current location is more than 5 km away from destination.
+     * @param destinationLL coordinates of destination location
+     * @return boolean whether location is within the recommended 5km distance
+     */
     private boolean inRadius(LatLng destinationLL) {
         float[] results = new float[1];
         Location.distanceBetween(currentLat, currentLong, destinationLL.latitude, destinationLL.longitude, results);
         float distanceInMeters = results[0];
-        boolean isWithin3km = distanceInMeters < 5000;
-        return isWithin3km;
+        boolean isWithin5km = distanceInMeters < 5000;
+        return isWithin5km;
     }
 
     //Calculates how many minutes the user needs based on his own unique average walking speed to go there.

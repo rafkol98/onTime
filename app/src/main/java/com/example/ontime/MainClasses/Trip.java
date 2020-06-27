@@ -6,17 +6,24 @@ package com.example.ontime.MainClasses;
 public class Trip implements Comparable<Trip>{
 
     //initialise variables. Timestamp is used because time is stored as a long in the firebase database.
+    int tripId;
     String destination;
+    double latitude;
+    double longitude;
     String date;
     String time;
     Long timestamp;
     Object object;
+    double flagValue10;
+    double flagValue1;
+    boolean shouldAlert10 = true;
+    boolean shouldAlert1 = true;
 
     /**
-     *
-     * @param destination
-     * @param date
-     * @param time
+     * Constructor
+     * @param destination - Destination of interest
+     * @param date - Date of trip
+     * @param time - Time of trip
      */
     public Trip(String destination, String date, String time) {
         this.destination = destination;
@@ -25,9 +32,26 @@ public class Trip implements Comparable<Trip>{
     }
 
     /**
-     *
-     * @param destination
-     * @param timestamp
+     * Constructor
+     * @param destination - Destination of interest
+     * @param timestamp - Timestamp for when destination is planned
+     * @param latitude - Latitude of location
+     * @param longitude - Longitude of location
+     */
+    public Trip (String destination, Long timestamp, double latitude, double longitude) {
+        this.destination = destination;
+        this.timestamp = timestamp;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+
+
+
+    /**
+     * Constructor
+     * @param destination - Destination of interest
+     * @param timestamp - Timestamp for when trip is planned
      */
     public Trip(String destination, Long timestamp) {
         this.destination = destination;
@@ -35,36 +59,48 @@ public class Trip implements Comparable<Trip>{
     }
 
     /**
-     *
-     * @param object
+     * Constructor
+     * @param object ?
      */
     public Trip(Object object) {
         this.object = object;
     }
 
     /**
-     *
-     * @return
+     * Getter for Destination
+     * @return destination of trip
      */
     public String getDestination() {
         return destination;
     }
 
     /**
-     *
-     * @return
+     * Getter for Date
+     * @return date of trip
      */
     public String getDate() {
         return date;
     }
 
     /**
-     *
-     * @return
+     * Getter for Time
+     * @return time of trip
      */
     public String getTime() {
         return time;
     }
+
+    /**
+     * Getter for Latitude
+     * @return latitude of destination
+     */
+    public double getLatitude() { return latitude; }
+
+    /**
+     * Getter for Longitude
+     * @return longitude of destination
+     */
+    public double getLongitude() { return longitude; }
 
     /**
      *
@@ -73,6 +109,38 @@ public class Trip implements Comparable<Trip>{
     public Long getTimestamp() {
         return timestamp;
     }
+
+    /**
+     * Setter for Distance from
+     * @param flagValue10 the distance of the users current location from trip destination
+     */
+    public void setFlagValue10(double flagValue10) { this.flagValue10 = flagValue10; }
+
+    /**
+     * Getter for Distance From
+     * @return the distance of the users current location from trip destination
+     */
+    public double getFlagValue10() { return flagValue10; }
+
+    /**
+     * Setter for Distance from
+     * @param flagValue1 the distance of the users current location from trip destination
+     */
+    public void setFlagValue1(double flagValue1) { this.flagValue1 = flagValue1; }
+
+    /**
+     * Getter for Distance From
+     * @return the distance of the users current location from trip destination
+     */
+    public double getFlagValue1() { return flagValue1; }
+
+    public boolean getShouldAlert10() { return shouldAlert10; }
+
+    public void setShouldAlert10 (boolean shouldAlert10) { this.shouldAlert10 = shouldAlert10; }
+
+    public boolean getShouldAlert1() { return shouldAlert1; }
+
+    public void setShouldAlert1 (boolean shouldAlert1) { this.shouldAlert1 = shouldAlert1; }
 
     /**
      * Get unique hash key of the trip. Used to generate a unique tripId for each trip.
@@ -107,9 +175,9 @@ public class Trip implements Comparable<Trip>{
     }
 
     /**
-     *
-     * @param l
-     * @return
+     * Convert Long to Integer
+     * @param l long to be converted
+     * @return integer value
      */
     public static int safeLongToInt(long l) {
         if (l < Integer.MIN_VALUE || l > Integer.MAX_VALUE) {
@@ -118,4 +186,5 @@ public class Trip implements Comparable<Trip>{
         }
         return (int) l;
     }
+
 }
