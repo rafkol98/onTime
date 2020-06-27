@@ -519,8 +519,15 @@ public class Service extends android.app.Service {
                                 "Should start walking",
                                 "In 10 minutes start walking to " + trip.getDestination() + " in order to arrive on time.",
                                 R.drawable.ic_notification, id, notifyPendingIntent, Channels.WALK_ALERT_CHANNEL);
-                        Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
-                        v.vibrate(2000);
+                        try{
+                            Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+                            if (v != null){
+                                v.vibrate(2000);
+                            }
+                        } catch (NullPointerException e) {
+                            FirebaseCrashlytics.getInstance().recordException(e);
+                        }
+
                         trip.setShouldAlert10(false);
 
                         //write current location on the database.
@@ -568,8 +575,14 @@ public class Service extends android.app.Service {
                                 "Should start walking",
                                 "In 1 minute start walking to " + trip.getDestination() + " in order to arrive on time.",
                                 R.drawable.ic_notification, id, notifyPendingIntent, Channels.WALK_1_ALERT_CHANNEL);
-                        Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
-                        v.vibrate(2000);
+                        try{
+                            Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+                            if (v != null){
+                                v.vibrate(2000);
+                            }
+                        } catch (NullPointerException e) {
+                            FirebaseCrashlytics.getInstance().recordException(e);
+                        }
                         trip.setShouldAlert1(false);
 
                         //write current location on the database.
@@ -606,8 +619,8 @@ public class Service extends android.app.Service {
          * Gets duration and distance in the background. Remember, this is an AsyncTask so it doesn't
          * run with the natural flow of the program. It runs in the background.
          *
-         * @param params
-         * @return
+         * @param params - Parameters of interest for background work
+         * @return - A string of the duration and distance
          */
         @Override
         protected String doInBackground(String... params) {
