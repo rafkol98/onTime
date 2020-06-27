@@ -132,6 +132,8 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
 
                         final boolean[] arrayBoolean = toPrimitiveArray(booleansList);
 
+
+
                         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
                         alertDialogBuilder.setCancelable(true);
                         alertDialogBuilder.setTitle("Select friends to share the meeting");
@@ -181,7 +183,7 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
         });
 
 
-        // Open a map when the user clicks on the search button.
+        // Open a map when the user clicks on the search button. The map opens to allow the user to confirm the location.
         meetBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
