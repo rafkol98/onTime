@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/select_temp_speed_bg"
-    tools:context=".SelectTempSpeed">
+    tools:context=".SignIn_UpClasses.SelectTempSpeed">
 
 
     <androidx.constraintlayout.widget.Guideline
@@ -57,11 +57,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:gravity="center"
-        android:text="Please select with 100% honesty what you feel like accurately
+        android:text="Please select with 100% honesty what you feel accurately
 describes your walking speed.
 "
         android:textColor="@color/blgrey"
-        android:textSize="15sp"
+        android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView18" />
@@ -75,7 +75,7 @@ describes your walking speed.
         android:text="You will be able to take the actual speed test whenever you want and you are outside, from the settings of the app.
 "
         android:textColor="@color/blgrey"
-        android:textSize="15sp"
+        android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.509"
         app:layout_constraintStart_toStartOf="parent"
@@ -85,11 +85,12 @@ describes your walking speed.
         android:id="@+id/buttonSlow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/custom_buttonRed"
-        android:textColor="@color/white"
-        android:textStyle="italic"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/custom_button_red"
         android:text="SLOW"
+        android:textColor="@color/white"
+        android:paddingHorizontal="25dp"
+        android:textStyle="italic"
         app:layout_constraintStart_toStartOf="@+id/guideline30"
         app:layout_constraintTop_toBottomOf="@+id/textIntroTest2" />
 
@@ -97,11 +98,11 @@ describes your walking speed.
         android:id="@+id/buttonAverage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/custom_buttonRed"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/custom_button_red"
+        android:text="AVERAGE"
         android:textColor="@color/white"
         android:textStyle="italic"
-        android:text="AVERAGE"
         app:layout_constraintEnd_toStartOf="@+id/guideline31"
         app:layout_constraintTop_toBottomOf="@+id/textIntroTest2" />
 
@@ -109,11 +110,11 @@ describes your walking speed.
         android:id="@+id/buttonQuiteSlow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/custom_buttonRed"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/custom_button_red"
+        android:text="QUITE SLOW"
         android:textColor="@color/white"
         android:textStyle="italic"
-        android:text="QUITE SLOW"
 
         app:layout_constraintEnd_toStartOf="@+id/buttonAverage"
         app:layout_constraintStart_toEndOf="@+id/buttonSlow"
@@ -124,10 +125,10 @@ describes your walking speed.
         android:id="@+id/buttonQuiteFast"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginLeft="40dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginLeft="60dp"
         android:layout_marginTop="24dp"
-        android:background="@drawable/custom_buttonRed"
+        android:background="@drawable/custom_button_red"
         android:text="QUITE FAST"
         android:textColor="@color/white"
         android:textStyle="italic"
@@ -139,9 +140,9 @@ describes your walking speed.
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginRight="40dp"
-        android:background="@drawable/custom_buttonRed"
+        android:layout_marginEnd="60dp"
+        android:layout_marginRight="60dp"
+        android:background="@drawable/custom_button_red"
         android:text="FAST"
         android:textColor="@color/white"
         android:textStyle="italic"

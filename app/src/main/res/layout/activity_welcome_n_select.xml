@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/welcome_select_bg"
-    tools:context=".WelcomeNSelect">
+    android:background="@drawable/welcome_altt_bg"
+    tools:context=".SignIn_UpClasses.WelcomeNSelect">
 
     <TextView
         android:id="@+id/your_friends_txt2"
@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:gravity="center"
-        android:textSize="15sp"
+        android:textSize="17sp"
         android:text="We will do a 2 minute test run, that will
 help us calculate your average
 walking speed.
@@ -60,7 +60,7 @@ walking speed.
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:gravity="center"
-        android:textSize="15sp"
+        android:textSize="17sp"
         android:text="We will use your average walking speed
 to better suggest when you should start
 your journey, and other smart
@@ -81,7 +81,7 @@ suggestions!
         android:gravity="center"
         android:text="YOU HAVE TO BE OUTSIDE TO DO THE TEST,"
         android:textColor="@color/blgrey"
-        android:textSize="14sp"
+        android:textSize="17sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline28"
         app:layout_constraintStart_toStartOf="@+id/guideline27"
@@ -95,7 +95,7 @@ suggestions!
         android:gravity="center"
         android:text="PLEASE WALK AT YOUR NORMAL SPEED"
         android:textColor="@color/blgrey"
-        android:textSize="14sp"
+        android:textSize="17sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline28"
         app:layout_constraintStart_toStartOf="@+id/guideline27"
@@ -125,7 +125,7 @@ suggestions!
         android:padding="12dp"
         android:text="I AM OUTSIDE, LET'S GO!"
         android:background="@drawable/custom_button2"
-        android:textSize="18dp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textWalkNormal" />
@@ -137,11 +137,11 @@ suggestions!
         android:layout_marginLeft="30dp"
         android:layout_marginTop="16dp"
         android:layout_marginRight="30dp"
-android:background="@drawable/custom_buttonRed"
-        android:padding="16dp"
-        android:text="I AM NOT OUTSIDE, I WILL DO THE TEST LATER"
+android:background="@drawable/custom_button_red"
+        android:padding="12dp"
+        android:text="I AM NOT OUTSIDE"
         android:textColor="@color/white"
-        android:textSize="14dp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.733"
         app:layout_constraintStart_toStartOf="parent"
