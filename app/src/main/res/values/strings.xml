@@ -62,4 +62,14 @@
     <string name="home_icon">Home Icon</string>
     <string name="arrival_time">Arrival Time:</string>
 
+    <string name="location_access_required">Location access is required to use map utilities.</string>
+    <string name="ok">OK</string>
+    <string name="location_unavailable">Permission is not available. Requesting location permission.</string>
+    <string name="location_permission_granted">Location permission was granted.</string>
+    <string name="location_permission_denied">Location permission request was denied.</string>
+    <string name="background_location_permission_granted">Background Location permission was granted.</string>
+    <string name="background_location_permission_denied">Background Location permission request was denied.</string>
+    <string name="background_access_required">Background Location access is required to update on trips.</string>
+    <string name="background_location_unavailable">Permission is not available. Requesting background location permission.</string>
+
 </resources>
