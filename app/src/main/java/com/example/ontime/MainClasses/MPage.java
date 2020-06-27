@@ -49,11 +49,24 @@ public class MPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_m_page);
 
+        String menuFragment = getIntent().getStringExtra("Tab");
+
         //Set bottom navigation bar.
         final BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new Tab1()).commit();
+        if (menuFragment != null) {
+            switch (menuFragment) {
+                case "Tab0":
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Tab0()).commit();
+                case "Tab1":
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Tab1()).commit();
+                case "Tab2":
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Tab2()).commit();
+            }
+        } else {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Tab1()).commit();
+        }
 
         //Get uId of the user from the firebase database.
         final String uId = currentFirebaseUser.getUid();
