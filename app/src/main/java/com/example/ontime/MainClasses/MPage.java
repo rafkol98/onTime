@@ -59,10 +59,13 @@ public class MPage extends AppCompatActivity {
             switch (menuFragment) {
                 case "Tab0":
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Tab0()).commit();
+                    break;
                 case "Tab1":
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Tab1()).commit();
+                    break;
                 case "Tab2":
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Tab2()).commit();
+                    break;
             }
         } else {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Tab1()).commit();
