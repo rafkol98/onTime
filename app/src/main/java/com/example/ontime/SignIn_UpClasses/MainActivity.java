@@ -5,6 +5,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,6 +24,7 @@ import com.example.ontime.R;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.*;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.database.FirebaseDatabase;
@@ -52,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     AlertDialog.Builder builder;
     AlertDialog dialog;
 
+    private View mLayout;
 
     private FirebaseAuth mAuth;
 
@@ -63,6 +66,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mLayout = findViewById(R.id.main_layout);
 
         setPersistence();
         fixGoogleMapBug();
@@ -113,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
         // Determine if permissions should be requested at Runtime
         if(!hasPermissions(this, PERMISSIONS)) {
-            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
+            requestRequiredPermissions();
         }
     }
 
@@ -132,6 +137,37 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         }
     }
 
+    private void requestRequiredPermissions() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)){
+            Snackbar.make(mLayout, R.string.location_access_required,
+                    Snackbar.LENGTH_INDEFINITE).setAction(R.string.ok, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ActivityCompat.requestPermissions(MainActivity.this, PERMISSIONS, PERMISSION_ALL);
+                }
+            }).show();
+        } else {
+            Snackbar.make(mLayout, R.string.location_unavailable, Snackbar.LENGTH_SHORT).show();
+            ActivityCompat.requestPermissions(MainActivity.this, PERMISSIONS, PERMISSION_ALL);
+        }
+    }
+
+    private void requestBackgroundPermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.ACCESS_BACKGROUND_LOCATION)){
+            Snackbar.make(mLayout, R.string.background_access_required,
+                    Snackbar.LENGTH_INDEFINITE).setAction(R.string.ok, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ActivityCompat.requestPermissions(MainActivity.this, BACKGROUND, PERMISSION_BACKGROUND);
+                }
+            }).show();
+        } else {
+            Snackbar.make(mLayout, R.string.background_location_unavailable, Snackbar.LENGTH_SHORT).show();
+            ActivityCompat.requestPermissions(MainActivity.this, BACKGROUND, PERMISSION_BACKGROUND);
+        }
+    }
     /**
      * Sign in to you account using firbase database authentication.
      */
@@ -176,12 +212,14 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 &&
                         grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Snackbar.make(mLayout, R.string.location_permission_granted,
+                            Snackbar.LENGTH_SHORT).show();
                     // Permission is granted. Continue the action or workflow
                     // in your app.
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         // Determine if permissions should be requested at Runtime
                         if(!hasPermissions(this, BACKGROUND)) {
-                            ActivityCompat.requestPermissions(this, BACKGROUND, PERMISSION_BACKGROUND);
+                            requestBackgroundPermission();
                         }
                     }
                 }  else {
@@ -190,10 +228,20 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                     // At the same time, respect the user's decision. Don't link to
                     // system settings in an effort to convince the user to change
                     // their decision.
+                    Snackbar.make(mLayout, R.string.location_permission_denied,
+                            Snackbar.LENGTH_SHORT).show();
                 }
                 return;
 
             case PERMISSION_BACKGROUND:
+                if (grantResults.length == 1 &&
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Snackbar.make(mLayout, R.string.background_location_permission_granted,
+                            Snackbar.LENGTH_SHORT).show();
+                } else {
+                    Snackbar.make(mLayout, R.string.background_location_permission_denied,
+                            Snackbar.LENGTH_SHORT).show();
+                }
 
         }
         // Other 'case' lines to check for other
