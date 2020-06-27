@@ -363,27 +363,31 @@ public class Map extends FragmentActivity implements OnMapReadyCallback,
     //Calculates how many minutes the user needs based on his own unique average walking speed to go there.
     @Override
     public void calculateTimeAndDist(String result) {
-        String[] res = result.split(",");
-        Double min = Double.parseDouble(res[0]) / 60;
-        Double dist = Double.parseDouble(res[1]) / 1000;
+        try {
+            String[] res = result.split(",");
+            Double min = Double.parseDouble(res[0]) / 60;
+            Double dist = Double.parseDouble(res[1]) / 1000;
 
-        Double d = Double.valueOf(dist);
-        Double s = Double.valueOf(getAverageSpeed());
+            Double d = Double.valueOf(dist);
+            Double s = Double.valueOf(getAverageSpeed());
 
-        timeToDest = ((d / s) * 60);
+            timeToDest = ((d / s) * 60);
 
-        textChange.setText(timeToDest + "");
-        distance = dist;
-        Toast.makeText(Map.this, "You need " + (int) timeToDest + " minutes to go there from your current location", Toast.LENGTH_LONG).show();
-        Log.d("Distance here here", distance + "");
+            textChange.setText(timeToDest + "");
+            distance = dist;
+            Toast.makeText(Map.this, "You need " + (int) timeToDest + " minutes to go there from your current location", Toast.LENGTH_LONG).show();
+            Log.d("Distance here here", distance + "");
 
-        //if destination is more than 50km away he has to select an alternative starting location.
-        if (dist > 50) {
-            Intent myIntent = new Intent(Map.this, PlanTripFromLocation.class);;
-            myIntent.putExtra("keyMap", destinationPassed);
-            startActivity(myIntent);
+            //if destination is more than 50km away he has to select an alternative starting location.
+            if (dist > 50) {
+                Intent myIntent = new Intent(Map.this, PlanTripFromLocation.class);
+                ;
+                myIntent.putExtra("keyMap", destinationPassed);
+                startActivity(myIntent);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
-
     }
 
     @Override

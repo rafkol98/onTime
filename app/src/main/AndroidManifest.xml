@@ -21,7 +21,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SignIn_UpClasses.SelectTempSpeed"></activity>
+        <activity android:name=".AverageSpeedNotFound"></activity>
+        <activity android:name=".SignIn_UpClasses.SelectTempSpeed" />
         <activity android:name=".SignIn_UpClasses.WelcomeNSelect" />
         <activity
             android:name=".MeetingsClasses.Map_Meet"

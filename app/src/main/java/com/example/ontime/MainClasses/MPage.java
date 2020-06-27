@@ -4,11 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.example.ontime.AverageSpeedNotFound;
 import com.example.ontime.R;
 import com.example.ontime.MainClasses.fragments.Tab0;
 import com.example.ontime.MainClasses.fragments.Tab1;
@@ -16,6 +18,7 @@ import com.example.ontime.MainClasses.fragments.Tab2;
 import com.example.ontime.RestarterAndServices.ProcessClass;
 import com.example.ontime.RestarterAndServices.RestartServiceBroadcastReceiver;
 import com.example.ontime.MeetingsClasses.Social;
+import com.example.ontime.SignIn_UpClasses.Countdown;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -72,6 +75,25 @@ public class MPage extends AppCompatActivity {
        //set email of the user.
        emailReff.setValue(uId);
 
+       //Read data just once, see if the user has a node 'Average Speed' If he doesn't have one take him to an activity where he will have the option to either
+        // take the test or select a speed from one of the options.
+       userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+           @Override
+           public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+               if(!dataSnapshot.hasChild("Average Speed")){
+                   Intent intent = new Intent(MPage.this, AverageSpeedNotFound.class);
+                   startActivity(intent);
+                   finish();
+
+               }
+           }
+
+           @Override
+           public void onCancelled(@NonNull DatabaseError databaseError) {
+
+           }
+       });
+
 
         Log.d("EMAIL of user",email);
 
@@ -79,6 +101,7 @@ public class MPage extends AppCompatActivity {
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                 Long childrenL = dataSnapshot.child("trips").getChildrenCount();
                 String counter = Long.toString(childrenL);
                 if (childrenL != 0){

@@ -55,6 +55,7 @@ public class SelectTempSpeed extends AppCompatActivity {
                 //Go to MPage.
                 Intent intent = new Intent(SelectTempSpeed.this, MPage.class);
                 startActivity(intent);
+                overridePendingTransition(0,0);
                 finish();
 
 
@@ -77,6 +78,7 @@ public class SelectTempSpeed extends AppCompatActivity {
                 //Go to MPage.
                 Intent intent = new Intent(SelectTempSpeed.this, MPage.class);
                 startActivity(intent);
+                overridePendingTransition(0,0);
                 finish();
             }
         });
@@ -97,6 +99,7 @@ public class SelectTempSpeed extends AppCompatActivity {
                 //Go to MPage.
                 Intent intent = new Intent(SelectTempSpeed.this, MPage.class);
                 startActivity(intent);
+                overridePendingTransition(0,0);
                 finish();
             }
         });
@@ -117,6 +120,7 @@ public class SelectTempSpeed extends AppCompatActivity {
                 //Go to MPage.
                 Intent intent = new Intent(SelectTempSpeed.this, MPage.class);
                 startActivity(intent);
+                overridePendingTransition(0,0);
                 finish();
             }
         });
@@ -138,6 +142,7 @@ public class SelectTempSpeed extends AppCompatActivity {
                 //Go to MPage.
                 Intent intent = new Intent(SelectTempSpeed.this, MPage.class);
                 startActivity(intent);
+                overridePendingTransition(0,0);
                 finish();
             }
         });
