@@ -9,6 +9,9 @@ import android.widget.Button;
 
 import com.example.ontime.R;
 
+/**
+ * This activity is shown when the user signed up for the first time.
+ */
 public class WelcomeNSelect extends AppCompatActivity {
 
     //Initialise variables.

@@ -15,6 +15,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+/**
+ * This activity allows the user to select what speed they think represents the if they cannot do the test.
+ */
 public class SelectTempSpeed extends AppCompatActivity {
 
     //Initialise variables.
