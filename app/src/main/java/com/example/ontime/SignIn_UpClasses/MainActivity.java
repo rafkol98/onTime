@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,16 +24,22 @@ import com.example.ontime.R;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.*;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.File;
 
+import static com.example.ontime.PermissionConstants.BACKGROUND;
+import static com.example.ontime.PermissionConstants.PERMISSIONS;
+import static com.example.ontime.PermissionConstants.PERMISSION_ALL;
+import static com.example.ontime.PermissionConstants.PERMISSION_BACKGROUND;
+
 /**
  *
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
 
     //Initialise variables.
@@ -49,18 +54,9 @@ public class MainActivity extends AppCompatActivity {
     AlertDialog.Builder builder;
     AlertDialog dialog;
 
+    private View mLayout;
 
     private FirebaseAuth mAuth;
-
-    private final String[] PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION,
-                                        Manifest.permission.ACCESS_COARSE_LOCATION};
-
-    @SuppressLint("InlinedApi")
-    private final String[] PERMISSIONS_Q = {Manifest.permission.ACCESS_FINE_LOCATION,
-                                            Manifest.permission.ACCESS_COARSE_LOCATION,
-                                            Manifest.permission.ACCESS_BACKGROUND_LOCATION};
-
-    static final int PERMISSION_ALL = 134;
 
     /**
      *
@@ -70,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mLayout = findViewById(R.id.main_layout);
 
         setPersistence();
         fixGoogleMapBug();
@@ -119,17 +117,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Determine if permissions should be requested at Runtime
-        if (Build.VERSION.SDK_INT >= 23) {
-            // If prior to Android Q request normal permissions else request background location
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q){
-                if(!hasPermissions(this, PERMISSIONS)){
-                    ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
-                }
-            } else {
-                if(!hasPermissions(this, PERMISSIONS_Q)){
-                    ActivityCompat.requestPermissions(this, PERMISSIONS_Q, PERMISSION_ALL);
-                }
-            }
+        if(!hasPermissions(this, PERMISSIONS)) {
+            requestRequiredPermissions();
         }
     }
 
@@ -148,6 +137,37 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void requestRequiredPermissions() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)){
+            Snackbar.make(mLayout, R.string.location_access_required,
+                    Snackbar.LENGTH_INDEFINITE).setAction(R.string.ok, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ActivityCompat.requestPermissions(MainActivity.this, PERMISSIONS, PERMISSION_ALL);
+                }
+            }).show();
+        } else {
+            Snackbar.make(mLayout, R.string.location_unavailable, Snackbar.LENGTH_SHORT).show();
+            ActivityCompat.requestPermissions(MainActivity.this, PERMISSIONS, PERMISSION_ALL);
+        }
+    }
+
+    private void requestBackgroundPermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.ACCESS_BACKGROUND_LOCATION)){
+            Snackbar.make(mLayout, R.string.background_access_required,
+                    Snackbar.LENGTH_INDEFINITE).setAction(R.string.ok, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ActivityCompat.requestPermissions(MainActivity.this, BACKGROUND, PERMISSION_BACKGROUND);
+                }
+            }).show();
+        } else {
+            Snackbar.make(mLayout, R.string.background_location_unavailable, Snackbar.LENGTH_SHORT).show();
+            ActivityCompat.requestPermissions(MainActivity.this, BACKGROUND, PERMISSION_BACKGROUND);
+        }
+    }
     /**
      * Sign in to you account using firbase database authentication.
      */
@@ -183,6 +203,51 @@ public class MainActivity extends AppCompatActivity {
                     });
         }
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_ALL:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 &&
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Snackbar.make(mLayout, R.string.location_permission_granted,
+                            Snackbar.LENGTH_SHORT).show();
+                    // Permission is granted. Continue the action or workflow
+                    // in your app.
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        // Determine if permissions should be requested at Runtime
+                        if(!hasPermissions(this, BACKGROUND)) {
+                            requestBackgroundPermission();
+                        }
+                    }
+                }  else {
+                    // Explain to the user that the feature is unavailable because
+                    // the features requires a permission that the user has denied.
+                    // At the same time, respect the user's decision. Don't link to
+                    // system settings in an effort to convince the user to change
+                    // their decision.
+                    Snackbar.make(mLayout, R.string.location_permission_denied,
+                            Snackbar.LENGTH_SHORT).show();
+                }
+                return;
+
+            case PERMISSION_BACKGROUND:
+                if (grantResults.length == 1 &&
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Snackbar.make(mLayout, R.string.background_location_permission_granted,
+                            Snackbar.LENGTH_SHORT).show();
+                } else {
+                    Snackbar.make(mLayout, R.string.background_location_permission_denied,
+                            Snackbar.LENGTH_SHORT).show();
+                }
+
+        }
+        // Other 'case' lines to check for other
+        // permissions this app might request.
+    }
+
 
     /**
      * Generate a Loading Animation.

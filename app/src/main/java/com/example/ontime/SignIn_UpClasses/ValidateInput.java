@@ -29,8 +29,8 @@ public class ValidateInput {
     }
 
     /**
-     *
-     * @param myContext
+     * Constructor
+     * @param myContext context
      * @param myName
      * @param myEmail
      * @param myPassword
@@ -46,8 +46,9 @@ public class ValidateInput {
     }
 
     /**
-     *
-     * @return
+     * Method to validate email
+     * Access Level: Package Private
+     * @return a boolean value whether the the email added is invalid
      */
     boolean ValidateEmail(){
         emailInput = email.getText().toString().trim();
@@ -64,8 +65,9 @@ public class ValidateInput {
     }
 
     /**
-     *
-     * @return
+     * Validates whether the password field is not empty and of appropriate length
+     * Access Level: Package Private
+     * @return a boolean value whether the password field meets requirement criteria
      */
     boolean ValidatePassword(){
         passwordInput = password.getText().toString().trim();
@@ -83,8 +85,9 @@ public class ValidateInput {
     }
 
     /**
-     *
-     * @return
+     * Validates whether the passwords match
+     * Access Level: Package Private
+     * @return a boolean value representing whether the two password fields match
      */
     boolean repeatPasswordValidation(){
         nameInput= name.getText().toString().trim();

@@ -38,7 +38,8 @@ import java.util.Date;
 /**
  * This class is used to enable the user to select the date and time of the trip.
  */
-public class SelectTime extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerFragment.TimePickerListener {
+public class SelectTime extends AppCompatActivity implements DatePickerDialog.OnDateSetListener,
+                                                            TimePickerFragment.TimePickerListener {
 
     /*
     Declare variables.
@@ -50,12 +51,18 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
     private TextView dateText;
     private TextView timeText;
 
+
+    double desLat, desLng;
+
     Trip trip;
     Map map;
     double time, tt;
     DateTimeCheck dateTimeCheck;
 
-    //Gets
+    /**
+     *
+     * @return time
+     */
     public double getTime() {
         return time;
     }
@@ -85,6 +92,9 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
             destinationPassed = extras.getString("keyMap");
             tt = extras.getDouble("keyTimeToDest");
             stringIn = extras.getString("keyTime");
+            desLat = extras.getDouble("keyLatitude");
+            desLng = extras.getDouble("keyLongitude");
+
         }
 
 
@@ -163,7 +173,7 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
         int temp = (int) timeToWalk;
 
         //Get time in difference between current date and trip's desired date.
-        int minutesDate = dateTimeCheck.getDateDiff(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"), strDate, dateSelected);
+        int minutesDate = DateTimeCheck.getDateDiff(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"), strDate, dateSelected);
 
 
         if ((dateText.getText().toString()).equalsIgnoreCase("date") && (timeText.getText().toString()).equalsIgnoreCase("time")) {
@@ -235,12 +245,16 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
         String dateSelected = dateText.getText().toString() + " " + timeText.getText().toString();
         Long timestamp = toMilli(dateSelected);
 
+        trip = new Trip(destinationPassed, timestamp, desLat, desLng, false);
 
-        trip = new Trip(destinationPassed, timestamp,false);
+        trip.setShouldAlert10(false);
+        trip.setShouldAlert1(false);
+
+
         //Get uId of the Firebase User.
         String uId = currentFirebaseUser.getUid();
         //Create a unique Hash Key for the Trip.
-        String tripId = Integer.toString(trip.getTripId(destinationPassed, datePassed, timePassed));
+        String tripId = Long.toString(trip.getTimestamp());
 
         //Store the trip on Firebase RealTime Database.
         DatabaseReference childReff = dbRef.child(uId).child("trips").child(tripId);
