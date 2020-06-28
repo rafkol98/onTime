@@ -17,11 +17,14 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.example.ontime.MainClasses.MPage;
 import com.example.ontime.MapRelatedClasses.Navigate;
 import com.example.ontime.MeetingsClasses.Meet_Request;
 import com.example.ontime.R;
 import com.example.ontime.MainClasses.Trip;
 import com.example.ontime.MainClasses.TripListAdapter;
+import com.example.ontime.SignIn_UpClasses.AverageSpeedNotFound;
+import com.example.ontime.SignIn_UpClasses.Countdown;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
@@ -74,6 +77,7 @@ public class Tab2 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         View v = inflater.inflate(R.layout.fragment_tab2, container, false);
         mListView = (ListView) v.findViewById(R.id.listView);
         deleteBtn = v.findViewById(R.id.buttonDelete);
@@ -177,22 +181,32 @@ public class Tab2 extends Fragment {
                                     if (snapshot.hasChild(keyTrip)) {
                                         tripsRef.child(keyTrip).removeValue();
                                     }
-                                    //If they dont include it, it means that its a meeting. Remove the meeting using keyMeeting.
+                                    //If its not included, it means that its a meeting. Remove the meeting using keyMeeting.
                                     else {
                                         tripsRef.child(keyMeeting).removeValue();
                                     }
 
-                                    //Refresh the fragment.
-                                    Fragment newFragment = new Tab2();
-                                    FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                                    Intent refreshIntent = new Intent(getContext(), MPage.class);
+                                    refreshIntent.putExtra("Tab","Tab2");
+                                    refreshIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    getActivity().overridePendingTransition(0,0);
+                                    startActivity(refreshIntent);
 
-                                    // Replace whatever is in the fragment_container view with this fragment,
-                                    // and add the transaction to the back stack if needed
-                                    transaction.replace(R.id.fragment_container, newFragment);
-                                    transaction.addToBackStack(null);
 
-                                    // Commit the transaction
-                                    transaction.commit();
+
+
+
+//                                    //Refresh the fragment.
+//                                    Fragment newFragment = new Tab2();
+//                                    FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+//
+//                                    // Replace whatever is in the fragment_container view with this fragment,
+//                                    // and add the transaction to the back stack if needed
+//                                    transaction.replace(R.id.fragment_container, newFragment);
+//                                    transaction.addToBackStack(null);
+//
+//                                    // Commit the transaction
+//                                    transaction.commit();
 
 
                                 } catch (NullPointerException e) {
