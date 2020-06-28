@@ -7,6 +7,7 @@ import androidx.fragment.app.DialogFragment;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -108,6 +109,7 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
             @Override
             public void onClick(View v) {
                 DialogFragment timePickerFragment = new TimePickerFragment();
+                timePickerFragment.setStyle(DialogFragment.STYLE_NORMAL,R.style.MyTimePickerDialogTheme);
                 timePickerFragment.setCancelable(false);
                 timePickerFragment.show(getSupportFragmentManager(), "timePicker");
             }
@@ -148,7 +150,7 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
      */
     @Override
     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-        timeText.setText(hour + ":" + minute);
+        timeText.setText(String.format("%02d:%02d", hour, minute));
     }
 
 
@@ -243,10 +245,11 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
         String dateSelected = dateText.getText().toString() + " " + timeText.getText().toString();
         Long timestamp = toMilli(dateSelected);
 
-        trip = new Trip(destinationPassed, timestamp, desLat, desLng);
+        trip = new Trip(destinationPassed, timestamp, desLat, desLng, false);
 
         trip.setShouldAlert10(false);
         trip.setShouldAlert1(false);
+
 
         //Get uId of the Firebase User.
         String uId = currentFirebaseUser.getUid();

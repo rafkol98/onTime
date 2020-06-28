@@ -3,7 +3,7 @@ package com.example.ontime.MainClasses;
 /**
  * Store specific information about a walk/trip.
  */
-public class Trip implements Comparable<Trip>{
+public class Trip implements Comparable<Trip> {
 
     //initialise variables. Timestamp is used because time is stored as a long in the firebase database.
     int tripId;
@@ -18,6 +18,8 @@ public class Trip implements Comparable<Trip>{
     double flagValue1;
     boolean shouldAlert10 = true;
     boolean shouldAlert1 = true;
+
+    boolean meetingFlag;
 
     /**
      * Constructor
@@ -46,7 +48,21 @@ public class Trip implements Comparable<Trip>{
     }
 
 
-
+    /**
+     * Constructor
+     * @param destination - Destination of interest
+     * @param timestamp - Timestamp for when destination is planned
+     * @param latitude - Latitude of location
+     * @param longitude - Longitude of location
+     * @param meetingFlag - Is this a meeting?
+     */
+    public Trip (String destination, Long timestamp, double latitude, double longitude, boolean meetingFlag) {
+        this.destination = destination;
+        this.timestamp = timestamp;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.meetingFlag = meetingFlag;
+    }
 
     /**
      * Constructor
@@ -57,6 +73,18 @@ public class Trip implements Comparable<Trip>{
         this.destination = destination;
         this.timestamp = timestamp;
     }
+
+
+    /**
+     * @param destination
+     * @param timestamp
+     */
+    public Trip(String destination, Long timestamp, boolean meetingFlag) {
+        this.destination = destination;
+        this.timestamp = timestamp;
+        this.meetingFlag = meetingFlag;
+    }
+
 
     /**
      * Constructor
@@ -110,6 +138,7 @@ public class Trip implements Comparable<Trip>{
         return timestamp;
     }
 
+
     /**
      * Setter for Distance from
      * @param flagValue10 the distance of the users current location from trip destination
@@ -144,23 +173,23 @@ public class Trip implements Comparable<Trip>{
 
     /**
      * Get unique hash key of the trip. Used to generate a unique tripId for each trip.
+     *
      * @param destination
      * @param date
      * @param time
      * @return
      */
-    public int getTripId(String destination, String date, String time){
-        String date_time = (destination+date+time);
+    public int getTripId(String destination, String date, String time) {
+        String date_time = (destination + date + time);
 
         int hash = 17;
         for (int i = 0; i < date_time.length(); i++) {
-            hash = hash*31 + date_time.charAt(i);
+            hash = hash * 31 + date_time.charAt(i);
         }
         return hash;
     }
 
     /**
-     *
      * @param o
      * @return
      */
@@ -186,5 +215,8 @@ public class Trip implements Comparable<Trip>{
         }
         return (int) l;
     }
-
+  
+    public boolean isMeetingFlag() {
+        return meetingFlag;
+    }
 }

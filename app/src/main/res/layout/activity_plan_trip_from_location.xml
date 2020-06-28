@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainClasses.PlanTripFromLocation"
-    android:background="@drawable/not_foot_bg">
+    android:background="@drawable/not_foot_bg"
+    android:screenOrientation="nosensor">
 
     <TextView
         android:id="@+id/textView3"

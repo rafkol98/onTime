@@ -53,6 +53,7 @@ public class TripListAdapter extends ArrayAdapter<Trip> {
         // Default values in case getItem().get... produces a NPE
         String destination = "";
         Long timeLong = 0L;
+        boolean isMeeting=false;
 
         // Attempt to get the destination
         try{
@@ -68,6 +69,13 @@ public class TripListAdapter extends ArrayAdapter<Trip> {
             FirebaseCrashlytics.getInstance().recordException(e);
         }
 
+        // Attempt to understand if its a meeting.
+        try{
+            isMeeting = getItem(position).isMeetingFlag();
+        } catch (NullPointerException e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
+        }
+
         // Obtain LayoutInflator instance from the stored context
         LayoutInflater inflater = LayoutInflater.from(mContext);
 
@@ -76,8 +84,8 @@ public class TripListAdapter extends ArrayAdapter<Trip> {
 
         // Obtain views by ID
         TextView tvDestination = (TextView) convertView.findViewById(R.id.textDestination);
-        TextView tvDate = (TextView) convertView.findViewById(R.id.textDate);
-        TextView tvTime = (TextView) convertView.findViewById(R.id.textTime);
+        TextView tvDate = (TextView) convertView.findViewById(R.id.textPlacedTime);
+        TextView tvMeeting = (TextView) convertView.findViewById(R.id.textInvitedBy);
 
         // Convert milliseconds to human readable form
         String time=convertTime(timeLong);
@@ -87,7 +95,14 @@ public class TripListAdapter extends ArrayAdapter<Trip> {
 
         // Set the converted time to the date TextView
         tvDate.setText(time);
-        tvTime.setText("");
+
+
+        if(isMeeting){
+            tvMeeting.setText("Meeting");
+        } else {
+            tvMeeting.setText("");
+        }
+
 
         // Return the inflated view
         return convertView;

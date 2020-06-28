@@ -3,7 +3,8 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="100">
+    android:weightSum="100"
+    android:screenOrientation="nosensor">
 
 
     <TextView
@@ -43,7 +44,7 @@
             android:backgroundTint="@color/red"
             android:textColor="@color/white"
             android:id="@+id/btnReject"
-            android:layout_below="@+id/textDate"/>
+            android:layout_below="@+id/textPlacedTime"/>
     </LinearLayout>
 
 </LinearLayout>

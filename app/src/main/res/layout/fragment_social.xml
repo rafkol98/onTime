@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/social_bg"
-    tools:context=".MeetingsClasses.Social">
+    tools:context=".MeetingsClasses.Social"
+    android:screenOrientation="nosensor">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline9"
@@ -20,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:text="MEETINGS"
+        android:text="SOCIALIZE"
         android:textColor="@color/blgrey"
         android:textSize="20sp"
         android:textStyle="italic"
@@ -50,12 +51,13 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.11354309" />
 
+    
     <ImageView
-        android:id="@+id/upcomingMeetings_img"
+        android:id="@+id/requestsOfMeetings_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:src="@drawable/upcoming_meetings_box"
+        android:src="@drawable/meeting_requests_box"
         app:layout_constraintEnd_toStartOf="@+id/guideline16"
         app:layout_constraintTop_toBottomOf="@+id/friend_requests_img" />
 

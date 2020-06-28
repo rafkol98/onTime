@@ -254,7 +254,7 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback,
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(origin.getPosition(), zoom));
 
         //Use Geocoder class to calculate minutes walking from current location.
-        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + currentOrigin + "&destinations=" + destinationPassed + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
+        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + latitude + "," + longitude + "&destinations=" + destinationPassed + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
         Log.d("url string", url);
         geoTask.execute(url);
     }

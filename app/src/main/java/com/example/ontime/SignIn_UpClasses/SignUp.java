@@ -63,7 +63,7 @@ public class SignUp extends AppCompatActivity {
         sign_up_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(SignUp.this, Welcome.class);
+                Intent intent = new Intent(SignUp.this, WelcomeNSelect.class);
                 startActivity(intent);
             }
 
@@ -100,7 +100,7 @@ public class SignUp extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
                                 FirebaseUser user = mAuth.getCurrentUser();
-                                Intent intent = new Intent(SignUp.this, Welcome.class);
+                                Intent intent = new Intent(SignUp.this, WelcomeNSelect.class);
                                 startActivity(intent);
                                 finish();
                             } else {

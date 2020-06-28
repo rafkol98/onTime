@@ -27,6 +27,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CurrentFriendsListAdapter extends ArrayAdapter<Friend> {
@@ -37,14 +38,17 @@ public class CurrentFriendsListAdapter extends ArrayAdapter<Friend> {
 
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/profiles");
-    private DatabaseReference dbRefFriend = FirebaseDatabase.getInstance().getReference("/friendRequests");
     String uId = currentFirebaseUser.getUid();
+
+
 
     public CurrentFriendsListAdapter(@NonNull Context context, int resource, List<Friend> objects) {
         super(context, resource, objects);
         this.mContext = context;
         this.mResource = resource;
     }
+
+
 
     // Default values in case getItem().get... produces a NPE
     String friendUid = "";
@@ -72,6 +76,7 @@ public class CurrentFriendsListAdapter extends ArrayAdapter<Friend> {
         }
 
 
+
         // Obtain LayoutInflator instance from the stored context
         LayoutInflater inflater = LayoutInflater.from(mContext);
 
@@ -82,6 +87,7 @@ public class CurrentFriendsListAdapter extends ArrayAdapter<Friend> {
         final TextView tvFriend = (TextView) convertView.findViewById(R.id.textFriend);
 
 
+
         dbRef.child(friendUid).child("Email").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -90,8 +96,6 @@ public class CurrentFriendsListAdapter extends ArrayAdapter<Friend> {
                     friendEmail = (String) dataSnapshot.getValue();
                     // Set friendEmail to the text view.
                     tvFriend.setText(friendEmail);
-
-
                 } catch (NullPointerException e) {
                     FirebaseCrashlytics.getInstance().recordException(e);
                 }

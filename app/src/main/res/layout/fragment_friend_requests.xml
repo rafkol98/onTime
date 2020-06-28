@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/requests_icon_bg"
-    tools:context=".MeetingsClasses.FriendRequests">
+    tools:context=".MeetingsClasses.FriendRequests"
+    android:screenOrientation="nosensor">
 
 
     <androidx.constraintlayout.widget.Guideline

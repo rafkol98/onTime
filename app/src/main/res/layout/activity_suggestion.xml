@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".AutoSuggestClasses.Suggestion">
+    tools:context=".AutoSuggestClasses.Suggestion"
+    android:screenOrientation="nosensor">
 
     <AutoCompleteTextView
         android:hint="Search Location"

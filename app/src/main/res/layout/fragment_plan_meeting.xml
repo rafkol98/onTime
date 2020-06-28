@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/plan_meeting_bg"
-    tools:context=".Plan_Meeting">
+    android:background="@drawable/bg_plan"
+    tools:context=".MeetingsClasses.Plan_Meeting">
 
 
     <androidx.constraintlayout.widget.Guideline
@@ -35,4 +35,183 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.14" />
+
+
+    <AutoCompleteTextView
+        android:id="@+id/meetingAutoComplete"
+        android:layout_width="300dp"
+        android:layout_height="39dp"
+
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:background="@drawable/search_button"
+        android:hint="Search location..."
+        android:padding="10dp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline19"
+        app:layout_constraintStart_toStartOf="@+id/guideline22"
+        app:layout_constraintTop_toBottomOf="@+id/where" />
+
+
+    <TextView
+        android:id="@+id/where"
+        android:layout_width="278dp"
+        android:layout_height="wrap_content"
+        android:text="WHERE DO YOU WANT TO MEET?"
+        android:textColor="@color/blgrey"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline19"
+        app:layout_constraintStart_toStartOf="@+id/guideline22"
+        app:layout_constraintTop_toTopOf="@+id/guideline21" />
+
+    <Button
+        android:id="@+id/meet_btn"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="18dp"
+        android:background="@drawable/go_alt_red"
+        android:text="Meet"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        android:textStyle="italic"
+        app:layout_constraintStart_toEndOf="@+id/meetingAutoComplete"
+        app:layout_constraintTop_toBottomOf="@+id/where" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="INVITE YOUR FRIENDS"
+        android:textColor="@color/blgrey"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline19"
+        app:layout_constraintStart_toStartOf="@+id/guideline22"
+        app:layout_constraintTop_toBottomOf="@+id/meetingAutoComplete" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline19"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.96107054"
+        android:screenOrientation="nosensor"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline22"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.04" />
+
+    <Button
+        android:id="@+id/select_Btn"
+        android:layout_width="320dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/search_button"
+        android:text="CLICK TO INVITE"
+        android:textSize="14dp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toStartOf="@+id/guideline19"
+        app:layout_constraintStart_toStartOf="@+id/guideline22"
+        app:layout_constraintTop_toBottomOf="@+id/textView14" />
+
+
+    <TextView
+        android:id="@+id/time_sel_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:visibility="invisible"
+        android:text="TIME"
+        android:textSize="24dp"
+        android:textColor="@color/red"
+        app:layout_constraintEnd_toStartOf="@+id/guideline19"
+        app:layout_constraintStart_toStartOf="@+id/guideline7"
+        app:layout_constraintTop_toBottomOf="@+id/selectDateTime_txt" />
+
+    <TextView
+        android:id="@+id/date_sel_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="DATE"
+        android:visibility="invisible"
+        android:textSize="24dp"
+        android:textColor="@color/red"
+        app:layout_constraintEnd_toStartOf="@+id/guideline7"
+        app:layout_constraintStart_toStartOf="@+id/guideline22"
+        app:layout_constraintTop_toBottomOf="@+id/selectDateTime_txt" />
+
+
+    <TextView
+        android:id="@+id/selectDateTime_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="SELECT A DATE AND TIME"
+        android:textColor="@color/blgrey"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline19"
+        app:layout_constraintHorizontal_bias="0.455"
+        app:layout_constraintStart_toStartOf="@+id/guideline22"
+        app:layout_constraintTop_toBottomOf="@+id/select_Btn" />
+
+    <Button
+        android:id="@+id/buttonPlan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:background="@drawable/delete_button"
+        android:paddingLeft="30dp"
+        android:paddingTop="14dp"
+        android:paddingRight="30dp"
+        android:paddingBottom="14dp"
+        android:text="PLAN MEETING"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline24" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline24"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.72" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <ImageView
+        android:id="@+id/timeImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:src="@drawable/timer_img"
+        app:layout_constraintEnd_toStartOf="@+id/guideline19"
+        app:layout_constraintStart_toStartOf="@+id/guideline7"
+        app:layout_constraintTop_toBottomOf="@+id/selectDateTime_txt" />
+
+    <ImageView
+        android:id="@+id/dateImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:src="@drawable/date_img"
+        app:layout_constraintEnd_toStartOf="@+id/guideline7"
+        app:layout_constraintStart_toStartOf="@+id/guideline22"
+        app:layout_constraintTop_toBottomOf="@+id/selectDateTime_txt" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,7 +7,8 @@
     tools:context=".SignIn_UpClasses.SignUp"
     android:background="@drawable/signup"
     android:paddingLeft="50dp"
-    android:paddingRight="50dp">
+    android:paddingRight="50dp"
+    android:screenOrientation="nosensor">
 
 
     <EditText

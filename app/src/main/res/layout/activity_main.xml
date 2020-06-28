@@ -9,7 +9,7 @@
     tools:context=".SignIn_UpClasses.MainActivity"
     android:paddingLeft="20dp"
     android:paddingRight="20dp"
-    >
+    android:screenOrientation="nosensor">
 
 
     <TextView
@@ -47,7 +47,7 @@
         app:layout_constraintGuide_percent="0.94" />
 
     <TextView
-        android:id="@+id/textTime"
+        android:id="@+id/textInvitedBy"
         android:layout_width="230dp"
         android:layout_height="30dp"
         android:layout_marginStart="8dp"
@@ -71,7 +71,7 @@
         android:textColor="#000000"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textTime" />
+        app:layout_constraintTop_toBottomOf="@+id/textInvitedBy" />
 
     <EditText
         android:id="@+id/sign_in_email"

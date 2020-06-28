@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/select_temp_speed_bg"
+    tools:context=".SignIn_UpClasses.SelectTempSpeed">
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline29"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.06" />
+
+    <TextView
+        android:id="@+id/your_friends_txt3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:text="SELECT YOUR SPEED"
+        android:textColor="@color/blgrey"
+        android:textSize="20sp"
+        android:textStyle="italic"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline29" />
+
+    <ImageView
+        android:id="@+id/imageView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/your_friends_txt3"
+        app:srcCompat="@drawable/select_speed_img" />
+
+    <TextView
+        android:id="@+id/textView18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="That's Ok."
+        android:textColor="@color/blgrey"
+        android:textSize="18sp"
+        android:textStyle="italic|bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView10" />
+
+    <TextView
+        android:id="@+id/textIntroTest"
+        android:layout_width="360dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="Please select with 100% honesty what you feel accurately
+describes your walking speed.
+"
+        android:textColor="@color/blgrey"
+        android:textSize="17sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView18" />
+
+    <TextView
+        android:id="@+id/textIntroTest2"
+        android:layout_width="360dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="You will be able to take the actual speed test whenever you want and you are outside, from the settings of the app.
+"
+        android:textColor="@color/blgrey"
+        android:textSize="17sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.509"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textIntroTest" />
+
+    <Button
+        android:id="@+id/buttonSlow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/custom_button_red"
+        android:text="SLOW"
+        android:textColor="@color/white"
+        android:paddingHorizontal="25dp"
+        android:textStyle="italic"
+        app:layout_constraintStart_toStartOf="@+id/guideline30"
+        app:layout_constraintTop_toBottomOf="@+id/textIntroTest2" />
+
+    <Button
+        android:id="@+id/buttonAverage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/custom_button_red"
+        android:text="AVERAGE"
+        android:textColor="@color/white"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toStartOf="@+id/guideline31"
+        app:layout_constraintTop_toBottomOf="@+id/textIntroTest2" />
+
+    <Button
+        android:id="@+id/buttonQuiteSlow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/custom_button_red"
+        android:text="QUITE SLOW"
+        android:textColor="@color/white"
+        android:textStyle="italic"
+
+        app:layout_constraintEnd_toStartOf="@+id/buttonAverage"
+        app:layout_constraintStart_toEndOf="@+id/buttonSlow"
+        app:layout_constraintTop_toBottomOf="@+id/textIntroTest2" />
+
+
+    <Button
+        android:id="@+id/buttonQuiteFast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/custom_button_red"
+        android:text="QUITE FAST"
+        android:textColor="@color/white"
+        android:textStyle="italic"
+        app:layout_constraintStart_toStartOf="@+id/guideline30"
+        app:layout_constraintTop_toBottomOf="@+id/buttonSlow" />
+
+    <Button
+        android:id="@+id/buttonFast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginRight="60dp"
+        android:background="@drawable/custom_button_red"
+        android:text="FAST"
+        android:textColor="@color/white"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toStartOf="@+id/guideline31"
+        app:layout_constraintTop_toBottomOf="@+id/buttonSlow" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline30"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05109489" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline31"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
+</androidx.constraintlayout.widget.ConstraintLayout>

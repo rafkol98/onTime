@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".DateTimeClasses.SelectTime"
     android:background="@drawable/timer"
+    android:screenOrientation="nosensor"
     >
 
     <TextView
@@ -33,7 +34,7 @@
         android:layout_marginLeft="32dp"/>
 
     <TextView
-        android:id="@+id/textDate"
+        android:id="@+id/textPlacedTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
@@ -58,7 +59,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.569"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textDate" />
+        app:layout_constraintTop_toBottomOf="@+id/textPlacedTime" />
 
     <TextView
     android:id="@+id/selectDate_txt"

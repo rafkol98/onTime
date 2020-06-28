@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/your_friends_bg_alt"
-    tools:context=".MeetingsClasses.Your_Friends">
+    tools:context=".MeetingsClasses.Your_Friends"
+    android:screenOrientation="nosensor">
 
 
     <androidx.constraintlayout.widget.Guideline

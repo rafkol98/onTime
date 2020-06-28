@@ -2,7 +2,9 @@ package com.example.ontime.DateTimeClasses;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
+import java.text.DateFormat;
 import java.text.Format;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -64,6 +66,26 @@ public class DateTimeCheck {
         Date date = new Date(time);
         Format format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         return format.format(date);
+    }
+
+    /**
+     * Converts date to milliseconds.
+     * @param dateIn - Date to convert to milliseconds (ms)
+     * @return date in milliseconds (ms)
+     * @throws ParseException - Signals that an error has been reached unexpectedly while parsing.
+     */
+    public Long toMilli(String dateIn) throws ParseException {
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        Date date = (Date) formatter.parse(dateIn);
+        long output = 0;
+
+        try{
+            output = date.getTime() / 1000L;
+        } catch (NullPointerException e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
+        }
+
+        return output * 1000;
     }
 
 }

@@ -182,7 +182,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback,
 
         //load the custom style of the map.
         try {
-            boolean success = googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.b_w_style1));
+            boolean success = googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.b_w_places));
 
             if (!success) {
                 Log.d("MapActivity", "Style parsing failes");
@@ -207,7 +207,6 @@ public class Map extends FragmentActivity implements OnMapReadyCallback,
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(destinationLatLng, zoom));
                 googleMap.addMarker(new MarkerOptions().position(destinationLatLng)
                         .title(destinationPassed));
-
             }
             //if it cannot find the location, it puts a market to current location and it notifies the user.
             else {
@@ -232,7 +231,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback,
 
 
             //Use Geocoder class to calculate minutes walking from current location.
-            String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + currentOrigin + "&destinations=" + destinationPassed + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
+            String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + currentLat + "," + currentLong + "&destinations=" + destinationLatLng.latitude + "," + destinationLatLng.longitude + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
             Log.d("url string", url);
             geoTask.execute(url);
         }
@@ -372,27 +371,32 @@ public class Map extends FragmentActivity implements OnMapReadyCallback,
     //Calculates how many minutes the user needs based on his own unique average walking speed to go there.
     @Override
     public void calculateTimeAndDist(String result) {
-        String[] res = result.split(",");
-        Double min = Double.parseDouble(res[0]) / 60;
-        Double dist = Double.parseDouble(res[1]) / 1000;
+        try {
+            String[] res = result.split(",");
+            Double min = Double.parseDouble(res[0]) / 60;
+            Double dist = Double.parseDouble(res[1]) / 1000;
 
-        Double d = Double.valueOf(dist);
-        Double s = Double.valueOf(getAverageSpeed());
+            Double d = Double.valueOf(dist);
+            Double s = Double.valueOf(getAverageSpeed());
 
-        timeToDest = ((d / s) * 60);
+            timeToDest = ((d / s) * 60);
 
-        textChange.setText(timeToDest + "");
-        distance = dist;
-        Toast.makeText(Map.this, "You need " + (int) timeToDest + " minutes to go there from your current location", Toast.LENGTH_LONG).show();
-        Log.d("Distance here here", distance + "");
+            textChange.setText(timeToDest + "");
+            distance = dist;
+            Toast.makeText(Map.this, "You need " + (int) timeToDest + " minutes to go there from your current location", Toast.LENGTH_LONG).show();
+            Log.d("Distance here here", distance + "");
 
-        //if destination is more than 50km away he has to select an alternative starting location.
-        if (dist > 50) {
-            Intent myIntent = new Intent(Map.this, PlanTripFromLocation.class);;
-            myIntent.putExtra("keyMap", destinationPassed);
-            startActivity(myIntent);
+            //if destination is more than 50km away he has to select an alternative starting location.
+            if (dist > 50) {
+                Intent myIntent = new Intent(Map.this, PlanTripFromLocation.class);
+                ;
+                myIntent.putExtra("keyMap", destinationPassed);
+                startActivity(myIntent);
+            }
+        }catch (Exception e){
+            FirebaseCrashlytics.getInstance().recordException(e);
+            e.printStackTrace();
         }
-
     }
 
     @Override

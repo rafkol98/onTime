@@ -44,6 +44,7 @@ public class Your_Friends extends Fragment {
 
 
 
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);

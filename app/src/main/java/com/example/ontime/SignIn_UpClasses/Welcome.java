@@ -11,7 +11,7 @@ import android.widget.Button;
 import com.example.ontime.R;
 
 /**
- * Welcome screen.
+ * Welcome screen. THIS IS NOW OBSOLETE.
  */
 public class Welcome extends AppCompatActivity {
 
