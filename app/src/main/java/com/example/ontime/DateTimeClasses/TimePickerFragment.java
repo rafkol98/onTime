@@ -40,7 +40,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
             mListener = (TimePickerListener) context;
         }catch (Exception e){
             e.printStackTrace();
-//            FirebaseCrashlytics.getInstance().recordException(e);
+            FirebaseCrashlytics.getInstance().recordException(e);
 //            try{
 //                throw new ClassCastException(getActivity().toString()+" must implement TimePickerListner");
 //            } catch (NullPointerException ex) {
@@ -76,6 +76,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         try{
         mListener.onTimeSet(view, hourOfDay, minute);}
         catch (Exception e){
+            FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
     }

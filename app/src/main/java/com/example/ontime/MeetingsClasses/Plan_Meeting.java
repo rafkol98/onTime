@@ -178,7 +178,8 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                FirebaseCrashlytics.getInstance().log(databaseError.getMessage());
+                FirebaseCrashlytics.getInstance().log(databaseError.getDetails());
             }
         });
 
@@ -332,6 +333,7 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
                                 }
 
                             } catch (Exception e) {
+                                FirebaseCrashlytics.getInstance().recordException(e);
                                 e.printStackTrace();
                             }
 
@@ -339,7 +341,8 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                            FirebaseCrashlytics.getInstance().log(databaseError.getMessage());
+                            FirebaseCrashlytics.getInstance().log(databaseError.getDetails());
                         }
                     });
                 }
@@ -442,7 +445,8 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                    FirebaseCrashlytics.getInstance().log(databaseError.getMessage());
+                    FirebaseCrashlytics.getInstance().log(databaseError.getDetails());
                 }
             });
 

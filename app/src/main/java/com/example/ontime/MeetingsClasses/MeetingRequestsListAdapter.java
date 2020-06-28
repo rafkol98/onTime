@@ -125,7 +125,8 @@ public class MeetingRequestsListAdapter extends ArrayAdapter<Meeting> {
 
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                                FirebaseCrashlytics.getInstance().log(databaseError.getMessage());
+                                FirebaseCrashlytics.getInstance().log(databaseError.getDetails());
                             }
                         });
 

@@ -394,6 +394,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback,
                 startActivity(myIntent);
             }
         }catch (Exception e){
+            FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
     }
