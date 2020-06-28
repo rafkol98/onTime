@@ -1,4 +1,4 @@
-package com.example.ontime;
+package com.example.ontime.SignIn_UpClasses;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,9 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.ontime.SignIn_UpClasses.Countdown;
-import com.example.ontime.SignIn_UpClasses.SelectTempSpeed;
-import com.example.ontime.SignIn_UpClasses.WelcomeNSelect;
+import com.example.ontime.R;
 
 public class AverageSpeedNotFound extends AppCompatActivity {
 

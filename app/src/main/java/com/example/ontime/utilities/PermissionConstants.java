@@ -1,4 +1,4 @@
-package com.example.ontime;
+package com.example.ontime.utilities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;

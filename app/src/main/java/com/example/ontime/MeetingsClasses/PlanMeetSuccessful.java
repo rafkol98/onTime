@@ -1,4 +1,4 @@
-package com.example.ontime;
+package com.example.ontime.MeetingsClasses;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.example.ontime.MainClasses.MPage;
 import com.example.ontime.MainClasses.fragments.Tab1;
+import com.example.ontime.R;
 import com.example.ontime.SignIn_UpClasses.Cool;
 
 

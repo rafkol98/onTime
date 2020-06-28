@@ -1,4 +1,4 @@
-package com.example.ontime;
+package com.example.ontime.MeetingsClasses;
 
 import android.os.Bundle;
 
@@ -17,6 +17,7 @@ import com.example.ontime.MainClasses.Trip;
 import com.example.ontime.MeetingsClasses.Friend;
 import com.example.ontime.MeetingsClasses.Meeting;
 import com.example.ontime.MeetingsClasses.MeetingRequestsListAdapter;
+import com.example.ontime.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;

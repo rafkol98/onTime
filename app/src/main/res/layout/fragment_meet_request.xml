@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/meet_req_bg"
-    tools:context=".Meet_Request">
+    tools:context=".MeetingsClasses.Meet_Request">
 
 
     <androidx.constraintlayout.widget.Guideline

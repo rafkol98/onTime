@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.example.ontime.Meet_Request;
 import com.example.ontime.R;
 
 

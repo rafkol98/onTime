@@ -8,7 +8,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -28,8 +27,6 @@ import android.widget.Toast;
 import com.example.ontime.AutoSuggestClasses.PlaceAutoSuggestAdapter;
 import com.example.ontime.DateTimeClasses.DateTimeCheck;
 import com.example.ontime.MainClasses.HashEmail;
-import com.example.ontime.Meet_Request;
-import com.example.ontime.PlanMeetSuccessful;
 import com.example.ontime.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

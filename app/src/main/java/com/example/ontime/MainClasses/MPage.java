@@ -10,7 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.example.ontime.AverageSpeedNotFound;
+import com.example.ontime.SignIn_UpClasses.AverageSpeedNotFound;
 import com.example.ontime.R;
 import com.example.ontime.MainClasses.fragments.Tab0;
 import com.example.ontime.MainClasses.fragments.Tab1;
@@ -18,7 +18,6 @@ import com.example.ontime.MainClasses.fragments.Tab2;
 import com.example.ontime.RestarterAndServices.ProcessClass;
 import com.example.ontime.RestarterAndServices.RestartServiceBroadcastReceiver;
 import com.example.ontime.MeetingsClasses.Social;
-import com.example.ontime.SignIn_UpClasses.Countdown;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;

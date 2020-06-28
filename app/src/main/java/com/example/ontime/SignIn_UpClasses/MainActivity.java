@@ -31,10 +31,10 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.File;
 
-import static com.example.ontime.PermissionConstants.BACKGROUND;
-import static com.example.ontime.PermissionConstants.PERMISSIONS;
-import static com.example.ontime.PermissionConstants.PERMISSION_ALL;
-import static com.example.ontime.PermissionConstants.PERMISSION_BACKGROUND;
+import static com.example.ontime.utilities.PermissionConstants.BACKGROUND;
+import static com.example.ontime.utilities.PermissionConstants.PERMISSIONS;
+import static com.example.ontime.utilities.PermissionConstants.PERMISSION_ALL;
+import static com.example.ontime.utilities.PermissionConstants.PERMISSION_BACKGROUND;
 
 /**
  *
