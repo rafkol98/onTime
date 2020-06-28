@@ -482,7 +482,7 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
             Toast.makeText(getContext(), "Please select a location", Toast.LENGTH_LONG).show();
             x = false;
         }
-        if (!clicked) {
+        if (!clicked || friendsList.size()==0) {
             Toast.makeText(getContext(), "Select someone to share this meeting with", Toast.LENGTH_LONG).show();
             x = false;
         }
