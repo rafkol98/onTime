@@ -14,12 +14,23 @@ public class Trip implements Comparable<Trip> {
     String time;
     Long timestamp;
     Object object;
+    String senderUId;
     double flagValue10;
     double flagValue1;
     boolean shouldAlert10 = true;
     boolean shouldAlert1 = true;
 
     boolean meetingFlag;
+
+
+    public Trip(String destination, double latitude, double longitude, Long timestamp, String senderUId, boolean meetingFlag) {
+        this.destination = destination;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.timestamp = timestamp;
+        this.senderUId = senderUId;
+        this.meetingFlag = meetingFlag;
+    }
 
     /**
      * Constructor

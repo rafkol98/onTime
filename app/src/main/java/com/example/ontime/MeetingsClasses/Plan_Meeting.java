@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -27,7 +29,10 @@ import android.widget.Toast;
 import com.example.ontime.AutoSuggestClasses.PlaceAutoSuggestAdapter;
 import com.example.ontime.DateTimeClasses.DateTimeCheck;
 import com.example.ontime.MainClasses.HashEmail;
+import com.example.ontime.MainClasses.Trip;
+import com.example.ontime.MapRelatedClasses.Map;
 import com.example.ontime.R;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
@@ -83,6 +88,8 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
     boolean clicked = false;  //used as a flag for the select button.
 
     Meeting meeting;
+
+    Trip trip;
 
 
     /**
@@ -285,11 +292,19 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
                             try {
                                 Long timestamp = dateTimeCheck.toMilli(dateSelected);
                                 // Create a new Meeting.
-                                meeting = new Meeting(destination.getText().toString(), timestamp, uId,true);
+//                                meeting = new Meeting(destination.getText().toString(), timestamp, uId,true);
+
+                                LatLng desLatLng = getLatLngFromAddress( destination.getText().toString());
+
+                                trip = new Trip(destination.getText().toString(), desLatLng.latitude, desLatLng.longitude, timestamp, uId,true);
+
+//                                trip = new Trip(destination, timestamp, mFlag);
+
+//                                trip = new Trip(destinationPassed, timestamp, desLat, desLng, false);
 
                                 // Store the meeting on Firebase RealTime Database.
-                                DatabaseReference childReff = profRef.child(uId).child("trips").child(meeting.getMeetingId());
-                                childReff.setValue(meeting, new DatabaseReference.CompletionListener() {
+                                DatabaseReference childReff = profRef.child(uId).child("trips").child(trip.getTimestamp().toString());
+                                childReff.setValue(trip, new DatabaseReference.CompletionListener() {
                                     @Override
                                     public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                                         if (databaseError != null) {
@@ -304,7 +319,7 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
                                 // Write the meeting request for the receiver.
                                 for (int i = 0; i < selectedUIdList.size(); i++) {
                                     DatabaseReference childMeetReq = profRef.child(selectedUIdList.get(i)).child("meeting_request");
-                                    childMeetReq.child(meeting.getMeetingId()).setValue(meeting, new DatabaseReference.CompletionListener() {
+                                    childMeetReq.child(trip.getTimestamp().toString()).setValue(trip, new DatabaseReference.CompletionListener() {
                                         @Override
                                         public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                                             if (databaseError != null) {
@@ -491,6 +506,29 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
             x = false;
         }
         return x;
+    }
+
+
+    //Returns Latitude and Longitude of an address.
+    public LatLng getLatLngFromAddress(String address) {
+        Geocoder geocoder = new Geocoder(getContext());
+        List<Address> addressList;
+
+        try {
+            addressList = geocoder.getFromLocationName(address, 1);
+            if (addressList != null) {
+                Address singleAddress = addressList.get(0);
+                LatLng latLng = new LatLng(singleAddress.getLatitude(), singleAddress.getLongitude());
+                return latLng;
+            } else {
+                return null;
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

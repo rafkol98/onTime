@@ -2,6 +2,8 @@ package com.example.ontime.MeetingsClasses;
 
 import com.example.ontime.MainClasses.Trip;
 
+
+//TODO -- Wherever there is an occurence of meeting, make it a trip AND THEN delete this class.
 public class Meeting {
 
     String uIdSender,emailSender , destination;
