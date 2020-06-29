@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
@@ -303,19 +304,71 @@ public class Service extends android.app.Service {
         if (avgSpeed == 0) return;
 
         for (Trip trip : trips) {
+//            float[] results = new float[1];
+            Location.distanceBetween(latitude, longitude, trip.getLatitude(), trip.getLongitude(), results);
+            float distanceInMeters = results[0];
+            Log.d("distanceInMeters to "+trip.getDestination(), " "+ distanceInMeters);
+              //  int x =
 
+
+            int timeToDestX = (int) ((distanceInMeters*60)/(avgSpeed*1000));
+            Log.d("timeToWalk to "+trip.getDestination(), " "+ timeToDestX);
+
+
+           // Instantiate a new calendar object
+            Calendar calendar = Calendar.getInstance();
+
+            // Add the time it would take to reach in milliseconds to the users current time
+            calendar.add(Calendar.MINUTE, (int) timeToDestX);
+
+            // Get the time of the of when they would arrive in milliseconds
+            long time = calendar.getTimeInMillis();
+
+
+            //Read flag's value
+            dbRef.child(uId).child("trips").child((trip.getTimestamp()).toString()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    try {
+                        valueFlag10 = Integer.valueOf(dataSnapshot.child("flagValue10").getValue().toString());
+                        Log.d("valueFlag value: ", valueFlag10 + "");
+
+                        valueFlag1 = Integer.valueOf(dataSnapshot.child("flagValue1").getValue().toString());
+                        Log.d("valueFlag value: ", valueFlag1 + "");
+
+
+
+
+                    } catch (NullPointerException e) {
+                        FirebaseCrashlytics.getInstance().recordException(e);
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    System.out.println("The read failed: " + databaseError.getCode());
+                    FirebaseCrashlytics.getInstance().log(databaseError.getMessage());
+                }
+            });
+
+
+            //Only request from DistanceMatrixAPI if the time needed is less than 16,... minutes.
+            System.out.println("here timestamp diff"+ (trip.getTimestamp() - time));
+            System.out.println("ValueFlag sum" + valueFlag1+valueFlag10);
+            if(((trip.getTimestamp() - time) < 1000000) && (valueFlag1+valueFlag10!=2)) {
                 //call the GeoService for every trip. The GeoService calculates in its calculateTimeAndDist method how much time the user needs to walk there from his current location.
                 GeoService geoService = new GeoService(trip);
                 String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + latitude + "," + longitude + "&destinations=" + trip.getLatitude() + "," + trip.getLongitude() + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
                 Log.d("url string", url);
                 geoService.execute(url);
-
+            }
         }
     }
 
 
     /**
-     * Start the service, get location of the user every 4 seconds.
+     * Start the service, get location of the user every 60 seconds.
      */
     @SuppressLint("MissingPermission")
     private void startLocationService() {
@@ -323,8 +376,8 @@ public class Service extends android.app.Service {
         Log.d(TAG, "Trying to start location......");
         LocationRequest locationRequest = new LocationRequest();
 
-        locationRequest.setInterval(4000);
-        locationRequest.setFastestInterval(2000);
+        locationRequest.setInterval(60000);
+        locationRequest.setFastestInterval(45000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         if (ContextCompat.checkSelfPermission(this,
@@ -335,6 +388,8 @@ public class Service extends android.app.Service {
             //ActivityCompat.requestPermissions(, PERMISSIONS, PERMISSION_ALL);
         }
     }
+
+
 
 
     /**
