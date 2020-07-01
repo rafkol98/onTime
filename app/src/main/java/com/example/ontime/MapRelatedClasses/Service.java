@@ -262,6 +262,11 @@ public class Service extends android.app.Service {
                 updateTrips();
 
                 Log.d("LOCATION_UPDATE", latitude + "," + longitude);
+
+                System.out.println("arraylist trips size "+ trips.size());
+                for (int i=0;i<trips.size();i++){
+                    System.out.println(trips.get(i).getDestination()+" i="+i);
+                }
             }
         }
     };
@@ -276,7 +281,7 @@ public class Service extends android.app.Service {
      * @param latitude  of the users current location
      * @param longitude of the users current location
      */
-    private void calculateDistanceFromTripDestination(double latitude, double longitude) {
+    private void calculateDistanceFromTripDestination(final double latitude, final double longitude) {
         float[] results = new float[1];
 
         if (avgSpeed == 0) {
@@ -303,6 +308,7 @@ public class Service extends android.app.Service {
         if (avgSpeed == 0) return;
 
         for (Trip trip : trips) {
+            int countX = 0;
 
             //If the time of the trip has passed, remove the trip.
             if (trip.getTimestamp() < Calendar.getInstance().getTimeInMillis()) {
@@ -362,21 +368,28 @@ public class Service extends android.app.Service {
                         }
                     });
 
-                    System.out.println("ValueFlag sum" + valueFlag1 + valueFlag10);
 
+                    //Calculate the total of the flags.
+                    int flagsTotal = valueFlag10+ valueFlag1;
+                    System.out.println("ValueFlag sum outsidee" + flagsTotal);
                     //If user was not allerted, perform the geoservice.
-                    if ((valueFlag1 + valueFlag10 != 2)) {
-                        //call the GeoService for every trip. The GeoService calculates in its calculateTimeAndDist method how much time the user needs to walk there from his current location.
+                    if ((flagsTotal != 2) && (countX==0)) {
                         GeoService geoService = new GeoService(trip);
                         String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + latitude + "," + longitude + "&destinations=" + trip.getLatitude() + "," + trip.getLongitude() + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
                         Log.d("url string", url);
                         geoService.execute(url);
+                        countX++;
                     }
+
+
 
                 }
             }
+
         }
     }
+
+
 
 
     /**
@@ -580,9 +593,12 @@ public class Service extends android.app.Service {
                         PendingIntent notifyPendingIntent = PendingIntent.getActivity(
                                 getApplicationContext(), 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+
+                        long timeDifferenceInMins = (trip.getTimestamp() - time) / 60000;
+
                         Notification.showNotification(getApplicationContext(),
                                 "Should start walking",
-                                "In 10 minutes start walking to " + trip.getDestination() + " in order to arrive on time.",
+                                "In " + timeDifferenceInMins + " minutes start walking to " + trip.getDestination() + " in order to arrive on time.",
                                 R.drawable.ic_notification, id, notifyPendingIntent, Channels.WALK_ALERT_CHANNEL);
                         try {
                             Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
