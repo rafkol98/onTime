@@ -237,7 +237,6 @@ public class Service extends android.app.Service {
                 double longitude = locationResult.getLastLocation().getLongitude();
 
 
-
                 DatabaseReference childReff = dbRef.child(uId).child("Current Location");
 
                 String cLocation = latitude + "," + longitude;
@@ -304,64 +303,77 @@ public class Service extends android.app.Service {
         if (avgSpeed == 0) return;
 
         for (Trip trip : trips) {
+
+            //If the time of the trip has passed, remove the trip.
+            if (trip.getTimestamp() < Calendar.getInstance().getTimeInMillis()) {
+                dbRef.child(uId).child("trips").child(trip.getTimestamp().toString()).removeValue();
+                Log.d("TRIP WAS DELETED", "trip no: " + trip.getTimestamp() + "");
+            } else {
+
 //            float[] results = new float[1];
-            Location.distanceBetween(latitude, longitude, trip.getLatitude(), trip.getLongitude(), results);
-            float distanceInMeters = results[0];
-            Log.d("distanceInMeters to "+trip.getDestination(), " "+ distanceInMeters);
-              //  int x =
+                Location.distanceBetween(latitude, longitude, trip.getLatitude(), trip.getLongitude(), results);
+                float distanceInMeters = results[0];
+                Log.d("distanceInMeters to " + trip.getDestination(), " " + distanceInMeters);
+                //  int x =
 
 
-            int timeToDestX = (int) ((distanceInMeters*60)/(avgSpeed*1000));
-            Log.d("timeToWalk to "+trip.getDestination(), " "+ timeToDestX);
+                int timeToDestX = (int) ((distanceInMeters * 60) / (avgSpeed * 1000));
+                Log.d("timeToWalk to " + trip.getDestination(), " " + timeToDestX);
 
 
-           // Instantiate a new calendar object
-            Calendar calendar = Calendar.getInstance();
+                // Instantiate a new calendar object
+                Calendar calendar = Calendar.getInstance();
 
-            // Add the time it would take to reach in milliseconds to the users current time
-            calendar.add(Calendar.MINUTE, (int) timeToDestX);
+                // Add the time it would take to reach in milliseconds to the users current time
+                calendar.add(Calendar.MINUTE, (int) timeToDestX);
 
-            // Get the time of the of when they would arrive in milliseconds
-            long time = calendar.getTimeInMillis();
-
-
-            //Read flag's value
-            dbRef.child(uId).child("trips").child((trip.getTimestamp()).toString()).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    try {
-                        valueFlag10 = Integer.valueOf(dataSnapshot.child("flagValue10").getValue().toString());
-                        Log.d("valueFlag value: ", valueFlag10 + "");
-
-                        valueFlag1 = Integer.valueOf(dataSnapshot.child("flagValue1").getValue().toString());
-                        Log.d("valueFlag value: ", valueFlag1 + "");
+                // Get the time of the of when they would arrive in milliseconds
+                long time = calendar.getTimeInMillis();
 
 
+                //Only request from DistanceMatrixAPI if the time needed is less than 16,... minutes.
+                System.out.println("here timestamp diff" + (trip.getTimestamp() - time));
+
+                if (((trip.getTimestamp() - time) < 1000000)) {
 
 
-                    } catch (NullPointerException e) {
-                        FirebaseCrashlytics.getInstance().recordException(e);
+                    //Read flag's value
+                    dbRef.child(uId).child("trips").child((trip.getTimestamp()).toString()).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            try {
+                                valueFlag10 = Integer.valueOf(dataSnapshot.child("flagValue10").getValue().toString());
+                                Log.d("valueFlag value: ", valueFlag10 + "");
+
+                                valueFlag1 = Integer.valueOf(dataSnapshot.child("flagValue1").getValue().toString());
+                                Log.d("valueFlag value: ", valueFlag1 + "");
+
+
+                            } catch (NullPointerException e) {
+                                FirebaseCrashlytics.getInstance().recordException(e);
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            System.out.println("The read failed: " + databaseError.getCode());
+                            FirebaseCrashlytics.getInstance().log(databaseError.getMessage());
+                        }
+                    });
+
+                    System.out.println("ValueFlag sum" + valueFlag1 + valueFlag10);
+
+                    //If user was not allerted, perform the geoservice.
+                    if ((valueFlag1 + valueFlag10 != 2)) {
+                        //call the GeoService for every trip. The GeoService calculates in its calculateTimeAndDist method how much time the user needs to walk there from his current location.
+                        GeoService geoService = new GeoService(trip);
+                        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + latitude + "," + longitude + "&destinations=" + trip.getLatitude() + "," + trip.getLongitude() + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
+                        Log.d("url string", url);
+                        geoService.execute(url);
                     }
 
                 }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    System.out.println("The read failed: " + databaseError.getCode());
-                    FirebaseCrashlytics.getInstance().log(databaseError.getMessage());
-                }
-            });
-
-
-            //Only request from DistanceMatrixAPI if the time needed is less than 16,... minutes.
-            System.out.println("here timestamp diff"+ (trip.getTimestamp() - time));
-            System.out.println("ValueFlag sum" + valueFlag1+valueFlag10);
-            if(((trip.getTimestamp() - time) < 1000000) && (valueFlag1+valueFlag10!=2)) {
-                //call the GeoService for every trip. The GeoService calculates in its calculateTimeAndDist method how much time the user needs to walk there from his current location.
-                GeoService geoService = new GeoService(trip);
-                String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + latitude + "," + longitude + "&destinations=" + trip.getLatitude() + "," + trip.getLongitude() + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
-                Log.d("url string", url);
-                geoService.execute(url);
             }
         }
     }
@@ -388,8 +400,6 @@ public class Service extends android.app.Service {
             //ActivityCompat.requestPermissions(, PERMISSIONS, PERMISSION_ALL);
         }
     }
-
-
 
 
     /**
@@ -456,7 +466,7 @@ public class Service extends android.app.Service {
                 }
                 try {
                     Collections.sort(trips);
-                } catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -544,29 +554,29 @@ public class Service extends android.app.Service {
                     }
                 });
 //                 Instantiate a new calendar object
-                    Calendar calendar = Calendar.getInstance();
+                Calendar calendar = Calendar.getInstance();
 
-                    // Add the time it would take to reach in milliseconds to the users current time
-                    calendar.add(Calendar.MINUTE, (int) timeToDest);
+                // Add the time it would take to reach in milliseconds to the users current time
+                calendar.add(Calendar.MINUTE, (int) timeToDest);
 
-                    // Get the time of the of when they would arrive in milliseconds
-                    long time = calendar.getTimeInMillis();
+                // Get the time of the of when they would arrive in milliseconds
+                long time = calendar.getTimeInMillis();
 
-                    Log.d("time arrival start now", time + "");
+                Log.d("time arrival start now", time + "");
 
                 System.out.println(" ");
 
                 //if the difference is less than 10 minutes notify user.
                 boolean shouldAlert = (trip.getTimestamp() - time) < 600000;
 
-                if (shouldAlert && valueFlag10==0) {
+                if (shouldAlert && valueFlag10 == 0) {
                     if (trip.getShouldAlert10()) {
                         int id = trip.getTripId(trip.getDestination(), trip.getDate(), trip.getTime());
 
                         Intent notifyIntent = new Intent(getApplicationContext(), MPage.class);
                         notifyIntent.putExtra("Tab", "Tab2");
                         notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                                            | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         PendingIntent notifyPendingIntent = PendingIntent.getActivity(
                                 getApplicationContext(), 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -574,9 +584,9 @@ public class Service extends android.app.Service {
                                 "Should start walking",
                                 "In 10 minutes start walking to " + trip.getDestination() + " in order to arrive on time.",
                                 R.drawable.ic_notification, id, notifyPendingIntent, Channels.WALK_ALERT_CHANNEL);
-                        try{
+                        try {
                             Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
-                            if (v != null){
+                            if (v != null) {
                                 v.vibrate(2000);
                             }
                         } catch (NullPointerException e) {
@@ -615,7 +625,7 @@ public class Service extends android.app.Service {
                 //if the difference is less than 1 minutes notify user.
                 shouldAlert = (trip.getTimestamp() - time) < 60000;
 
-                if (shouldAlert && valueFlag1==0) {
+                if (shouldAlert && valueFlag1 == 0) {
                     if (trip.getShouldAlert1()) {
                         int id = trip.getTripId(trip.getDestination(), trip.getDate(), trip.getTime());
 
@@ -630,9 +640,9 @@ public class Service extends android.app.Service {
                                 "Should start walking",
                                 "In 1 minute start walking to " + trip.getDestination() + " in order to arrive on time.",
                                 R.drawable.ic_notification, id, notifyPendingIntent, Channels.WALK_1_ALERT_CHANNEL);
-                        try{
+                        try {
                             Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
-                            if (v != null){
+                            if (v != null) {
                                 v.vibrate(2000);
                             }
                         } catch (NullPointerException e) {
@@ -734,7 +744,7 @@ public class Service extends android.app.Service {
             timeToDest = ((d / s) * 60);
 
 
-            Log.d("time to dest "+trip.getDestination(), timeToDest + "");
+            Log.d("time to dest " + trip.getDestination(), timeToDest + "");
             return timeToDest;
 
         }

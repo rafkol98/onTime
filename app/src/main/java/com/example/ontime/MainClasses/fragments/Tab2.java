@@ -194,21 +194,6 @@ public class Tab2 extends Fragment {
 
 
 
-
-
-//                                    //Refresh the fragment.
-//                                    Fragment newFragment = new Tab2();
-//                                    FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-//
-//                                    // Replace whatever is in the fragment_container view with this fragment,
-//                                    // and add the transaction to the back stack if needed
-//                                    transaction.replace(R.id.fragment_container, newFragment);
-//                                    transaction.addToBackStack(null);
-//
-//                                    // Commit the transaction
-//                                    transaction.commit();
-
-
                                 } catch (NullPointerException e) {
                                     FirebaseCrashlytics.getInstance().recordException(e);
                                 }
