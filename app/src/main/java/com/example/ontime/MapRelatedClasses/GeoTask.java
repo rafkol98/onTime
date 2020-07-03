@@ -5,6 +5,8 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import androidx.fragment.app.FragmentHostCallback;
+
 import com.example.ontime.DateTimeClasses.SelectTime;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
@@ -31,6 +33,7 @@ import java.net.URL;
 public class GeoTask extends AsyncTask<String, Void, String> {
     ProgressDialog pd;
     Context mContext;
+    private FragmentHostCallback mFragmentCallback;
 
     SelectTime selectTime;
     Geo geo1;
@@ -42,6 +45,10 @@ public class GeoTask extends AsyncTask<String, Void, String> {
     public GeoTask(Context mContext) {
         this.mContext = mContext;
         geo1 = (Geo) mContext;
+    }
+
+    public GeoTask(FragmentHostCallback fragmentCallback) {
+        mFragmentCallback = fragmentCallback;
     }
 
 
@@ -119,7 +126,7 @@ public class GeoTask extends AsyncTask<String, Void, String> {
     /**
      *
      */
-    interface Geo {
+    public interface Geo {
         public void calculateTimeAndDist(String min);
 
         public void tripFromLocation();

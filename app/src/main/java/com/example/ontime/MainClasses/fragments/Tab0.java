@@ -15,6 +15,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -24,9 +25,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ontime.DateTimeClasses.SelectTime;
 import com.example.ontime.MainClasses.MPage;
+import com.example.ontime.MainClasses.PlanTripFromLocation;
+import com.example.ontime.MapRelatedClasses.GeoTask;
 import com.example.ontime.MapRelatedClasses.Map;
 import com.example.ontime.R;
 import com.google.android.gms.maps.CameraUpdate;
@@ -38,7 +44,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 import java.util.Locale;
@@ -48,7 +61,7 @@ import java.util.Locale;
  * Tab0 is the fragment that shows the map.
  */
 public class Tab0 extends Fragment implements OnMapReadyCallback,
-                                              LocationListener {
+        LocationListener {
 
     //initialise variables.
     GoogleMap map;
@@ -57,22 +70,33 @@ public class Tab0 extends Fragment implements OnMapReadyCallback,
 
     public String bestProvider;
     public Criteria criteria;
+    private String tempAverageSpeed;
+    private String averageSpeed;
     public LocationManager locationManager;
     MarkerOptions origin;
+    private double timeToDest;
+    String destinationPassed;
+
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-    
 
+    Button planBtn;
 
     /**
      * Required empty public constructor
      */
-    public Tab0() { }
+    public Tab0() {
+    }
 
+    public String getAverageSpeed() {
+        return averageSpeed;
+    }
+
+    public void setAverageSpeed(String averageSpeed) {
+        this.averageSpeed = averageSpeed;
+    }
 
     /**
-     *
-     *
      * @param inflater
      * @param container
      * @param savedInstanceState
@@ -83,6 +107,7 @@ public class Tab0 extends Fragment implements OnMapReadyCallback,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_tab0, container, false);
+        planBtn = rootView.findViewById(R.id.buttonPlanTab0);
         //Get map
         if (getActivity() != null) {
             SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapUL);
@@ -96,7 +121,6 @@ public class Tab0 extends Fragment implements OnMapReadyCallback,
     }
 
     /**
-     *
      * @param savedInstanceState
      */
     @Override
@@ -111,9 +135,7 @@ public class Tab0 extends Fragment implements OnMapReadyCallback,
         bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
 
         //Get and show current location of the user.
-//        if (permissionEnabled()) {
-            getCurrentLocation();
-//        }
+        getCurrentLocation();
 
     }
 
@@ -145,7 +167,7 @@ public class Tab0 extends Fragment implements OnMapReadyCallback,
     /**
      *
      */
-    public void permissionEnabled(){
+    public void permissionEnabled() {
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -159,11 +181,12 @@ public class Tab0 extends Fragment implements OnMapReadyCallback,
                     MY_PERMISSIONS_REQUEST_LOCATION
             );
 
-    }
+        }
     }
 
     /**
      * Once the map fragment has loaded do this
+     *
      * @param googleMap
      */
     @Override
@@ -183,8 +206,6 @@ public class Tab0 extends Fragment implements OnMapReadyCallback,
         }
 
 
-
-
         //enable the zoom in and out buttons bottom right
         final float zoom = 18.0f;
         //Check if we have permission.
@@ -201,7 +222,7 @@ public class Tab0 extends Fragment implements OnMapReadyCallback,
 
             map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                 @Override
-                public void onMapClick(LatLng latLng) {
+                public void onMapClick(final LatLng latLng) {
                     //Create a new marker.
                     MarkerOptions markerOptions = new MarkerOptions();
 
@@ -212,41 +233,67 @@ public class Tab0 extends Fragment implements OnMapReadyCallback,
                     markerOptions.draggable(true);
 
                     //Set the title for the marker.
-                    markerOptions.title(getAddressFromLatLng(latLng.latitude,latLng.longitude));
+                    markerOptions.title("CLICK ON THIS LABEL TO PLAN THE TRIP");
 
                     //Clear any previous markers.
                     map.clear();
 
                     //Animate the camera to the point.
-                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoom));
+                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
 
                     //add the new marker.
                     Marker marker = map.addMarker(markerOptions);
 
                     marker.showInfoWindow();
 
+                    destinationPassed = getAddressFromLatLng(latLng.latitude,latLng.longitude);
+                    System.out.println("Destination heree: HAHA: "+destinationPassed);
+
+                    final double tripLatitude = latLng.latitude;
+                    final double tripLongitude = latLng.longitude;
+
+
                     map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                         @Override
-                        public void onInfoWindowClick(Marker marker) {
-
-                            //Alert the user about the distance.
-                            final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                            builder.setMessage("Would you like to plan a trip here?")
-                                    .setCancelable(false)
-                                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                        public void onClick(final DialogInterface dialog, final int id) {
-                                                Log.d("Yes button works","malista");
-                                        }
-                                    })
-                                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                        public void onClick(final DialogInterface dialog, final int id) {
-                                            Log.d("No button works","malista");
-                                        }
-                                    });
-                            final AlertDialog alert = builder.create();
-                            alert.show();
+                        public void onInfoWindowClick(final Marker marker) {
 
 
+
+                            planBtn.setVisibility(View.VISIBLE);
+
+                            planBtn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+
+
+
+                                    //Alert the user about the distance.
+                                    final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                    builder.setMessage("Would you like to plan a trip there?")
+                                            .setCancelable(false)
+                                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                                public void onClick(final DialogInterface dialog, final int id) {
+                                                    Intent myIntent = new Intent(getContext(), SelectTime.class);
+                                                    myIntent.putExtra("keyMap", destinationPassed);
+                                                    myIntent.putExtra("keyLatitude", tripLatitude);
+                                                    myIntent.putExtra("keyLongitude", tripLongitude);
+                                                    startActivity(myIntent);
+                                                    getActivity().overridePendingTransition(0,0);
+
+                                                }
+                                            })
+                                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                                public void onClick(final DialogInterface dialog, final int id) {
+                                                    marker.remove();
+                                                    planBtn.setVisibility(View.INVISIBLE);
+                                                    Log.d("No button works", "malista");
+                                                }
+                                            });
+                                    final AlertDialog alert = builder.create();
+                                    alert.show();
+                                }
+                            });
                         }
                     });
 
@@ -255,10 +302,10 @@ public class Tab0 extends Fragment implements OnMapReadyCallback,
         }
         //if not, ask for permission.
         else {
-        ActivityCompat.requestPermissions(getActivity(), new String[] {
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION },
-                MY_PERMISSIONS_REQUEST_LOCATION);
+            ActivityCompat.requestPermissions(getActivity(), new String[]{
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_LOCATION);
 
         }
 
@@ -267,6 +314,7 @@ public class Tab0 extends Fragment implements OnMapReadyCallback,
 
     /**
      * Get user's location if he moves/walks.
+     *
      * @param location
      */
     @Override
@@ -276,27 +324,28 @@ public class Tab0 extends Fragment implements OnMapReadyCallback,
     }
 
     /**
-     *
      * @param provider
      * @param status
      * @param extras
      */
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) { }
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+    }
 
     /**
-     *
      * @param provider
      */
     @Override
-    public void onProviderEnabled(String provider) { }
+    public void onProviderEnabled(String provider) {
+    }
 
     /**
-     *
      * @param provider
      */
     @Override
-    public void onProviderDisabled(String provider) { }
+    public void onProviderDisabled(String provider) {
+    }
+
 
     //Gets address from latitude and Longitude.
     public String getAddressFromLatLng(double latitude, double longitude) {
@@ -324,6 +373,7 @@ public class Tab0 extends Fragment implements OnMapReadyCallback,
         }
         return strAdd;
     }
+
 
 
 }

@@ -162,18 +162,22 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
     public void onDone(View v) throws ParseException {
         String dateSelected = dateText.getText().toString() + " " + timeText.getText().toString() + ":00";
 
+        double timeToWalk = 0;
+
         //Get current date.
         Date date = Calendar.getInstance().getTime();
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         String strDate = dateFormat.format(date);
         //Get the time to walk there based on the user's speed.
-        double timeToWalk = Double.parseDouble(stringIn);
-
+        if(stringIn!=null) {
+            timeToWalk = Double.parseDouble(stringIn);
+        }
         //temp is time to walk to destination.
         int temp = (int) timeToWalk;
 
         //Get time in difference between current date and trip's desired date.
         int minutesDate = DateTimeCheck.getDateDiff(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"), strDate, dateSelected);
+
 
 
         if ((dateText.getText().toString()).equalsIgnoreCase("date") && (timeText.getText().toString()).equalsIgnoreCase("time")) {
@@ -200,6 +204,7 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
                     .setNegativeButton("No", new DialogInterface.OnClickListener() {
                         public void onClick(final DialogInterface dialog, final int id) {
                             startActivity(new Intent(SelectTime.this, MPage.class));
+                            overridePendingTransition(0,0);
                         }
                     });
             final AlertDialog alert = builder.create();

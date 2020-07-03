@@ -332,11 +332,13 @@ public class Map extends FragmentActivity implements OnMapReadyCallback,
                             myIntent.putExtra("keyLatitude", destinationLatLng.latitude);
                             myIntent.putExtra("keyLongitude", destinationLatLng.longitude);
                             startActivity(myIntent);
+                            overridePendingTransition(0,0);
                         }
                     })
                     .setNegativeButton("No", new DialogInterface.OnClickListener() {
                         public void onClick(final DialogInterface dialog, final int id) {
                             startActivity(new Intent(Map.this, MPage.class));
+                            overridePendingTransition(0,0);
                         }
                     });
             final AlertDialog alert = builder.create();
@@ -352,6 +354,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback,
             Log.d("here before intent", " " + timeToDest);
 
             startActivity(myIntent);
+            overridePendingTransition(0,0);
         }
     }
 
@@ -392,6 +395,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback,
                 ;
                 myIntent.putExtra("keyMap", destinationPassed);
                 startActivity(myIntent);
+                overridePendingTransition(0,0);
             }
         }catch (Exception e){
             FirebaseCrashlytics.getInstance().recordException(e);
