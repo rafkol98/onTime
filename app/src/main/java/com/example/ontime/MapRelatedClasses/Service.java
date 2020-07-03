@@ -115,7 +115,7 @@ public class Service extends android.app.Service {
 
 
         trips = new ArrayList<>();
-        getTrips();
+        updateTrips();
         startTimer();
         startLocationService();
 
@@ -259,7 +259,7 @@ public class Service extends android.app.Service {
 
                 calculateDistanceFromTripDestination(latitude, longitude);
 
-                updateTrips();
+                getTrips();
 
                 Log.d("LOCATION_UPDATE", latitude + "," + longitude);
 
@@ -272,6 +272,8 @@ public class Service extends android.app.Service {
     };
 
     private void updateTrips() {
+        ArrayList<Trip> arrayList = new ArrayList<>();
+
 
     }
 

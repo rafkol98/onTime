@@ -257,17 +257,11 @@ public class Tab0 extends Fragment implements OnMapReadyCallback,
                         @Override
                         public void onInfoWindowClick(final Marker marker) {
 
-
-
                             planBtn.setVisibility(View.VISIBLE);
 
                             planBtn.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-
-
-
-
                                     //Alert the user about the distance.
                                     final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                                     builder.setMessage("Would you like to plan a trip there?")
