@@ -254,7 +254,7 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback,
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(origin.getPosition(), zoom));
 
         //Use Geocoder class to calculate minutes walking from current location.
-        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + latitude + "," + longitude + "&destinations=" + destinationPassed + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
+        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + latitude + "," + longitude + "&destinations=" + destinationPassed + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyB_Y4NILmgU_Ua-dgqY1AVoD81o9qn0yKY";
         Log.d("url string", url);
         geoTask.execute(url);
     }
@@ -268,11 +268,11 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback,
         currentLat = location.getLatitude();
         currentLong = location.getLongitude();
 
-        String originUpdate = getAddressFromLatLng(currentLat, currentLong);
-        //Use Geocoder class to calculate minutes walking from current location.
-        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + originUpdate + "&destinations=" + destinationPassed + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
-        Log.d("url string", url);
-        geoTask.execute(url);
+//        String originUpdate = getAddressFromLatLng(currentLat, currentLong);
+//        //Use Geocoder class to calculate minutes walking from current location.
+//        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + originUpdate + "&destinations=" + destinationPassed + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
+//        Log.d("url string", url);
+//        geoTask.execute(url);
     }
 
     /**

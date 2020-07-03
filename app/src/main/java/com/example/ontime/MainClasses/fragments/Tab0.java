@@ -1,10 +1,15 @@
 package com.example.ontime.MainClasses.fragments;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.location.Address;
 import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -20,15 +25,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.ontime.DateTimeClasses.SelectTime;
+import com.example.ontime.MainClasses.MPage;
+import com.example.ontime.MapRelatedClasses.Map;
 import com.example.ontime.R;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+
+import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -48,6 +61,8 @@ public class Tab0 extends Fragment implements OnMapReadyCallback,
     MarkerOptions origin;
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    
+
 
     /**
      * Required empty public constructor
@@ -167,8 +182,11 @@ public class Tab0 extends Fragment implements OnMapReadyCallback,
             Log.d("MapActivity", "Can't find style");
         }
 
+
+
+
         //enable the zoom in and out buttons bottom right
-        float zoom = 18.0f;
+        final float zoom = 18.0f;
         //Check if we have permission.
         if (ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) ==
                 PackageManager.PERMISSION_GRANTED &&
@@ -180,6 +198,60 @@ public class Tab0 extends Fragment implements OnMapReadyCallback,
             map.getUiSettings().setZoomControlsEnabled(true);
             //set the camera to user's current location.
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(current, zoom));
+
+            map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                @Override
+                public void onMapClick(LatLng latLng) {
+                    //Create a new marker.
+                    MarkerOptions markerOptions = new MarkerOptions();
+
+                    //Set marker position.
+                    markerOptions.position(latLng);
+
+                    //Make the marker draggable.
+                    markerOptions.draggable(true);
+
+                    //Set the title for the marker.
+                    markerOptions.title(getAddressFromLatLng(latLng.latitude,latLng.longitude));
+
+                    //Clear any previous markers.
+                    map.clear();
+
+                    //Animate the camera to the point.
+                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoom));
+
+                    //add the new marker.
+                    Marker marker = map.addMarker(markerOptions);
+
+                    marker.showInfoWindow();
+
+                    map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                        @Override
+                        public void onInfoWindowClick(Marker marker) {
+
+                            //Alert the user about the distance.
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                            builder.setMessage("Would you like to plan a trip here?")
+                                    .setCancelable(false)
+                                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                        public void onClick(final DialogInterface dialog, final int id) {
+                                                Log.d("Yes button works","malista");
+                                        }
+                                    })
+                                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                        public void onClick(final DialogInterface dialog, final int id) {
+                                            Log.d("No button works","malista");
+                                        }
+                                    });
+                            final AlertDialog alert = builder.create();
+                            alert.show();
+
+
+                        }
+                    });
+
+                }
+            });
         }
         //if not, ask for permission.
         else {
@@ -189,6 +261,8 @@ public class Tab0 extends Fragment implements OnMapReadyCallback,
                 MY_PERMISSIONS_REQUEST_LOCATION);
 
         }
+
+
     }
 
     /**
@@ -224,6 +298,32 @@ public class Tab0 extends Fragment implements OnMapReadyCallback,
     @Override
     public void onProviderDisabled(String provider) { }
 
+    //Gets address from latitude and Longitude.
+    public String getAddressFromLatLng(double latitude, double longitude) {
+
+        String strAdd = "";
+        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            if (addresses != null) {
+                Address returnedAddress = addresses.get(0);
+                StringBuilder strReturnedAddress = new StringBuilder("");
+
+                for (int i = 0; i <= returnedAddress.getMaxAddressLineIndex(); i++) {
+                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
+                }
+                strAdd = strReturnedAddress.toString();
+                Log.d("Address", strReturnedAddress.toString());
+            } else {
+                Log.d("Address", "No Address returned!");
+            }
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
+            e.printStackTrace();
+            Log.d("Address", "Cannot get Address!");
+        }
+        return strAdd;
+    }
 
 
 }

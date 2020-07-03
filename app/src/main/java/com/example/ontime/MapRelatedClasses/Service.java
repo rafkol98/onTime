@@ -375,7 +375,7 @@ public class Service extends android.app.Service {
                     //If user was not allerted, perform the geoservice.
                     if ((flagsTotal != 2) && (countX==0)) {
                         GeoService geoService = new GeoService(trip);
-                        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + latitude + "," + longitude + "&destinations=" + trip.getLatitude() + "," + trip.getLongitude() + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyBCv-Rz8niwSqwicymjqs_iKinNNsVBAdQ";
+                        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + latitude + "," + longitude + "&destinations=" + trip.getLatitude() + "," + trip.getLongitude() + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyB_Y4NILmgU_Ua-dgqY1AVoD81o9qn0yKY";
                         Log.d("url string", url);
                         geoService.execute(url);
                         countX++;
