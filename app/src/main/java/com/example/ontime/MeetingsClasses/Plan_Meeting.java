@@ -221,6 +221,7 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
         //as the destination.
         if (bundle != null) {
             destinationConfirmed = getArguments().getString("confirmedMeeting");
+            Log.d("destination conf alo",destinationConfirmed+"");
         }
 
         destination.setText(destinationConfirmed);

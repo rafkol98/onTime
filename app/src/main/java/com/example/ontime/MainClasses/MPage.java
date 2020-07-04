@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.example.ontime.MeetingsClasses.Plan_Meeting;
 import com.example.ontime.SignIn_UpClasses.AverageSpeedNotFound;
 import com.example.ontime.R;
 import com.example.ontime.MainClasses.fragments.Tab0;
@@ -60,6 +61,9 @@ public class MPage extends AppCompatActivity {
 
         if (menuFragment != null) {
             switch (menuFragment) {
+                case "Plan_Meeting":
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Plan_Meeting()).commit();
+                    break;
                 case "Tab0":
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Tab0()).commit();
                     break;

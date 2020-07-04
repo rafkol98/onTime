@@ -20,6 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,6 +35,7 @@ import com.example.ontime.MainClasses.MPage;
 import com.example.ontime.MainClasses.PlanTripFromLocation;
 import com.example.ontime.MapRelatedClasses.GeoTask;
 import com.example.ontime.MapRelatedClasses.Map;
+import com.example.ontime.MeetingsClasses.Plan_Meeting;
 import com.example.ontime.R;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -80,10 +82,11 @@ public class Tab0 extends Fragment implements OnMapReadyCallback,
     double tripLatitude;
     double tripLongitude;
 
-
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
     Button planBtn;
+
+    AlertDialog alertDialog;
 
     /**
      * Required empty public constructor
@@ -259,40 +262,7 @@ public class Tab0 extends Fragment implements OnMapReadyCallback,
                     map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                         @Override
                         public void onInfoWindowClick(final Marker marker) {
-
                             showDialog();
-
-//                            planBtn.setVisibility(View.VISIBLE);
-//
-//                            planBtn.setOnClickListener(new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View view) {
-//                                    //Alert the user about the distance.
-//                                    final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-//                                    builder.setMessage("Would you like to plan a trip there?")
-//                                            .setCancelable(false)
-//                                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                                                public void onClick(final DialogInterface dialog, final int id) {
-//                                                    Intent myIntent = new Intent(getContext(), SelectTime.class);
-//                                                    myIntent.putExtra("keyMap", destinationPassed);
-//                                                    myIntent.putExtra("keyLatitude", tripLatitude);
-//                                                    myIntent.putExtra("keyLongitude", tripLongitude);
-//                                                    startActivity(myIntent);
-//                                                    getActivity().overridePendingTransition(0,0);
-//
-//                                                }
-//                                            })
-//                                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
-//                                                public void onClick(final DialogInterface dialog, final int id) {
-//                                                    marker.remove();
-//                                                    planBtn.setVisibility(View.INVISIBLE);
-//                                                    Log.d("No button works", "malista");
-//                                                }
-//                                            });
-//                                    final AlertDialog alert = builder.create();
-//                                    alert.show();
-//                                }
-//                            });
                         }
                     });
 
@@ -390,17 +360,34 @@ public class Tab0 extends Fragment implements OnMapReadyCallback,
                 myIntent.putExtra("keyLatitude", tripLatitude);
                 myIntent.putExtra("keyLongitude", tripLongitude);
                 startActivity(myIntent);
+                getActivity().overridePendingTransition(0,0);
             }
         });
 
         noBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("No Button", "works");
+                Bundle bundle = new Bundle();
+                //the meeting is confirmed. Put it in a bundle, access it from Plan_Meeting Class.
+                bundle.putString("confirmedMeeting", destinationPassed);
+
+                Fragment fragmentPlan = new Plan_Meeting();
+                fragmentPlan.setArguments(bundle);
+
+                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+
+                // Replace whatever is in the fragment_container view with this fragment,
+                // and add the transaction to the back stack if needed
+                transaction.replace(R.id.fragment_container, fragmentPlan);
+                transaction.addToBackStack(null);
+
+                // Commit the transaction
+                transaction.commit();
+                
             }
         });
 
-        AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+        alertDialog = new AlertDialog.Builder(getContext())
                 .setView(view)
                 .create();
 
@@ -409,4 +396,9 @@ public class Tab0 extends Fragment implements OnMapReadyCallback,
     }
 
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        alertDialog.dismiss();
+    }
 }
