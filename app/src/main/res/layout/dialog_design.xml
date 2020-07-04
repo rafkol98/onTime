@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textView19"
+        android:layout_width="match_parent"
+        android:padding="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        android:text="Do you want to go there alone?"
+        android:textSize="18dp"
+        android:textStyle="italic|bold"
+        android:textColor="@color/blgrey"
+        android:gravity="center"/>
+
+    <Button
+        android:id="@+id/yesBtnDialog"
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:text="Yes"
+        android:textSize="24dp"
+        android:padding="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/custom_button"/>
+
+    <Button
+        android:id="@+id/noBtnDialog"
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:text="No, I want to meet friends"
+        android:textSize="18dp"
+        android:padding="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/custom_button_red"
+        android:textColor="@color/white"/>
+
+
+
+</LinearLayout>

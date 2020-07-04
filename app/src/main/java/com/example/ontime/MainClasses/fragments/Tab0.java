@@ -77,6 +77,9 @@ public class Tab0 extends Fragment implements OnMapReadyCallback,
     private double timeToDest;
     String destinationPassed;
 
+    double tripLatitude;
+    double tripLongitude;
+
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
@@ -247,47 +250,49 @@ public class Tab0 extends Fragment implements OnMapReadyCallback,
                     marker.showInfoWindow();
 
                     destinationPassed = getAddressFromLatLng(latLng.latitude,latLng.longitude);
-                    System.out.println("Destination heree: HAHA: "+destinationPassed);
+                    System.out.println("Destination heree: "+destinationPassed);
 
-                    final double tripLatitude = latLng.latitude;
-                    final double tripLongitude = latLng.longitude;
+                    tripLatitude = latLng.latitude;
+                    tripLongitude = latLng.longitude;
 
 
                     map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                         @Override
                         public void onInfoWindowClick(final Marker marker) {
 
-                            planBtn.setVisibility(View.VISIBLE);
+                            showDialog();
 
-                            planBtn.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    //Alert the user about the distance.
-                                    final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                                    builder.setMessage("Would you like to plan a trip there?")
-                                            .setCancelable(false)
-                                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                                public void onClick(final DialogInterface dialog, final int id) {
-                                                    Intent myIntent = new Intent(getContext(), SelectTime.class);
-                                                    myIntent.putExtra("keyMap", destinationPassed);
-                                                    myIntent.putExtra("keyLatitude", tripLatitude);
-                                                    myIntent.putExtra("keyLongitude", tripLongitude);
-                                                    startActivity(myIntent);
-                                                    getActivity().overridePendingTransition(0,0);
-
-                                                }
-                                            })
-                                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                                public void onClick(final DialogInterface dialog, final int id) {
-                                                    marker.remove();
-                                                    planBtn.setVisibility(View.INVISIBLE);
-                                                    Log.d("No button works", "malista");
-                                                }
-                                            });
-                                    final AlertDialog alert = builder.create();
-                                    alert.show();
-                                }
-                            });
+//                            planBtn.setVisibility(View.VISIBLE);
+//
+//                            planBtn.setOnClickListener(new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View view) {
+//                                    //Alert the user about the distance.
+//                                    final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+//                                    builder.setMessage("Would you like to plan a trip there?")
+//                                            .setCancelable(false)
+//                                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                                                public void onClick(final DialogInterface dialog, final int id) {
+//                                                    Intent myIntent = new Intent(getContext(), SelectTime.class);
+//                                                    myIntent.putExtra("keyMap", destinationPassed);
+//                                                    myIntent.putExtra("keyLatitude", tripLatitude);
+//                                                    myIntent.putExtra("keyLongitude", tripLongitude);
+//                                                    startActivity(myIntent);
+//                                                    getActivity().overridePendingTransition(0,0);
+//
+//                                                }
+//                                            })
+//                                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+//                                                public void onClick(final DialogInterface dialog, final int id) {
+//                                                    marker.remove();
+//                                                    planBtn.setVisibility(View.INVISIBLE);
+//                                                    Log.d("No button works", "malista");
+//                                                }
+//                                            });
+//                                    final AlertDialog alert = builder.create();
+//                                    alert.show();
+//                                }
+//                            });
                         }
                     });
 
@@ -368,6 +373,40 @@ public class Tab0 extends Fragment implements OnMapReadyCallback,
         return strAdd;
     }
 
+
+    public void showDialog(){
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        View view = inflater.inflate(R.layout.dialog_design,null);
+
+        Button yesBtn = view.findViewById(R.id.yesBtnDialog);
+        Button noBtn = view.findViewById(R.id.noBtnDialog);
+
+        yesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("Yes Button", "works");
+                Intent myIntent = new Intent(getContext(), SelectTime.class);
+                myIntent.putExtra("keyMap", destinationPassed);
+                myIntent.putExtra("keyLatitude", tripLatitude);
+                myIntent.putExtra("keyLongitude", tripLongitude);
+                startActivity(myIntent);
+            }
+        });
+
+        noBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("No Button", "works");
+            }
+        });
+
+        AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+                .setView(view)
+                .create();
+
+        alertDialog.show();
+
+    }
 
 
 }
