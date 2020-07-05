@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.ontime.MainClasses.Trip;
 import com.example.ontime.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,7 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class MeetingRequestsListAdapter extends ArrayAdapter<Meeting> {
+public class MeetingRequestsListAdapter extends ArrayAdapter<Trip> {
 
 
     private Context mContext;
@@ -40,7 +41,7 @@ public class MeetingRequestsListAdapter extends ArrayAdapter<Meeting> {
     String uId = currentFirebaseUser.getUid();
 
 
-    public MeetingRequestsListAdapter(@NonNull Context context, int resource, @NonNull List<Meeting> objects) {
+    public MeetingRequestsListAdapter(@NonNull Context context, int resource, @NonNull List<Trip> objects) {
         super(context, resource, objects);
         this.mContext = context;
         this.mResource = resource;
@@ -64,11 +65,11 @@ public class MeetingRequestsListAdapter extends ArrayAdapter<Meeting> {
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-        final Meeting meeting = getItem(position);
+        final Trip meeting = getItem(position);
 
         // Attempt to get the destination
         try {
-            friendUId = meeting.getuIdSender();
+            friendUId = meeting.getSenderUId();
         } catch (NullPointerException e) {
             FirebaseCrashlytics.getInstance().recordException(e);
         }
@@ -143,7 +144,7 @@ public class MeetingRequestsListAdapter extends ArrayAdapter<Meeting> {
             @Override
             public void onClick(View view) {
                 //Write the meeting under user's trips.
-                DatabaseReference childReff = profRef.child(uId).child("trips").child(meeting.getMeetingId());
+                DatabaseReference childReff = profRef.child(uId).child("trips").child(meeting.getTimestamp().toString());
                 childReff.setValue(meeting, new DatabaseReference.CompletionListener() {
                     @Override
                     public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
@@ -158,7 +159,7 @@ public class MeetingRequestsListAdapter extends ArrayAdapter<Meeting> {
 
                 //remove userUid from friendRequests of the friend.
                 DatabaseReference meetRef = profRef.child(uId).child("meeting_request");
-                meetRef.child(meeting.getMeetingId()).removeValue();
+                meetRef.child(meeting.getTimestamp().toString()).removeValue();
 
                 //Refresh the fragment.
                 Fragment newFragment = new Meet_Request();
@@ -181,7 +182,7 @@ public class MeetingRequestsListAdapter extends ArrayAdapter<Meeting> {
 
                 //remove userUid from friendRequests of the friend.
                 DatabaseReference meetRef = profRef.child(uId).child("meeting_request");
-                meetRef.child(meeting.getMeetingId()).removeValue();
+                meetRef.child(meeting.getTimestamp().toString()).removeValue();
 
                 //Refresh the fragment.
                 Fragment newFragment = new Meet_Request();

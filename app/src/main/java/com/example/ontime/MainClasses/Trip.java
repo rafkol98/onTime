@@ -14,7 +14,7 @@ public class Trip implements Comparable<Trip> {
     String time;
     Long timestamp;
     Object object;
-    String senderUId;
+    String senderUId = null;
     double flagValue10;
     double flagValue1;
     boolean shouldAlert10 = true;
@@ -24,6 +24,15 @@ public class Trip implements Comparable<Trip> {
 
 
     public Trip(String destination, double latitude, double longitude, Long timestamp, String senderUId, boolean meetingFlag) {
+        this.destination = destination;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.timestamp = timestamp;
+        this.senderUId = senderUId;
+        this.meetingFlag = meetingFlag;
+    }
+
+    public Trip(String destination, Long timestamp, String senderUId, boolean meetingFlag) {
         this.destination = destination;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -230,4 +239,16 @@ public class Trip implements Comparable<Trip> {
     public boolean isMeetingFlag() {
         return meetingFlag;
     }
+
+    public String getSenderUId() {
+        return senderUId;
+    }
+
+    public void setSenderUId(String senderUId) {
+        this.senderUId = senderUId;
+    }
+
+
 }
+
+

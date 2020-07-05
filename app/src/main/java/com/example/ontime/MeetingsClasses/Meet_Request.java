@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +38,7 @@ public class Meet_Request extends Fragment {
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     private DatabaseReference profRef = FirebaseDatabase.getInstance().getReference("/profiles");
 
-    ArrayList<Meeting> meetingList = new ArrayList<>();
+    ArrayList<Trip> meetingList = new ArrayList<>();
 
     private ListView mListView;
 
@@ -45,7 +46,7 @@ public class Meet_Request extends Fragment {
 
     Long timestamp;
 
-    Meeting newMeetingReq;
+    Trip newMeetingReq;
 
     ImageView noMeetings_img;
 
@@ -61,16 +62,21 @@ public class Meet_Request extends Fragment {
         profRef.child(uId).child("meeting_request").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
+
                     try {
                         destination = child.child("destination").getValue().toString();
-                        senderUid = child.child("uIdSender").getValue().toString();
+                        Log.d("destination in",destination+"");
+
+                        senderUid = child.child("senderUId").getValue().toString();
+                        Log.d("destination in",destination+"");
+
                         timestamp = child.child("timestamp").getValue(Long.class);
 
-                        newMeetingReq = new Meeting(destination, timestamp, senderUid,true);
+                        newMeetingReq = new Trip(destination, timestamp, senderUid,true);
                         meetingList.add(newMeetingReq);
+
+                        Log.d("I am in the fb","Meeting list size "+meetingList.size()+"meeting list first element "+meetingList.get(0).getDestination());
                         noMeetings_img.setVisibility(View.INVISIBLE);
 
                     } catch (NullPointerException e) {
