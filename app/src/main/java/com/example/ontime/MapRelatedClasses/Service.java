@@ -114,8 +114,8 @@ public class Service extends android.app.Service {
                 R.drawable.ic_notification, Channels.FOREGROUND_CHANNEL));
 
 
-        trips = new ArrayList<>();
-        updateTrips();
+        trips = getTrips();
+//        updateTrips();
         startTimer();
         startLocationService();
 
@@ -259,14 +259,10 @@ public class Service extends android.app.Service {
 
                 calculateDistanceFromTripDestination(latitude, longitude);
 
-                getTrips();
+                trips = getTrips();
 
                 Log.d("LOCATION_UPDATE", latitude + "," + longitude);
 
-                System.out.println("arraylist trips size "+ trips.size());
-                for (int i=0;i<trips.size();i++){
-                    System.out.println(trips.get(i).getDestination()+" i="+i);
-                }
             }
         }
     };
@@ -308,6 +304,8 @@ public class Service extends android.app.Service {
 
         // Skip if failed to obtain the users speed
         if (avgSpeed == 0) return;
+
+        System.out.println(trips.size()+" size dame na doume");
 
         for (Trip trip : trips) {
             int countX = 0;
@@ -449,7 +447,8 @@ public class Service extends android.app.Service {
         }
     }
 
-    private void getTrips() {
+    private ArrayList<Trip> getTrips() {
+        final ArrayList<Trip> tripsList = new ArrayList<>();
         String uId = currentFirebaseUser.getUid();
         //Get trips of the user. Order them so that the closest one to the current date is first.
         dbRef.child(uId).child("trips").orderByChild("timestamp").addValueEventListener(new ValueEventListener() {
@@ -477,14 +476,13 @@ public class Service extends android.app.Service {
                     } else {
                         trip = new Trip(destination, timestamp);
                     }
-                    trips.add(trip);
+                    tripsList.add(trip);
                 }
                 try {
-                    Collections.sort(trips);
+                    Collections.sort(tripsList);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
             }
 
             @Override
@@ -492,6 +490,7 @@ public class Service extends android.app.Service {
 
             }
         });
+        return tripsList;
     }
 
 

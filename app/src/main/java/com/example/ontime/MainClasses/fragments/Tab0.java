@@ -383,7 +383,6 @@ public class Tab0 extends Fragment implements OnMapReadyCallback,
 
                 // Commit the transaction
                 transaction.commit();
-                
             }
         });
 
@@ -399,6 +398,8 @@ public class Tab0 extends Fragment implements OnMapReadyCallback,
     @Override
     public void onPause() {
         super.onPause();
-        alertDialog.dismiss();
-    }
+
+        if(alertDialog!=null && alertDialog.isShowing()){
+            alertDialog.dismiss();
+    }}
 }
