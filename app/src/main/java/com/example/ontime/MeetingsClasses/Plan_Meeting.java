@@ -21,7 +21,6 @@ import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -30,7 +29,6 @@ import com.example.ontime.AutoSuggestClasses.PlaceAutoSuggestAdapter;
 import com.example.ontime.DateTimeClasses.DateTimeCheck;
 import com.example.ontime.MainClasses.HashEmail;
 import com.example.ontime.MainClasses.Trip;
-import com.example.ontime.MapRelatedClasses.Map;
 import com.example.ontime.R;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
@@ -55,7 +53,7 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
 
     TextView dateText, timeText;
 
-    ImageView dateImg, timeImg;
+    Button dateBtn, timeBtn;
 
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/friendRequests");
@@ -227,7 +225,7 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
         destination.setText(destinationConfirmed);
 
         //When click on the image of the diary, open dialog that allows the user to select date.
-        dateImg.setOnClickListener(new View.OnClickListener() {
+        dateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDatePickerDialog();
@@ -243,7 +241,7 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
         });
 
         //When click on the image of the clock, open dialog that allows the user to select time.
-        timeImg.setOnClickListener(new View.OnClickListener() {
+        timeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showTimePickerDialog();
@@ -265,11 +263,17 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
             public void onClick(View v) {
 
                 if (validate()) {
+                    if (friendsCopy.size()==0) {
+                        Toast.makeText(getContext(), "Select someone to share this meeting with", Toast.LENGTH_LONG).show();
+
+                    }else{
                     //find the uid of the friends the user selected.
                     dbRefEmail.addValueEventListener(new ValueEventListener() {
 
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+
 
                             //Get the users that were selected and get their UId from the database.
                             for (int i = 0; i < friendsCopy.size(); i++) {
@@ -358,7 +362,7 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
                             FirebaseCrashlytics.getInstance().log(databaseError.getDetails());
                         }
                     });
-                }
+                }}
             }
         });
 
@@ -428,8 +432,8 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
         selectBtn = v.findViewById(R.id.select_Btn);
         dateText = v.findViewById(R.id.date_sel_text);
         timeText = v.findViewById(R.id.time_sel_text);
-        dateImg = v.findViewById(R.id.dateImg);
-        timeImg = v.findViewById(R.id.timeImg);
+        dateBtn = v.findViewById(R.id.btn_PickDate);
+        timeBtn = v.findViewById(R.id.btn_PickTime);
         planBtn = v.findViewById(R.id.buttonPlan);
 
 
@@ -465,15 +469,13 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
 
 
         }
-
-
         return listWithEmails;
     }
 
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        dateImg.setVisibility(View.INVISIBLE);
+        dateBtn.setVisibility(View.INVISIBLE);
         date = dayOfMonth + "/" + (month + 1) + "/" + year;
         dateText.setText(date);
         Log.d("date selected", date);
@@ -483,7 +485,7 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
 
     @Override
     public void onTimeSet(TimePicker view, int hour, int minute) {
-        timeImg.setVisibility(View.INVISIBLE);
+        timeBtn.setVisibility(View.INVISIBLE);
 
         Log.d("time selected", hour + ":" + minute);
         timeText.setText(String.format("%02d:%02d", hour, minute));
@@ -498,10 +500,7 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
             Toast.makeText(getContext(), "Please select a location", Toast.LENGTH_LONG).show();
             x = false;
         }
-        if (!clicked || friendsList.size()==0) {
-            Toast.makeText(getContext(), "Select someone to share this meeting with", Toast.LENGTH_LONG).show();
-            x = false;
-        }
+
         if ((dateText.getText().toString()).equalsIgnoreCase("date") || (timeText.getText().toString()).equalsIgnoreCase("time")) {
             Toast.makeText(getContext(), "Please select both date and time!", Toast.LENGTH_LONG).show();
             x = false;

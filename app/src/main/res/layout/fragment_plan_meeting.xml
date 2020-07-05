@@ -96,8 +96,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.96107054"
-        android:screenOrientation="nosensor"/>
+        android:screenOrientation="nosensor"
+        app:layout_constraintGuide_percent="0.96107054" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline22"
@@ -125,10 +125,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:visibility="invisible"
         android:text="TIME"
-        android:textSize="24dp"
         android:textColor="@color/red"
+        android:textSize="24dp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toStartOf="@+id/guideline19"
         app:layout_constraintStart_toStartOf="@+id/guideline7"
         app:layout_constraintTop_toBottomOf="@+id/selectDateTime_txt" />
@@ -139,9 +139,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="DATE"
-        android:visibility="invisible"
-        android:textSize="24dp"
         android:textColor="@color/red"
+        android:textSize="24dp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toStartOf="@+id/guideline7"
         app:layout_constraintStart_toStartOf="@+id/guideline22"
         app:layout_constraintTop_toBottomOf="@+id/selectDateTime_txt" />
@@ -193,24 +193,55 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
 
-    <ImageView
-        android:id="@+id/timeImg"
-        android:layout_width="wrap_content"
+    <!--    <ImageView-->
+    <!--        android:id="@+id/timeImg"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="32dp"-->
+    <!--        android:src="@drawable/timer_img"-->
+    <!--        app:layout_constraintEnd_toStartOf="@+id/guideline19"-->
+    <!--        app:layout_constraintStart_toStartOf="@+id/guideline7"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/selectDateTime_txt" />-->
+
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/dateImg"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="32dp"-->
+    <!--        android:src="@drawable/date_img"-->
+    <!--        app:layout_constraintEnd_toStartOf="@+id/guideline7"-->
+    <!--        app:layout_constraintStart_toStartOf="@+id/guideline22"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/selectDateTime_txt" />-->
+
+    <Button
+        android:id="@+id/btn_PickDate"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:src="@drawable/timer_img"
-        app:layout_constraintEnd_toStartOf="@+id/guideline19"
-        app:layout_constraintStart_toStartOf="@+id/guideline7"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/search_button"
+        android:drawableLeft="@drawable/date_img"
+        android:padding="10dp"
+        android:text="Pick Date"
+        android:textSize="12dp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toStartOf="@+id/guideline7"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/selectDateTime_txt" />
 
-    <ImageView
-        android:id="@+id/dateImg"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/btn_PickTime"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:src="@drawable/date_img"
-        app:layout_constraintEnd_toStartOf="@+id/guideline7"
-        app:layout_constraintStart_toStartOf="@+id/guideline22"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/search_button"
+        android:drawableLeft="@drawable/timer_img"
+        android:padding="12dp"
+        android:text="Pick Time"
+        android:textSize="12dp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toStartOf="@+id/guideline19"
+        app:layout_constraintStart_toStartOf="@+id/guideline7"
         app:layout_constraintTop_toBottomOf="@+id/selectDateTime_txt" />
 
 

@@ -305,8 +305,6 @@ public class Service extends android.app.Service {
         // Skip if failed to obtain the users speed
         if (avgSpeed == 0) return;
 
-        System.out.println(trips.size()+" size dame na doume");
-
         for (Trip trip : trips) {
             int countX = 0;
 
@@ -380,9 +378,6 @@ public class Service extends android.app.Service {
                         geoService.execute(url);
                         countX++;
                     }
-
-
-
                 }
             }
 
