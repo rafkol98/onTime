@@ -103,7 +103,7 @@ public class Meet_Request extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        // Inflate the layout for this fragment.
         View v = inflater.inflate(R.layout.fragment_meet_request, container, false);
         mListView = (ListView) v.findViewById(R.id.listView_req_meetings);
         noMeetings_img = v.findViewById(R.id.noMeetings_Img);
