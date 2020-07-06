@@ -50,6 +50,8 @@ public class Meet_Request extends Fragment {
 
     ImageView noMeetings_img;
 
+    double desLatitude, desLongitude;
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -66,14 +68,12 @@ public class Meet_Request extends Fragment {
 
                     try {
                         destination = child.child("destination").getValue().toString();
-                        Log.d("destination in",destination+"");
-
                         senderUid = child.child("senderUId").getValue().toString();
-                        Log.d("destination in",destination+"");
-
                         timestamp = child.child("timestamp").getValue(Long.class);
+                        desLatitude = child.child("latitude").getValue(Double.class);
+                        desLongitude = child.child("longitude").getValue(Double.class);
 
-                        newMeetingReq = new Trip(destination, timestamp, senderUid,true);
+                        newMeetingReq = new Trip(destination, desLatitude, desLongitude, timestamp, senderUid,true);
                         meetingList.add(newMeetingReq);
 
                         Log.d("I am in the fb","Meeting list size "+meetingList.size()+"meeting list first element "+meetingList.get(0).getDestination());
@@ -83,22 +83,10 @@ public class Meet_Request extends Fragment {
                         FirebaseCrashlytics.getInstance().recordException(e);
                     }
                 }
-
-
-
-
-
                 if (getContext() != null) {
                     MeetingRequestsListAdapter adapter = new MeetingRequestsListAdapter(getContext(), R.layout.adapter_view_meet_req, meetingList);
                     mListView.setAdapter(adapter);
                 }
-
-
-
-
-
-
-
             }
 
             @Override

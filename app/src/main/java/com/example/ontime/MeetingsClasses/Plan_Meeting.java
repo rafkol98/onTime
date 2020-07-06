@@ -300,6 +300,7 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
 //                                meeting = new Meeting(destination.getText().toString(), timestamp, uId,true);
 
                                 LatLng desLatLng = getLatLngFromAddress( destination.getText().toString());
+                                Log.d("des lat lng", desLatLng.latitude+" , "+desLatLng.longitude);
 
                                 trip = new Trip(destination.getText().toString(), desLatLng.latitude, desLatLng.longitude, timestamp, uId,true);
 
