@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">onTime</string>
+    <string name="max_speed">Μέγιστη ταχύτητα</string>
+    <string name="average_speed">Μέση ταχύτητα</string>
+    <string name="distance">Απόσταση</string>
+    <string name="time">χρόνος</string>
+    <string name="accuracy">Ακρίβεια</string>
+    <string name="satellite">Δορυφόροι</string>
+
+    <string name="waiting_for_fix">Αναμονή για διόρθωση GPS…</string>
+    <string name="gps_disabled">Το GPS είναι απενεργοποιημένο</string>
+    <string name="please_enable_gps">Για να χρησιμοποιήσετε αυτήν την εφαρμογή, πρέπει να είναι ενεργοποιημένο το GPS.</string>
+
+    <string name="running">Διαδρομή σε διαδικασία…</string>
+    <string name="notification">Μέγιστη ταχύτητα : %1$s, Απόσταση : %2$s.</string>
+
+    <string name="settings">Ρυθμίσεις</string>
+    <string name="app_info">Σχετικά με αυτήν την εφαρμογή</string>
+    <string name="pref_auto_average">Αυτόματη ανίχνευση χρόνου διακοπής.</string>
+    <string name="pref_auto_average_summary">Ο χρόνος που αφιερώνεται σε κίνηση δεν θα μετρά στη μέση ταχύτητα.</string>
+    <string name="pref_miles_per_hour">Χρησιμοποιήστε μίλια ανά ώρα</string>
+    <string name="pref_miles_per_hour_summary">Εμφάνιση της ταχύτητας σε mi/h αντί για km/h</string>
+
+    <string name="license">Αδεια</string>
+    <string name="donate">Προσφέρω</string>
+    <string name="donate_summary">Κάντε κλικ για να υποστηρίξετε τη δουλειά μου :) …</string>
+    <string name="source_code">GitHub</string>
+    <string name="source_code_summary">Πρόσβαση στον πηγαίο κώδικα.</string>
+    <string name="version">Έκδοση ταχύμετρου</string>
+
+    <string name="noti_id" translatable="false">Speedmeterisanid</string>
+    <string name="github" translatable="false">https://github.com/flyingrub/SpeedMeter</string>
+    <string name="license_type" translatable="false">GNU General Public License 2</string>
+    <string name="doante_url" translatable="false">https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=6DE8SFMJKRVK2</string>
+    <string name="title_activity_m_page">MPage</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+
+    <!-- Channel ID for notification channel -->
+    <string name="CHANNEL_ID">"com.example.ontime.channel"</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="success">MALAKA IT WORKED</string>
+    <string name="world_pic_desc">Κόσμος εκμετάλλευσης προσώπων</string>
+    <string name="all_set">Είστε πανέτοιμοι</string>
+    <string name="cool">Δροσερός</string>
+    <string name="the_world_is_yours">Ο κόσμος είναι δικός σου!</string>
+    <string name="two">02:00</string>
+    <string name="keep_walking">Συνέχισε να περπατάς...</string>
+    <string name="countimage_desc">Άτομο που περπατά</string>
+    <string name="zero_speed">0.0 m/s</string>
+    <string name="metric_units">Μετρικές μονάδες</string>
+    <string name="welcome">Καλώς ήλθατε στο onTime</string>
+    <string name="email">Διεύθυνση ηλεκτρονικού ταχυδρομείου</string>
+    <string name="password">Κωδικός πρόσβασης</string>
+    <string name="never_late">Ποτέ μην αργείς ξανά!</string>
+    <string name="sign_in">Συνδεθείτε</string>
+    <string name="sign_up">Οχι μέλος? Εγγραφείτε!</string>
+    <string name="promo_desc">Χρησιμοποιήστε την επαναστατική εφαρμογή μας που θα σας φτάσει εκεί εγκαίρως, χρησιμοποιώντας το δικό σας ρυθμό!</string>
+    <string name="plan">Προγραμματίστε ταξίδι</string>
+    <string name="home_icon">Εικονίδιο</string>
+    <string name="arrival_time">Ωρα άφιξης:</string>
+
+    <string name="location_access_required">Απαιτείται πρόσβαση τοποθεσίας για τη χρήση βοηθητικών προγραμμάτων χαρτών.</string>
+    <string name="ok">Εντάξει</string>
+    <string name="location_unavailable">Η άδεια δεν είναι διαθέσιμη. Αίτημα άδειας τοποθεσίας.</string>
+    <string name="location_permission_granted">Παραχωρήθηκε άδεια τοποθεσίας.</string>
+    <string name="location_permission_denied">Το αίτημα άδειας τοποθεσίας απορρίφθηκε.</string>
+    <string name="background_location_permission_granted">Παραχωρήθηκε άδεια τοποθεσίας παρασκηνίου.</string>
+    <string name="background_location_permission_denied">Το αίτημα άδειας τοποθεσίας στο παρασκήνιο απορρίφθηκε.</string>
+    <string name="background_access_required">Απαιτείται πρόσβαση τοποθεσίας για ενημέρωση σε ταξίδια.</string>
+    <string name="background_location_unavailable">Η άδεια δεν είναι διαθέσιμη. Αίτημα άδειας τοποθεσίας στο παρασκήνιο.</string>
+</resources>
