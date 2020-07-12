@@ -71,5 +71,8 @@
     <string name="background_location_permission_denied">Background Location permission request was denied.</string>
     <string name="background_access_required">Background Location access is required to update on trips.</string>
     <string name="background_location_unavailable">Permission is not available. Requesting background location permission.</string>
+    <string name="avg_speed_not_found_img_desc">Couldn\'t find your average walking speed.</string>
+    <string name="never_sell">WE WILL NEVER SELL OR GIVE YOUR INFORMATION TO ANYONE</string>
+    <string name="i_am_not_outside">I AM NOT OUTSIDE</string>
 
 </resources>
