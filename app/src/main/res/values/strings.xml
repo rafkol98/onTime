@@ -74,5 +74,10 @@
     <string name="avg_speed_not_found_img_desc">Couldn\'t find your average walking speed.</string>
     <string name="never_sell">WE WILL NEVER SELL OR GIVE YOUR INFORMATION TO ANYONE</string>
     <string name="i_am_not_outside">I AM NOT OUTSIDE</string>
+    <string name="average_speed_not_found">AVERAGE SPEED NOT FOUND</string>
+    <string name="cant_start_calculations">We cannot do all of our smart calculations without having your average speed</string>
+    <string name="need_to_be_outside">YOU HAVE TO BE OUTSIDE TO DO THE TEST,</string>
+    <string name="walk_at_normal_speed">PLEASE WALK AT YOUR NORMAL SPEED</string>
+    <string name="start_the_test">I AM OUTSIDE, START THE TEST!</string>
 
 </resources>
