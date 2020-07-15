@@ -80,4 +80,10 @@
     <string name="need_to_be_outside">YOU HAVE TO BE OUTSIDE TO DO THE TEST,</string>
     <string name="walk_at_normal_speed">PLEASE WALK AT YOUR NORMAL SPEED</string>
     <string name="start_the_test">I AM OUTSIDE, START THE TEST!</string>
+    <string name="textview">TextView</string>
+    <string name="pick_an_alternative_starting_point">Pick an alternative starting point</string>
+    <string name="cant_reach_destination_on_foot">According to our calculations you can’t get there from your current location, on foot</string>
+    <string name="to">To...</string>
+    <string name="from">From...</string>
+    <string name="bags_img_desc">Man walking with bag</string>
 </resources>

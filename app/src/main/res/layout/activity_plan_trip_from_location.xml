@@ -16,7 +16,7 @@
         android:gravity="center"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:text="Pick an alternative starting point"
+        android:text="@string/pick_an_alternative_starting_point"
         android:textColor="@color/blgrey"
 
         android:textSize="24sp"
@@ -33,8 +33,7 @@
         android:gravity="center"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:text="According to our calculations you can’t get there from your current location,
-on foot"
+        android:text="@string/cant_reach_destination_on_foot"
         android:textColor="@color/blgrey"
         android:textSize="24sp"
 
@@ -50,7 +49,8 @@ on foot"
         app:layout_constraintBottom_toTopOf="@+id/guideline6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/bags_img" />
+        app:srcCompat="@drawable/bags_img"
+        android:contentDescription="@string/bags_img_desc" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline6"
@@ -66,7 +66,7 @@ on foot"
         android:layout_height="39dp"
         android:layout_marginTop="24dp"
         android:background="@drawable/search_button"
-        android:hint="From..."
+        android:hint="@string/from"
         android:textStyle="italic"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -80,7 +80,7 @@ on foot"
         android:layout_height="39dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/search_button"
-        android:hint="To..."
+        android:hint="@string/to"
         android:padding="10dp"
         android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
