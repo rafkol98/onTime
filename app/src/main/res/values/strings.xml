@@ -95,5 +95,11 @@
     <string name="quite_slow">QUITE SLOW</string>
     <string name="quite_fast">QUITE FAST</string>
     <string name="fast">FAST</string>
+    <string name="done">Done</string>
+    <string name="time_big">TIME</string>
+    <string name="date">DATE</string>
+    <string name="tell_the_date">Please tell us the date you want to be there</string>
+    <string name="got_it">Got it!</string>
+    <string name="and_the_time">and the time?</string>
 
 </resources>
