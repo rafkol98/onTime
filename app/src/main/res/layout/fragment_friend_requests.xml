@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:text="FRIEND REQUESTS"
+        android:text="@string/friend_requests"
         android:textColor="@color/blgrey"
         android:textSize="20sp"
         android:textStyle="italic"
@@ -38,7 +38,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/no_new_requests" />
 
     <ListView
         android:id="@+id/listView_req_friends"
