@@ -19,14 +19,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/super_img" />
+        app:srcCompat="@drawable/super_img"
+        android:contentDescription="@string/super_img_desc" />
 
     <TextView
         android:id="@+id/textView10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
-        android:text="Super!"
+        android:text="@string/supers"
         android:textColor="@color/blgrey"
         android:textSize="34sp"
         android:textStyle="italic"
@@ -40,7 +41,7 @@
         android:layout_height="64dp"
         android:layout_marginTop="8dp"
         android:gravity="center"
-        android:text="WE WILL NOTIFY YOU WHEN YOU SHOULD START WALKING"
+        android:text="@string/we_will_notify"
         android:textColor="@color/blgrey"
 
         android:textSize="18sp"

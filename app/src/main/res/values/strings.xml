@@ -104,5 +104,8 @@
     <string name="repeat_password">Repeat password</string>
     <string name="sign_up">Sign Up</string>
     <string name="name">Name</string>
-
+    <string name="search_location">Search Location</string>
+    <string name="super_img_desc">Man watching time</string>
+    <string name="supers">Super!</string>
+    <string name="we_will_notify">WE WILL NOTIFY YOU WHEN YOU SHOULD START WALKING</string>
 </resources>
