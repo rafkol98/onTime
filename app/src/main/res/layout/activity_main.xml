@@ -19,7 +19,7 @@
         android:layout_marginTop="52dp"
         android:fontFamily="helvetica"
         android:gravity="center"
-        android:text="@string/welcome"
+        android:text="@string/welcome_to_app"
         android:textColor="#000000"
         android:textSize="34sp"
         app:layout_constraintEnd_toEndOf="parent"

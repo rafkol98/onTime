@@ -15,13 +15,7 @@
         android:layout_width="355dp"
         android:layout_height="201dp"
         android:layout_marginTop="8dp"
-        android:text="We will use your average walking speed
-to better suggest when you should start
-your journey, and other smart
-suggestions such as what speed you
-need to have to be there on time, in
-case you are running late!
-"
+        android:text="@string/use_avg_walk_speed_prompt"
         android:textColor="@color/blgrey"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -35,7 +29,7 @@ case you are running late!
         android:layout_marginStart="4dp"
         android:layout_marginLeft="4dp"
         android:layout_marginTop="32dp"
-        android:text="WELCOME,"
+        android:text="@string/welcome"
         android:textColor="@color/black"
         android:textSize="26sp"
         android:textStyle="italic"
@@ -49,7 +43,7 @@ case you are running late!
         android:layout_marginStart="4dp"
         android:layout_marginLeft="4dp"
         android:layout_marginTop="8dp"
-        android:text="Lets do a test run!"
+        android:text="@string/lets_do_a_test_run"
         android:textColor="@color/blgrey"
         android:textSize="24sp"
         android:textStyle="italic"
@@ -61,10 +55,7 @@ case you are running late!
         android:layout_width="354dp"
         android:layout_height="71dp"
         android:layout_marginTop="24dp"
-        android:text="We will do a 2 minutes test run, that will
-help us calculate your average
-walking speed.
-"
+        android:text="@string/two_minute_test_run_prompt"
         android:textColor="@color/blgrey"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -79,7 +70,7 @@ walking speed.
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:background="@color/grey"
-        android:text="START"
+        android:text="@string/start"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="italic"

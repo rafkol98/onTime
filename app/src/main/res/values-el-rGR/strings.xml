@@ -52,7 +52,7 @@
     <string name="countimage_desc">Άτομο που περπατά</string>
     <string name="zero_speed">0.0 m/s</string>
     <string name="metric_units">Μετρικές μονάδες</string>
-    <string name="welcome">Καλώς ήλθατε στο onTime</string>
+    <string name="welcome_to_app">Καλώς ήλθατε στο onTime</string>
     <string name="email">Διεύθυνση ηλεκτρονικού ταχυδρομείου</string>
     <string name="password">Κωδικός πρόσβασης</string>
     <string name="never_late">Ποτέ μην αργείς ξανά!</string>
@@ -109,4 +109,17 @@
     <string name="super_img_desc">Man watching time</string>
     <string name="supers">Super!</string>
     <string name="we_will_notify">WE WILL NOTIFY YOU WHEN YOU SHOULD START WALKING</string>
+    <string name="upcoming_walks">UPCOMING WALKS</string>
+    <string name="delete_walk">Delete walk</string>
+    <string name="start">START</string>
+    <string name="two_minute_test_run_prompt">We will do a 2 minutes test run, that will help us calculate your average walking speed.</string>
+    <string name="lets_do_a_test_run">Lets do a test run!</string>
+    <string name="welcome">WELCOME</string>
+    <string name="use_avg_walk_speed_prompt">We will use your average walking speed to better suggest when you should start your journey, and other smart suggestions such as what speed you need to have to be there on time, in case you are running late!</string>
+    <string name="speed_test_img_desc">Person measuring speed</string>
+    <string name="textview1">TextView1</string>
+    <string name="textview2">TextView2</string>
+    <string name="textview3">TextView3</string>
+    <string name="edit">EDIT</string>
+    <string name="plan_meeting">Plan meeting</string>
 </resources>
