@@ -56,7 +56,7 @@
     <string name="password">Password</string>
     <string name="never_late">Never be late again!</string>
     <string name="sign_in">Sign In</string>
-    <string name="sign_up">Not a member? Sign Up!</string>
+    <string name="sign_up_not_member">Not a member? Sign Up!</string>
     <string name="promo_desc">Use our revolutionary app that will get you there on time, using your own pace!</string>
     <string name="plan">Plan Trip</string>
     <string name="home_icon">Home Icon</string>
@@ -101,5 +101,8 @@
     <string name="tell_the_date">Please tell us the date you want to be there</string>
     <string name="got_it">Got it!</string>
     <string name="and_the_time">and the time?</string>
+    <string name="repeat_password">Repeat password</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="name">Name</string>
 
 </resources>

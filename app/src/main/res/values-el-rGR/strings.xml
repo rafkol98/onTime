@@ -57,7 +57,7 @@
     <string name="password">Κωδικός πρόσβασης</string>
     <string name="never_late">Ποτέ μην αργείς ξανά!</string>
     <string name="sign_in">Συνδεθείτε</string>
-    <string name="sign_up">Οχι μέλος? Εγγραφείτε!</string>
+    <string name="sign_up_not_member">Οχι μέλος? Εγγραφείτε!</string>
     <string name="promo_desc">Χρησιμοποιήστε την επαναστατική εφαρμογή μας που θα σας φτάσει εκεί εγκαίρως, χρησιμοποιώντας το δικό σας ρυθμό!</string>
     <string name="plan">Προγραμματίστε ταξίδι</string>
     <string name="home_icon">Εικονίδιο</string>
@@ -102,4 +102,7 @@
     <string name="tell_the_date">Please tell us the date you want to be there</string>
     <string name="got_it">Got it!</string>
     <string name="and_the_time">and the time?</string>
+    <string name="repeat_password">Repeat password</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="name">Name</string>
 </resources>
