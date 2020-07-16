@@ -86,4 +86,14 @@
     <string name="to">To...</string>
     <string name="from">From...</string>
     <string name="bags_img_desc">Man walking with bag</string>
+    <string name="select_your_speed">SELECT YOUR SPEED</string>
+    <string name="your_friends_txt3_img_desc">Woman Walking</string>
+    <string name="thats_ok">That\'s Ok.</string>
+    <string name="select_speed">Please select with 100% honesty what you feel accurately describes your walking speed.</string>
+    <string name="take_speed_test_anytime">You will be able to take the actual speed test whenever you want and you are outside, from the settings of the app.</string>
+    <string name="slow">SLOW</string>
+    <string name="average">AVERAGE</string>
+    <string name="quite_slow">QUITE SLOW</string>
+    <string name="quite_fast">QUITE FAST</string>
+    <string name="fast">FAST</string>
 </resources>
