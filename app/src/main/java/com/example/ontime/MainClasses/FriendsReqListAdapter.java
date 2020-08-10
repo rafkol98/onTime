@@ -41,6 +41,7 @@ public class FriendsReqListAdapter extends ArrayAdapter<Friend> {
     private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/profiles");
     private DatabaseReference dbRefFriend = FirebaseDatabase.getInstance().getReference("/friendRequests");
     String uId = currentFirebaseUser.getUid();
+    String email = currentFirebaseUser.getEmail();
 
     public FriendsReqListAdapter(@NonNull Context context, int resource, List<Friend> objects) {
         super(context, resource, objects);
@@ -120,11 +121,14 @@ public class FriendsReqListAdapter extends ArrayAdapter<Friend> {
             public void onClick(View view) {
                 DatabaseReference userRef = dbRefFriend.child(uId);
                 userRef.child("friends").child(friendUid).child("status").setValue("Friends");
+                userRef.child("friends").child(friendUid).child("email").setValue(friendEmail);
+
 
                 //write to the friend. We will write under the node "friends" the uId of the current user along with the status as received, as the
                 //friend has received this request.
                 DatabaseReference friendsRef = dbRefFriend.child(friendUid);
                 friendsRef.child("friends").child(uId).child("status").setValue("Friends");
+                friendsRef.child("friends").child(uId).child("email").setValue(email);
 
 
                 //After they successfully become friends, refresh the fragment.
