@@ -59,6 +59,7 @@ import java.util.List;
 import java.util.Locale;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
@@ -181,6 +182,8 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback,
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+
+
         getLocation();
         Log.d("Des LatLng LOG", " " + desLatLgn);
 
@@ -209,22 +212,8 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback,
 
     }
 
-    /**
-     * When the user clicks the home icon, go back to MPage
-     * @param v
-     */
-    public void onHomeIcon(View v) {
-        Intent intent = new Intent(Navigate.this, MPage.class);
-        startActivity(intent);
-        finish();
-    }
 
-    /**
-     * Override onBackPressed.
-     */
-    public void onBackPressed() {
 
-    }
 
     /**
      * When the map is ready, do this.
@@ -252,6 +241,7 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback,
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.addMarker(destination);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(origin.getPosition(), zoom));
+        mMap.setPadding(0, 200, 0, 0);
 
         //Use Geocoder class to calculate minutes walking from current location.
         String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + latitude + "," + longitude + "&destinations=" + destinationPassed + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyB_Y4NILmgU_Ua-dgqY1AVoD81o9qn0yKY";
