@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="360" height="640" viewBox="0 0 360 640">
+  <defs>
+    <radialGradient id="radial-gradient" cx="0.5" cy="0.5" r="0.727" gradientTransform="translate(1.152 0.773) rotate(157.737)" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#ff1d1d"/>
+      <stop offset="1" stop-color="#3a0248"/>
+    </radialGradient>
+    <linearGradient id="linear-gradient" x1="0.5" x2="0.5" y2="0.391" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-opacity="0.514"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0.161"/>
+    </linearGradient>
+    <clipPath id="clip-Android_Mobile_28">
+      <rect width="360" height="640"/>
+    </clipPath>
+  </defs>
+  <g id="Android_Mobile_28" data-name="Android Mobile – 28" clip-path="url(#clip-Android_Mobile_28)">
+    <rect width="360" height="640" fill="#fff"/>
+    <rect id="Rectangle_233" data-name="Rectangle 233" width="309" height="309" rx="154.5" transform="translate(30.077 431.58) rotate(73)" fill="url(#radial-gradient)"/>
+    <rect id="Rectangle_1" data-name="Rectangle 1" width="375" height="86" opacity="0.3" fill="url(#linear-gradient)"/>
+    <rect id="Rectangle_234" data-name="Rectangle 234" width="309" height="309" rx="68" transform="translate(443.872 -155.367) rotate(38)" fill="url(#radial-gradient)"/>
+  </g>
+</svg>

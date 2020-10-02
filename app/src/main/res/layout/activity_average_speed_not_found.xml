@@ -4,8 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/welcome_altt_bg"
     tools:context=".SignIn_UpClasses.AverageSpeedNotFound">
+
+    <include
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        layout="@layout/background"/>
 
     <TextView
         android:id="@+id/your_friends_txt2"
@@ -25,7 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.06" />
+        app:layout_constraintGuide_percent="0.061559506" />
 
 
     <ImageView
@@ -86,7 +90,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.05109489" />
+        app:layout_constraintGuide_percent="0.05352798" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline28"
