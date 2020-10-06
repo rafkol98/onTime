@@ -258,7 +258,7 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback,
         mMap.setPadding(0, 200, 0, 0);
 
         //Use Geocoder class to calculate minutes walking from current location.
-        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + latitude + "," + longitude + "&destinations=" + destinationPassed + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyB_Y4NILmgU_Ua-dgqY1AVoD81o9qn0yKY";
+        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + latitude + "," + longitude + "&destinations=" + desLatLgn.latitude + "," + desLatLgn.longitude + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyB_Y4NILmgU_Ua-dgqY1AVoD81o9qn0yKY";
         Log.d("url string", url);
         geoTask.execute(url);
     }
