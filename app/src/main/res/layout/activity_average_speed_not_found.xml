@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/welcome_altt_bg"
-    tools:context=".SignIn_UpClasses.AverageSpeedNotFound">
+    tools:context=".SignIn_UpClasses.AverageSpeedNotFound"
+    android:screenOrientation="nosensor">
 
     <TextView
         android:id="@+id/your_friends_txt2"

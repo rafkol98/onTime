@@ -8,11 +8,12 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.ontime.SignIn_UpClasses.MainActivity;
+import com.example.ontime.SignIn_UpClasses.RedoTest;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    Button logOut;
+    Button logOut, redo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +23,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         //Get logOut button.
         logOut = findViewById(R.id.buttonLogOut);
+        redo = findViewById(R.id.buttonRedo);
         //Log out user.
         logOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -32,6 +34,15 @@ public class SettingsActivity extends AppCompatActivity {
                 overridePendingTransition(0,0);
                 FirebaseAuth.getInstance().signOut();
                 finish();
+            }
+        });
+
+        redo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(SettingsActivity.this, RedoTest.class);
+                startActivity( i );
+                overridePendingTransition(0,0);
             }
         });
     }
