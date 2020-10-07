@@ -2,6 +2,7 @@ package com.example.ontime.MapRelatedClasses;
 
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -21,13 +22,16 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ontime.MainClasses.MPage;
 import com.example.ontime.R;
+import com.example.ontime.SignIn_UpClasses.CLocation;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -54,11 +58,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Formatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
@@ -85,7 +91,7 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback,
     private Criteria criteria;
 
     LatLng desLatLgn;
-    TextView arrivalTxt;
+    TextView arrivalTxt,txt;
 
     /**
      *
@@ -129,6 +135,7 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback,
         setContentView(R.layout.activity_navigate);
 
         arrivalTxt = findViewById(R.id.textArrival);
+        txt = findViewById(R.id.speedometer_txt);
 
         //Get uId of the user.
         final String uId = currentFirebaseUser.getUid();
@@ -181,6 +188,10 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback,
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+
+        doStuff();
+        this.updateSpeed(null);
+
         getLocation();
         Log.d("Des LatLng LOG", " " + desLatLgn);
 
@@ -209,22 +220,8 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback,
 
     }
 
-    /**
-     * When the user clicks the home icon, go back to MPage
-     * @param v
-     */
-    public void onHomeIcon(View v) {
-        Intent intent = new Intent(Navigate.this, MPage.class);
-        startActivity(intent);
-        finish();
-    }
 
-    /**
-     * Override onBackPressed.
-     */
-    public void onBackPressed() {
 
-    }
 
     /**
      * When the map is ready, do this.
@@ -251,13 +248,81 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback,
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.addMarker(destination);
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(origin.getPosition(), zoom));
+        CameraPosition cameraPosition = new CameraPosition.Builder().
+                target(origin.getPosition()).
+                tilt(55).
+                zoom(15).
+                bearing(0).
+                build();
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        mMap.setPadding(0, 200, 0, 0);
 
         //Use Geocoder class to calculate minutes walking from current location.
-        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + latitude + "," + longitude + "&destinations=" + destinationPassed + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyB_Y4NILmgU_Ua-dgqY1AVoD81o9qn0yKY";
+        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + latitude + "," + longitude + "&destinations=" + desLatLgn.latitude + "," + desLatLgn.longitude + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyB_Y4NILmgU_Ua-dgqY1AVoD81o9qn0yKY";
         Log.d("url string", url);
         geoTask.execute(url);
     }
+
+
+
+
+
+
+
+    /**
+     * Speedometer walk for the user.
+     */
+
+    @SuppressLint("MissingPermission")
+    private void doStuff() {
+        LocationManager locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+        if (locationManager != null) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, (LocationListener) this);
+        }
+
+    }
+
+    /**
+     * Update speed of the user.
+     * @param location
+     */
+    private void updateSpeed(CLocation location) {
+        double nCurrentSpeed = 0;
+        if (location != null) {
+
+            nCurrentSpeed = location.getSpeed();
+            Log.d("Location speed", nCurrentSpeed+"");
+
+        }
+
+        Formatter fmt = new Formatter(new StringBuilder());
+        fmt.format(Locale.UK, "%5.1f", nCurrentSpeed);
+        String strCurrentSpeed = fmt.toString();
+        strCurrentSpeed = strCurrentSpeed.replace(" ", "0");
+
+
+        txt.setText(strCurrentSpeed + " km/h");
+
+
+    }
+
+    /**
+     * Grant permission.
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 1000) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                doStuff();
+            } else {
+                finish();
+            }
+        }
+    }
+
 
     /**
      * When the user moves update his location.
@@ -267,6 +332,11 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback,
     public void onLocationChanged(Location location) {
         currentLat = location.getLatitude();
         currentLong = location.getLongitude();
+
+        if (location != null) {
+            CLocation myLocation = new CLocation(location, true);
+            this.updateSpeed(myLocation);
+        }
 
 //        String originUpdate = getAddressFromLatLng(currentLat, currentLong);
 //        //Use Geocoder class to calculate minutes walking from current location.
@@ -660,6 +730,8 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback,
             if (points.size() != 0)
                 mMap.addPolyline(lineOptions);
         }
+
+
     }
 
 
