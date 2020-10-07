@@ -45,6 +45,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -199,8 +200,10 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback,
         //Setting marker to draw route between these two points
         origin = new MarkerOptions().position(new LatLng(latitude, longitude)).title("Current Position").snippet("origin");
         if (desLatLgn != null) {
-            destination = new MarkerOptions().position(desLatLgn).title("Bellandur").snippet("destination");
+            destination = new MarkerOptions().position(desLatLgn).title("Destination").snippet("destination");
             url = getDirectionsUrl(origin.getPosition(), destination.getPosition());
+            Log.d("destination log", url);
+
         } else {
             destination = new MarkerOptions().position(new LatLng(latitude, longitude)).title("Current Position").snippet("destination");
             // Getting URL to the Google Directions API
@@ -684,6 +687,29 @@ public class Navigate extends FragmentActivity implements OnMapReadyCallback,
                 DataParser parser = new DataParser();
 
                 routes = parser.parse(jObject);
+
+
+
+
+                //EXPERIMENT.
+                JSONArray routesX = jObject.getJSONArray("routes");
+                JSONObject object = routesX.getJSONObject(0);
+                JSONArray legs = object.getJSONArray("legs");
+                JSONObject legsObjects = legs.getJSONObject(0);
+
+                //get the distance
+                JSONObject distanceX = legsObjects.getJSONObject("distance");
+                String distanceS = distanceX.getString("text");
+                Log.d("distanceExp", distanceS);
+
+                //get the time
+                JSONObject timeX = legsObjects.getJSONObject("duration");
+                String durationS = timeX.getString("text");
+                Log.d("durationExp",durationS);
+
+
+
+
             } catch (Exception e) {
                 FirebaseCrashlytics.getInstance().recordException(e);
                 e.printStackTrace();
