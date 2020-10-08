@@ -23,7 +23,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".SignIn_UpClasses.RedoTest"></activity>
-        <activity android:name=".SettingsActivity" />
+        <activity android:name=".utilities.SettingsActivity" />
         <activity android:name=".SignIn_UpClasses.AverageSpeedNotFound" />
         <activity android:name=".SignIn_UpClasses.SelectTempSpeed" />
         <activity android:name=".SignIn_UpClasses.WelcomeNSelect" />

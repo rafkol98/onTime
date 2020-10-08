@@ -2,7 +2,6 @@ package com.example.ontime.MainClasses.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,7 @@ import androidx.fragment.app.Fragment;
 import com.example.ontime.AutoSuggestClasses.*;
 import com.example.ontime.MapRelatedClasses.*;
 import com.example.ontime.R;
-import com.example.ontime.SettingsActivity;
+import com.example.ontime.utilities.SettingsActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;

@@ -7,7 +7,7 @@
     android:paddingTop="40dp"
     android:paddingBottom="40dp"
     android:background="@drawable/settings_bg"
-    tools:context=".SettingsActivity"
+    tools:context=".utilities.SettingsActivity"
     android:screenOrientation="nosensor">
 
 

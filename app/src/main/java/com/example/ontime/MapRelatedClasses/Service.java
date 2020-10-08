@@ -310,6 +310,10 @@ public class Service extends android.app.Service {
 
             //If the time of the trip has passed, remove the trip.
             if (trip.getTimestamp() < Calendar.getInstance().getTimeInMillis()) {
+
+                //Take that trip to the user's past trips.
+                dbRef.child(uId).child("history").child("trips").child(trip.getTimestamp().toString()).setValue(trip);
+
                 dbRef.child(uId).child("trips").child(trip.getTimestamp().toString()).removeValue();
                 Log.d("TRIP WAS DELETED", "trip no: " + trip.getTimestamp() + "");
             } else {

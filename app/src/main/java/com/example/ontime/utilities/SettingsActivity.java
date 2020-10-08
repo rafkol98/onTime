@@ -1,4 +1,4 @@
-package com.example.ontime;
+package com.example.ontime.utilities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.ontime.R;
 import com.example.ontime.SignIn_UpClasses.MainActivity;
 import com.example.ontime.SignIn_UpClasses.RedoTest;
 import com.google.firebase.auth.FirebaseAuth;
