@@ -310,6 +310,19 @@ public class Service extends android.app.Service {
 
             //If the time of the trip has passed, remove the trip.
             if (trip.getTimestamp() < Calendar.getInstance().getTimeInMillis()) {
+
+                Log.d("Meeting flag! ",trip.isMeetingFlag()+"");
+
+                //Move trip to history.
+                if(trip.isMeetingFlag()){
+                    //Take that meetings to the user's past meetings.
+                    dbRef.child(uId).child("history").child("meetings").child(trip.getTimestamp().toString()).setValue(trip);
+                } else{
+                    //Take that trip to the user's past trips.
+                    dbRef.child(uId).child("history").child("trips").child(trip.getTimestamp().toString()).setValue(trip);
+                }
+
+                //remove trip.
                 dbRef.child(uId).child("trips").child(trip.getTimestamp().toString()).removeValue();
                 Log.d("TRIP WAS DELETED", "trip no: " + trip.getTimestamp() + "");
             } else {
@@ -452,12 +465,14 @@ public class Service extends android.app.Service {
 
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     String destination = "";
+                    boolean isMeeting = false;
                     Long timestamp;
                     double latitude = 0.0;
                     double longitude = 0.0;
                     Trip trip;
                     try {
                         destination = child.child("destination").getValue().toString();
+                        isMeeting = (boolean) child.child("meetingFlag").getValue();
                         latitude = child.child("latitude").getValue(Double.class);
                         longitude = child.child("longitude").getValue(Double.class);
 
@@ -467,7 +482,7 @@ public class Service extends android.app.Service {
                     timestamp = child.child("timestamp").getValue(Long.class);
 
                     if (latitude != 0.0 && longitude != 0.0) {
-                        trip = new Trip(destination, timestamp, latitude, longitude);
+                        trip = new Trip(destination, timestamp, latitude, longitude, isMeeting);
                     } else {
                         trip = new Trip(destination, timestamp);
                     }

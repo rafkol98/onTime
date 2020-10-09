@@ -170,7 +170,12 @@ public class SelectTime extends AppCompatActivity implements DatePickerDialog.On
         String strDate = dateFormat.format(date);
         //Get the time to walk there based on the user's speed.
         if(stringIn!=null) {
-            timeToWalk = Double.parseDouble(stringIn);
+            try {
+                timeToWalk = Double.parseDouble(stringIn);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+
         }
         //temp is time to walk to destination.
         int temp = (int) timeToWalk;
