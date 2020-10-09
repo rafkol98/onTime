@@ -153,4 +153,10 @@
     <string name="socialize">SOCIALIZE</string>
     <string name="add_friend">Add Friend</string>
     <string name="meeting_requests">Meeting Requests</string>
+    <string name="please_wait">Please Wait...</string>
+    <string name="your_friends">YOUR FRIENDS</string>
+    <string name="person">person</string>
+    <string name="go">Go</string>
+    <string name="where_do_you_want_to_go">WHERE DO YOU WANT TO GO?</string>
+    <string name="search_location_dots">Search location...</string>
 </resources>

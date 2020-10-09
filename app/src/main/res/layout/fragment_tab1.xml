@@ -20,7 +20,8 @@
         android:layout_marginLeft="32dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/settings" />
+        app:srcCompat="@drawable/settings"
+        android:contentDescription="@string/settings" />
 
 
     <AutoCompleteTextView
@@ -32,7 +33,7 @@
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:background="@drawable/search_button"
-        android:hint="Search location..."
+        android:hint="@string/search_location_dots"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,7 +44,7 @@
         android:layout_width="278dp"
         android:layout_height="35dp"
         android:layout_marginTop="40dp"
-        android:text="WHERE DO YOU WANT TO GO?"
+        android:text="@string/where_do_you_want_to_go"
         android:textColor="@color/blgrey"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -60,7 +61,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/go_alt_red"
-        android:text="Go"
+        android:text="@string/go"
         android:textColor="@color/white"
         android:textSize="14sp"
         android:textStyle="italic"
@@ -102,7 +103,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/autoComplete1"
-        app:srcCompat="@drawable/person" />
+        app:srcCompat="@drawable/person"
+        android:contentDescription="@string/person" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline23"
