@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -14,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import com.example.ontime.AutoSuggestClasses.*;
 import com.example.ontime.MapRelatedClasses.*;
 import com.example.ontime.R;
+import com.example.ontime.utilities.SettingsActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -32,6 +34,8 @@ public class Tab1 extends Fragment {
 
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("/profiles");
+
+    ImageView imageSettings;
 
 
     /**
@@ -55,6 +59,7 @@ public class Tab1 extends Fragment {
         //initialise buttons and variables used.
         goBtn = v.findViewById(R.id.go_btn);
         destination = v.findViewById(R.id.autoComplete1);
+        imageSettings = v.findViewById(R.id.imageSettings);
 
         //Autocomplete when the user searches for a location.
         autoCompleteTextView = v.findViewById(R.id.autoComplete1);
@@ -83,6 +88,16 @@ public class Tab1 extends Fragment {
                 String destinationStr = destination.getText().toString();
                 myIntent.putExtra("key", destinationStr);
                 startActivity(myIntent);
+            }
+        });
+
+        imageSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(getContext(), SettingsActivity.class);
+                startActivity(myIntent);
+                getActivity().overridePendingTransition(0,0);
+
             }
         });
 

@@ -273,8 +273,6 @@ public class Plan_Meeting extends Fragment implements DatePickerDialog.OnDateSet
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-
-
                             //Get the users that were selected and get their UId from the database.
                             for (int i = 0; i < friendsCopy.size(); i++) {
                                 String hashValue = hashEmail.getHashEmail(friendsCopy.get(i));
