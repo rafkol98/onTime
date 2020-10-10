@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:text="SELECT YOUR SPEED"
+        android:text="@string/select_your_speed"
         android:textColor="@color/blgrey"
         android:textSize="20sp"
         android:textStyle="italic"
@@ -36,14 +36,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/your_friends_txt3"
-        app:srcCompat="@drawable/select_speed_img" />
+        app:srcCompat="@drawable/select_speed_img"
+        android:contentDescription="@string/your_friends_txt3_img_desc" />
 
     <TextView
         android:id="@+id/textView18"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="That's Ok."
+        android:text="@string/thats_ok"
         android:textColor="@color/blgrey"
         android:textSize="18sp"
         android:textStyle="italic|bold"
@@ -57,9 +58,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:gravity="center"
-        android:text="Please select with 100% honesty what you feel accurately
-describes your walking speed.
-"
+        android:text="@string/select_speed"
         android:textColor="@color/blgrey"
         android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -72,8 +71,7 @@ describes your walking speed.
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:gravity="center"
-        android:text="You will be able to take the actual speed test whenever you want and you are outside, from the settings of the app.
-"
+        android:text="@string/take_speed_test_anytime"
         android:textColor="@color/blgrey"
         android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -87,7 +85,7 @@ describes your walking speed.
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:background="@drawable/custom_button_red"
-        android:text="SLOW"
+        android:text="@string/slow"
         android:textColor="@color/white"
         android:paddingHorizontal="25dp"
         android:textStyle="italic"
@@ -100,7 +98,7 @@ describes your walking speed.
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:background="@drawable/custom_button_red"
-        android:text="AVERAGE"
+        android:text="@string/average"
         android:textColor="@color/white"
         android:textStyle="italic"
         app:layout_constraintEnd_toStartOf="@+id/guideline31"
@@ -112,7 +110,7 @@ describes your walking speed.
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:background="@drawable/custom_button_red"
-        android:text="QUITE SLOW"
+        android:text="@string/quite_slow"
         android:textColor="@color/white"
         android:textStyle="italic"
 
@@ -129,7 +127,7 @@ describes your walking speed.
         android:layout_marginLeft="60dp"
         android:layout_marginTop="24dp"
         android:background="@drawable/custom_button_red"
-        android:text="QUITE FAST"
+        android:text="@string/quite_fast"
         android:textColor="@color/white"
         android:textStyle="italic"
         app:layout_constraintStart_toStartOf="@+id/guideline30"
@@ -143,7 +141,7 @@ describes your walking speed.
         android:layout_marginEnd="60dp"
         android:layout_marginRight="60dp"
         android:background="@drawable/custom_button_red"
-        android:text="FAST"
+        android:text="@string/fast"
         android:textColor="@color/white"
         android:textStyle="italic"
         app:layout_constraintEnd_toStartOf="@+id/guideline31"
@@ -162,4 +160,5 @@ describes your walking speed.
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.95" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

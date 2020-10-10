@@ -14,7 +14,7 @@
         android:layout_weight="66.6"
         android:textColor="@color/blgrey"
         android:gravity="center"
-        android:text="TextView1"
+        android:text="@string/textview1"
         android:textAlignment="center" />
 
     <LinearLayout
@@ -25,7 +25,7 @@
 
         <TextView
             android:gravity="center"
-            android:text="TextView2"
+            android:text="@string/textview2"
             android:textColor="@color/blgrey"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -33,7 +33,7 @@
 
         <TextView
             android:gravity="center"
-            android:text="TextView3"
+            android:text="@string/textview3"
             android:textColor="@color/blgrey"
             android:layout_width="match_parent"
             android:layout_height="50dp"

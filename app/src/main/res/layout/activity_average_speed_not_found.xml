@@ -8,13 +8,18 @@
     tools:context=".SignIn_UpClasses.AverageSpeedNotFound"
     android:screenOrientation="nosensor">
 
+    <include
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        layout="@layout/background"/>
+
     <TextView
         android:id="@+id/your_friends_txt2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:text="AVERAGE SPEED NOT FOUND"
+        android:text="@string/average_speed_not_found"
         android:textColor="@color/blgrey"
         android:textSize="20sp"
         android:textStyle="italic"
@@ -26,7 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.06" />
+        app:layout_constraintGuide_percent="0.061559506" />
 
 
     <ImageView
@@ -37,7 +42,8 @@
         android:src="@drawable/speed_not_found"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/your_friends_txt2" />
+        app:layout_constraintTop_toBottomOf="@+id/your_friends_txt2"
+        android:contentDescription="@string/avg_speed_not_found_img_desc" />
 
     <TextView
         android:id="@+id/textIntroTest"
@@ -46,8 +52,7 @@
         android:layout_marginTop="16dp"
         android:gravity="center"
         android:textSize="17sp"
-        android:text="We cannot do all of our smart calculations without having your average speed
-"
+        android:text="@string/cant_start_calculations"
         android:textColor="@color/blgrey"
         app:layout_constraintEnd_toStartOf="@+id/guideline28"
         app:layout_constraintStart_toStartOf="@+id/guideline27"
@@ -60,7 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:gravity="center"
-        android:text="YOU HAVE TO BE OUTSIDE TO DO THE TEST,"
+        android:text="@string/need_to_be_outside"
         android:textColor="@color/blgrey"
         android:textSize="17sp"
         android:textStyle="bold"
@@ -74,7 +79,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="PLEASE WALK AT YOUR NORMAL SPEED"
+        android:text="@string/walk_at_normal_speed"
         android:textColor="@color/blgrey"
         android:textSize="17sp"
         android:textStyle="bold"
@@ -87,7 +92,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.05109489" />
+        app:layout_constraintGuide_percent="0.05352798" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline28"
@@ -104,7 +109,7 @@
         android:layout_marginTop="24dp"
         android:layout_marginRight="30dp"
         android:padding="12dp"
-        android:text="I AM OUTSIDE, START THE TEST!"
+        android:text="@string/start_the_test"
         android:background="@drawable/custom_button2"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -120,7 +125,7 @@
         android:layout_marginRight="30dp"
         android:background="@drawable/custom_button_red"
         android:padding="12dp"
-        android:text="I AM NOT OUTSIDE"
+        android:text="@string/i_am_not_outside"
         android:textColor="@color/white"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -135,7 +140,7 @@
         android:layout_marginBottom="24dp"
         android:gravity="center"
         android:textColor="@color/blgrey"
-        android:text="WE WILL NEVER SELL OR GIVE YOUR INFORMATION TO ANYONE"
+        android:text="@string/never_sell"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

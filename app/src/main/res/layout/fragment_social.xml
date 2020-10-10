@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:text="SOCIALIZE"
+        android:text="@string/socialize"
         android:textColor="@color/blgrey"
         android:textSize="20sp"
         android:textStyle="italic"
@@ -42,7 +42,8 @@
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="@+id/guideline15"
         app:layout_constraintTop_toTopOf="@+id/guideline14"
-        app:srcCompat="@drawable/add_friend_box" />
+        app:srcCompat="@drawable/add_friend_box"
+        android:contentDescription="@string/add_friend" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline14"
@@ -59,7 +60,8 @@
         android:layout_marginTop="32dp"
         android:src="@drawable/meeting_requests_box"
         app:layout_constraintEnd_toStartOf="@+id/guideline16"
-        app:layout_constraintTop_toBottomOf="@+id/friend_requests_img" />
+        app:layout_constraintTop_toBottomOf="@+id/friend_requests_img"
+        android:contentDescription="@string/meeting_requests" />
 
     <ImageView
         android:id="@+id/yourFriends_img"
@@ -69,7 +71,8 @@
         android:src="@drawable/your_friends_box"
         app:layout_constraintEnd_toStartOf="@+id/guideline16"
         app:layout_constraintStart_toStartOf="@+id/guideline15"
-        app:layout_constraintTop_toBottomOf="@+id/planMeeting_img" />
+        app:layout_constraintTop_toBottomOf="@+id/planMeeting_img"
+        android:contentDescription="@string/your_friends" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline15"
@@ -92,7 +95,8 @@
         android:layout_marginTop="32dp"
         android:src="@drawable/plan_a_meeting_box"
         app:layout_constraintStart_toStartOf="@+id/guideline15"
-        app:layout_constraintTop_toBottomOf="@+id/addFriend_img" />
+        app:layout_constraintTop_toBottomOf="@+id/addFriend_img"
+        android:contentDescription="@string/plan_meeting" />
 
     <ImageView
         android:id="@+id/friend_requests_img"
@@ -101,7 +105,8 @@
         android:layout_marginTop="16dp"
         android:src="@drawable/friend_request_box"
         app:layout_constraintEnd_toStartOf="@+id/guideline16"
-        app:layout_constraintTop_toTopOf="@+id/guideline14" />
+        app:layout_constraintTop_toTopOf="@+id/guideline14"
+        android:contentDescription="@string/friend_requests" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

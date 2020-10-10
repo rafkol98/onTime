@@ -11,43 +11,43 @@
         android:id="@+id/textFriend"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_weight="33.3"
+        android:layout_weight="40"
         android:gravity="start"
         android:paddingTop="15dp"
         android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:text="@string/textview1"
-        android:textColor="@color/black"
+        android:textColor="@color/blgrey"
         android:textSize="18sp"
         android:textAlignment="textStart"
-        android:paddingStart="20dp" />
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"/>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="66.6">
+        android:layout_weight="60">
 
         <Button
             android:gravity="center"
-            android:text="@string/accept"
-            android:layout_marginRight="20dp"
+            android:text="@string/edit"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:backgroundTint="@color/grey_lighter"
-            android:id="@+id/btnAccept"
+            android:layout_height="40dp"
+            android:backgroundTint="@color/white"
+            android:id="@+id/btnEdit"
             android:layout_marginEnd="20dp" />
 
         <Button
             android:gravity="center"
-            android:text="@string/reject"
-            android:layout_marginRight="20dp"
+            android:text="@string/plan_meeting"
+            android:layout_marginEnd="20dp"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="60dp"
             android:backgroundTint="@color/red"
             android:textColor="@color/white"
             android:id="@+id/btnReject"
-            android:layout_below="@+id/textPlacedTime"
-            android:layout_marginEnd="20dp" />
+            android:layout_below="@+id/textPlacedTime"/>
     </LinearLayout>
 
 </LinearLayout>

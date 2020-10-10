@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:text="ADD A FRIEND"
+        android:text="@string/add_a_friend"
         android:textColor="@color/blgrey"
         android:textSize="20sp"
         android:textStyle="italic"
@@ -35,13 +35,14 @@
         android:layout_height="45dp"
         android:layout_marginTop="32dp"
         android:ems="10"
-        android:hint="Type your friend's email..."
+        android:hint="@string/type_your_friends_email_prompt"
         android:inputType="textEmailAddress"
         android:background="@drawable/search_button"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView17" />
+        app:layout_constraintTop_toBottomOf="@+id/textView17"
+        android:autofillHints="emailAddress" />
 
     <TextView
         android:id="@+id/textView17"
@@ -50,7 +51,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="32dp"
-        android:text="Please tell us the email of your friend"
+        android:text="@string/please_tell_us_the_email_of_your_friend"
         android:textColor="@color/blgrey"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -68,7 +69,7 @@
         android:paddingTop="14dp"
         android:paddingRight="30dp"
         android:paddingBottom="14dp"
-        android:text="Send Request"
+        android:text="@string/send_request"
         android:textColor="@color/white"
         android:textSize="14sp"
         android:textStyle="italic"
@@ -91,6 +92,7 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline13"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailPassedIn" />
+        app:layout_constraintTop_toBottomOf="@+id/emailPassedIn"
+        android:contentDescription="@string/friends_hanging_out_pic_desc" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

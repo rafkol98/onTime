@@ -8,7 +8,7 @@
     android:screenOrientation="nosensor">
 
     <AutoCompleteTextView
-        android:hint="Search Location"
+        android:hint="@string/search_location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/autoComplete1"
