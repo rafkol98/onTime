@@ -22,6 +22,9 @@ import android.widget.Toast;
 import com.example.ontime.MainClasses.MPage;
 import com.example.ontime.R;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
@@ -45,7 +48,14 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     //Initialise variables.
     EditText sign_in_email, sign_in_password;
     TextView create_account_txt;
+
     Button sign_in;
+
+    private Button google_sign_in;
+
+    private GoogleSignInClient mGoogleSignInClient;
+
+    private final int GOOGLE_SIGN_IN_CODE = 8672309;
 
     ValidateInput validateInput;
 
@@ -76,8 +86,23 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         sign_in_email = findViewById(R.id.sign_in_email);
         sign_in_password = findViewById(R.id.sign_in_password);
         sign_in = findViewById(R.id.sign_in_button);
+        google_sign_in = findViewById(R.id.google_sign_in_button);
 
         validateInput = new ValidateInput(MainActivity.this, sign_in_email, sign_in_password);
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        google_sign_in.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                signInGoogle();
+            }
+        });
 
         // Firebase Authentication
         mAuth = FirebaseAuth.getInstance();
@@ -289,5 +314,10 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             }
         }
         return true;
+    }
+
+    private void signInGoogle(){
+        Intent signinIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signinIntent, GOOGLE_SIGN_IN_CODE);
     }
 }
