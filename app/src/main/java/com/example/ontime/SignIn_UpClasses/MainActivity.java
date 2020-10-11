@@ -1,6 +1,7 @@
 package com.example.ontime.SignIn_UpClasses;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -23,8 +24,11 @@ import com.example.ontime.MainClasses.MPage;
 import com.example.ontime.R;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
@@ -51,11 +55,11 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     Button sign_in;
 
-    private Button google_sign_in;
+    private SignInButton google_sign_in;
 
     private GoogleSignInClient mGoogleSignInClient;
 
-    private final int GOOGLE_SIGN_IN_CODE = 8672309;
+    private final int GOOGLE_SIGN_IN_CODE = 1989;
 
     ValidateInput validateInput;
 
@@ -319,5 +323,57 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private void signInGoogle(){
         Intent signinIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signinIntent, GOOGLE_SIGN_IN_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == GOOGLE_SIGN_IN_CODE) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuthWithGoogle(account.getIdToken());
+            } catch (ApiException e) {
+                FirebaseCrashlytics.getInstance().recordException(e);
+            }
+        }
+    }
+
+    private void firebaseAuthWithGoogle(String idToken) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        loadingAnimation();
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success
+
+                            try{
+                                boolean isNewUser = task.getResult().getAdditionalUserInfo().isNewUser();
+
+                                if (isNewUser) {
+                                    Intent intent = new Intent(MainActivity.this, WelcomeNSelect.class);
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    Intent intent = new Intent(MainActivity.this, MPage.class);
+                                    startActivity(intent);
+                                    dialog.dismiss();
+                                    finish();
+                                }
+
+                            } catch (NullPointerException e) {
+                                FirebaseCrashlytics.getInstance().recordException(e);
+                                Snackbar.make(mLayout, "Sign-In Failed.", Snackbar.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Snackbar.make(mLayout, "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 }
