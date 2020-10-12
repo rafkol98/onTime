@@ -336,6 +336,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account.getIdToken());
             } catch (ApiException e) {
+                Snackbar.make(mLayout, "Attempting Authentication.", Snackbar.LENGTH_SHORT).show();
                 FirebaseCrashlytics.getInstance().recordException(e);
             }
         }
@@ -343,7 +344,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-        loadingAnimation();
+        //loadingAnimation();
+
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -356,12 +358,13 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
                                 if (isNewUser) {
                                     Intent intent = new Intent(MainActivity.this, WelcomeNSelect.class);
+                                    //dialog.dismiss();
                                     startActivity(intent);
                                     finish();
                                 } else {
                                     Intent intent = new Intent(MainActivity.this, MPage.class);
                                     startActivity(intent);
-                                    dialog.dismiss();
+                                    //dialog.dismiss();
                                     finish();
                                 }
 
