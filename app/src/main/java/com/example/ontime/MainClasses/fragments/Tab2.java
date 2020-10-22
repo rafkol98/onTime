@@ -1,6 +1,9 @@
 package com.example.ontime.MainClasses.fragments;
 
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -25,6 +28,7 @@ import com.example.ontime.MainClasses.Trip;
 import com.example.ontime.MainClasses.TripListAdapter;
 import com.example.ontime.SignIn_UpClasses.AverageSpeedNotFound;
 import com.example.ontime.SignIn_UpClasses.Countdown;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
@@ -36,6 +40,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 
 /**
@@ -140,10 +145,15 @@ public class Tab2 extends Fragment {
                 // Get the selected item text from ListView
                 Trip selectedItem = (Trip) parent.getItemAtPosition(position);
 
-                //Open Navigate class which shows the path to go there from his current location.
-                Intent myIntent = new Intent(getContext(), Navigate.class);
-                myIntent.putExtra("keyDest", selectedItem.getDestination());
-                startActivity(myIntent);
+//                //Open Navigate class which shows the path to go there from his current location.
+//                Intent myIntent = new Intent(getContext(), Navigate.class);
+//                myIntent.putExtra("keyDest", selectedItem.getDestination());
+//                startActivity(myIntent);
+
+                Uri navigationIntentUri = Uri.parse("google.navigation:q=" + selectedItem.getDestination()+"&mode=w");//creating intent with latlng
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, navigationIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivity(mapIntent);
 
 
             }
@@ -213,5 +223,26 @@ public class Tab2 extends Fragment {
 
 
 
+    }
+
+    public LatLng getLatLngFromAddress(String address) {
+        Geocoder geocoder = new Geocoder(getContext());
+        List<Address> addressList;
+
+        try {
+            addressList = geocoder.getFromLocationName(address, 1);
+            if (addressList != null) {
+                Address singleAddress = addressList.get(0);
+                LatLng latLng = new LatLng(singleAddress.getLatitude(), singleAddress.getLongitude());
+                return latLng;
+            } else {
+                return null;
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
+            e.printStackTrace();
+            return null;
+        }
     }
 }
